@@ -52,7 +52,7 @@ A secure, responsive platform strengthening civic participation in Kenya — sup
 A web application for registering, viewing, and searching student records — the foundational project that shaped the modern Elevate Media system.
 
 - **Live:** https://studentmanagement.gt.tc
-- **Source:** [`student-management-system`](student-management-system)
+- **Source:** [`projects/websites/student-management-system`](projects/websites/student-management-system)
 
 ---
 
@@ -84,11 +84,13 @@ A web application for registering, viewing, and searching student records — th
 emmanuel-tech-portfolio/
 │
 ├── projects/
-│   └── websites/
-│       ├── elevate-media/                 # Next.js Student Management System (Vercel)
-│       └── civic-compliance-system/       # PHP Civic Compliance Platform
-│
-└── student-management-system/             # Legacy PHP + MySQL system
+│   ├── websites/
+│   │   ├── elevate-media/                 # Next.js Student Management System (Vercel)
+│   │   ├── civic-compliance-system/       # PHP Civic Compliance Platform
+│   │   └── student-management-system/     # Legacy PHP + MySQL system
+│   └── applications/
+│       ├── mobile apps/                   # Mobile applications
+│       └── desktop apps/                  # Desktop applications
 ```
 
 ---
