@@ -54,6 +54,13 @@ A web application for registering, viewing, and searching student records — th
 - **Live:** https://studentmanagement.gt.tc
 - **Source:** [`projects/websites/student-management-system`](projects/websites/student-management-system)
 
+### 4. TrackSpend — Native Expense Tracker
+**Kotlin · Jetpack Compose · Supabase**
+
+A native Android expense tracker that reads SMS payment notifications directly via `BroadcastReceiver`, auto-categorizes transactions, and syncs to the same Supabase backend as its PWA counterpart — with fingerprint/PIN security, biometrics, and full offline-ready performance.
+
+- **Source:** [`projects/applications/mobile apps/trackspend-native`](projects/applications/mobile%20apps/trackspend-native)
+
 ---
 
 ## 💡 What Defines These Projects
@@ -89,8 +96,9 @@ emmanuel-tech-portfolio/
 │   │   ├── civic-compliance-system/       # PHP Civic Compliance Platform
 │   │   └── student-management-system/     # Legacy PHP + MySQL system
 │   └── applications/
-│       ├── mobile apps/                   # Mobile applications
-│       └── desktop apps/                  # Desktop applications
+│       ├── mobile apps/
+│       │   └── trackspend-native/          # Kotlin/Jetpack Compose expense tracker
+│       └── desktop apps/                   # Desktop applications
 ```
 
 ---

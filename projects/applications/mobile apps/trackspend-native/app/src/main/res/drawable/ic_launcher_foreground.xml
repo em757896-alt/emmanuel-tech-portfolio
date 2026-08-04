@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- T letter for TrackSpend -->
+    <path
+        android:fillColor="#818CF8"
+        android:pathData="M34,36h40v6H58v30H50V42H34V36z" />
+</vector>
