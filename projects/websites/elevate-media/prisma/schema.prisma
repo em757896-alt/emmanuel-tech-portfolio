@@ -1,0 +1,345 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+enum StudentStatus {
+  ACTIVE
+  GRADUATED
+  SUSPENDED
+  DEFERRED
+}
+
+enum SubmissionStatus {
+  PENDING
+  GRADED
+  RETURNED
+}
+
+enum ResearchStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+}
+
+enum AnnouncementTarget {
+  ALL
+  STUDENTS
+  TEACHERS
+  DEPARTMENT
+  COURSE
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  passwordHash  String
+  role          Role
+  avatar        String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  student       Student?
+  teacher       Teacher?
+  announcements Announcement[]
+
+  @@map("users")
+}
+
+model Student {
+  id              String        @id @default(cuid())
+  userId          String        @unique
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  studentId       String        @unique
+  firstName       String
+  lastName        String
+  phone           String?
+  dateOfBirth     DateTime?
+  address         String?
+  departmentId    String?
+  department      Department?   @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  enrollmentDate  DateTime      @default(now())
+  status          StudentStatus @default(ACTIVE)
+
+  enrollments     CourseEnrollment[]
+  submissions     Submission[]
+  examResults     ExamResult[]
+  grades          Grade[]
+  attendanceRecords AttendanceRecord[]
+  poeDocuments    POEDocument[]
+  researchPapers  Research[]
+
+  @@map("students")
+}
+
+model Teacher {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  employeeId  String   @unique
+  firstName   String
+  lastName    String
+  phone       String?
+  departmentId String?
+  department  Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  position    String?
+  hireDate    DateTime @default(now())
+
+  courseAssignments CourseAssignment[]
+  assignments       Assignment[]
+  exams             Exam[]
+  attendanceSessions AttendanceSession[]
+  researchPapers    Research[]
+
+  @@map("teachers")
+}
+
+model Department {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  code      String   @unique
+  description String?
+
+  students  Student[]
+  teachers  Teacher[]
+  courses   Course[]
+
+  @@map("departments")
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  name        String
+  code        String   @unique
+  description String?
+  credits     Int      @default(3)
+  departmentId String?
+  department  Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  semester    Int
+  year        Int
+
+  enrollments         CourseEnrollment[]
+  courseAssignments   CourseAssignment[]
+  assignments         Assignment[]
+  exams               Exam[]
+  grades              Grade[]
+  attendanceSessions  AttendanceSession[]
+  announcements       Announcement[]
+
+  @@map("courses")
+}
+
+model CourseEnrollment {
+  id         String   @id @default(cuid())
+  studentId  String
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  courseId    String
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  enrolledAt DateTime @default(now())
+
+  @@unique([studentId, courseId])
+  @@map("course_enrollments")
+}
+
+model CourseAssignment {
+  id       String  @id @default(cuid())
+  teacherId String
+  teacher  Teacher @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  courseId  String
+  course   Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  semester Int
+  year     Int
+
+  @@unique([teacherId, courseId, semester, year])
+  @@map("course_assignments")
+}
+
+model Assignment {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  courseId     String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacherId   String
+  teacher     Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  dueDate     DateTime
+  totalMarks  Int      @default(100)
+  fileUrl     String?
+  fileName    String?
+  createdAt   DateTime @default(now())
+
+  submissions Submission[]
+
+  @@map("assignments")
+}
+
+model Submission {
+  id           String         @id @default(cuid())
+  assignmentId String
+  assignment   Assignment     @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  studentId    String
+  student      Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  fileUrl      String?
+  fileName     String?
+  status       SubmissionStatus @default(PENDING)
+  marks        Int?
+  feedback     String?
+  gradedAt     DateTime?
+  submittedAt  DateTime       @default(now())
+
+  @@unique([assignmentId, studentId])
+  @@map("submissions")
+}
+
+model Exam {
+  id         String   @id @default(cuid())
+  title      String
+  courseId    String
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacherId  String
+  teacher    Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  date       DateTime
+  totalMarks Int      @default(100)
+  weight     Float    @default(30)
+  createdAt  DateTime @default(now())
+
+  examResults ExamResult[]
+
+  @@map("exams")
+}
+
+model ExamResult {
+  id      String @id @default(cuid())
+  examId  String
+  exam    Exam   @relation(fields: [examId], references: [id], onDelete: Cascade)
+  studentId String
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  marks   Float
+  grade   String?
+  createdAt DateTime @default(now())
+
+  @@unique([examId, studentId])
+  @@map("exam_results")
+}
+
+model Grade {
+  id         String   @id @default(cuid())
+  studentId  String
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  courseId    String
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  semester   Int
+  year       Int
+  finalGrade String
+  gpa        Float
+  calculatedAt DateTime @default(now())
+
+  @@unique([studentId, courseId, semester, year])
+  @@map("grades")
+}
+
+model AttendanceSession {
+  id        String   @id @default(cuid())
+  courseId   String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacherId String
+  teacher   Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  date      DateTime @default(now())
+  qrCode    String
+  qrExpiry  DateTime
+
+  records AttendanceRecord[]
+
+  @@map("attendance_sessions")
+}
+
+model AttendanceRecord {
+  id        String           @id @default(cuid())
+  sessionId String
+  session   AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  studentId String
+  student   Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  checkedInAt DateTime       @default(now())
+  status    AttendanceStatus @default(PRESENT)
+
+  @@unique([sessionId, studentId])
+  @@map("attendance_records")
+}
+
+model POEDocument {
+  id          String   @id @default(cuid())
+  studentId   String
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  fileUrl     String
+  fileName    String
+  fileType    String
+  fileSize    Int
+  uploadedAt  DateTime @default(now())
+
+  @@map("poe_documents")
+}
+
+model Research {
+  id          String         @id @default(cuid())
+  studentId   String
+  student     Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  advisorId   String?
+  advisor     Teacher?       @relation(fields: [advisorId], references: [id], onDelete: SetNull)
+  title       String
+  abstract    String?
+  fileUrl     String?
+  fileName    String?
+  status      ResearchStatus @default(DRAFT)
+  reviewNotes String?
+  uploadedAt  DateTime       @default(now())
+  reviewedAt  DateTime?
+
+  @@map("research")
+}
+
+model Announcement {
+  id          String            @id @default(cuid())
+  title       String
+  content     String
+  authorId    String
+  author      User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  courseId    String?
+  course      Course?           @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  target      AnnouncementTarget @default(ALL)
+  createdAt   DateTime          @default(now())
+
+  @@map("announcements")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
+}
