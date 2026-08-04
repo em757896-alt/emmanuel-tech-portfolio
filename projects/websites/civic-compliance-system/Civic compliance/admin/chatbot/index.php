@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/chatbot/index.php
  * Chatbot Management & Monitoring
@@ -21,7 +21,7 @@ $currentPage = 'chatbot';
 
 $db = Database::getInstance()->getConnection();
 
-// ── Handle Actions ────────────────────────────────────────────────
+// â”€â”€ Handle Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $actionMsg  = '';
 $actionType = '';
 
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// ── Stats ─────────────────────────────────────────────────────────
+// â”€â”€ Stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $stmt = $db->query("SELECT COUNT(*) FROM chatbot_conversations");
 $totalQueries = (int)$stmt->fetchColumn();
 
@@ -99,7 +99,7 @@ $feedbackStats = $stmt->fetch();
 $stmt = $db->query("SELECT COUNT(*) FROM chatbot_knowledge_base WHERE is_active=1");
 $kbEntries = (int)$stmt->fetchColumn();
 
-// ── Flagged Logs ──────────────────────────────────────────────────
+// â”€â”€ Flagged Logs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $stmt = $db->query("
     SELECT *
     FROM chatbot_conversations
@@ -109,7 +109,7 @@ $stmt = $db->query("
 ");
 $flaggedLogs = $stmt->fetchAll();
 
-// ── Recent Logs ───────────────────────────────────────────────────
+// â”€â”€ Recent Logs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $page    = max(1, intval($_GET['page'] ?? 1));
 $perPage = 20;
 $offset  = ($page - 1) * $perPage;
@@ -129,7 +129,7 @@ $stmt->bindValue(':offset', $offset,  PDO::PARAM_INT);
 $stmt->execute();
 $recentLogs = $stmt->fetchAll();
 
-// ── Knowledge Base ────────────────────────────────────────────────
+// â”€â”€ Knowledge Base â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $kbStmt = $db->query("
     SELECT * FROM chatbot_knowledge_base
     WHERE is_active=1
@@ -138,7 +138,7 @@ $kbStmt = $db->query("
 ");
 $kbEntries_list = $kbStmt->fetchAll();
 
-// ── Top Queries ───────────────────────────────────────────────────
+// â”€â”€ Top Queries â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $stmt = $db->query("
     SELECT user_message, COUNT(*) as count
     FROM chatbot_conversations
@@ -382,14 +382,14 @@ $posRate = ($feedbackStats['with_feedback'] > 0)
                                         <?php elseif ($log['feedback'] === 'negative'): ?>
                                         <i class="fas fa-thumbs-down" style="color:#ef4444"></i>
                                         <?php else: ?>
-                                        <span style="color:#d1d5db;font-size:0.75rem">—</span>
+                                        <span style="color:#d1d5db;font-size:0.75rem">â€”</span>
                                         <?php endif; ?>
                                     </td>
                                     <td>
                                         <?php if ($log['flagged_for_review']): ?>
                                         <span class="severity-badge sev-high">Flagged</span>
                                         <?php else: ?>
-                                        <span style="color:#d1d5db;font-size:0.75rem">—</span>
+                                        <span style="color:#d1d5db;font-size:0.75rem">â€”</span>
                                         <?php endif; ?>
                                     </td>
                                     <td class="date-cell">

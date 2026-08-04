@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * api/health-check.php
  * System Health Check Endpoint
@@ -21,7 +21,7 @@ $startTime = microtime(true);
 $checks    = [];
 $overallOk = true;
 
-// ── 1. Database Connection ────────────────────────────────────────
+// â”€â”€ 1. Database Connection â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 try {
     $db   = Database::getInstance()->getConnection();
     $stmt = $db->query("SELECT 1 AS ping");
@@ -39,7 +39,7 @@ try {
     $overallOk = false;
 }
 
-// ── 2. Database Tables ────────────────────────────────────────────
+// â”€â”€ 2. Database Tables â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if ($checks['database']['status'] === 'ok') {
     $requiredTables = [
         'users', 'monitoring_reports', 'monitoring_attachments',
@@ -70,7 +70,7 @@ if ($checks['database']['status'] === 'ok') {
     }
 }
 
-// ── 3. PHP Version ────────────────────────────────────────────────
+// â”€â”€ 3. PHP Version â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $phpVersion      = PHP_VERSION;
 $phpVersionOk    = version_compare($phpVersion, '7.4.0', '>=');
 
@@ -79,10 +79,10 @@ $checks['php'] = [
     'version' => $phpVersion,
     'message' => $phpVersionOk
         ? 'PHP ' . $phpVersion . ' (compatible)'
-        : 'PHP ' . $phpVersion . ' — upgrade recommended (7.4+ required)',
+        : 'PHP ' . $phpVersion . ' â€” upgrade recommended (7.4+ required)',
 ];
 
-// ── 4. Required PHP Extensions ────────────────────────────────────
+// â”€â”€ 4. Required PHP Extensions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $requiredExtensions = ['pdo', 'pdo_mysql', 'json', 'mbstring', 'openssl', 'session'];
 $missingExtensions  = [];
 
@@ -104,7 +104,7 @@ if (!empty($missingExtensions)) {
     $overallOk = false;
 }
 
-// ── 5. Upload Directory ───────────────────────────────────────────
+// â”€â”€ 5. Upload Directory â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $uploadDir = '../uploads/';
 $uploadsOk = is_dir($uploadDir) && is_writable($uploadDir);
 
@@ -112,11 +112,11 @@ $checks['uploads'] = [
     'status'  => $uploadsOk ? 'ok' : 'warning',
     'message' => $uploadsOk
         ? 'Upload directory writable'
-        : 'Upload directory missing or not writable — create ../uploads/ with 755',
+        : 'Upload directory missing or not writable â€” create ../uploads/ with 755',
     'path'    => realpath($uploadDir) ?: $uploadDir,
 ];
 
-// ── 6. Session ────────────────────────────────────────────────────
+// â”€â”€ 6. Session â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $sessionOk = session_status() !== PHP_SESSION_DISABLED;
 
 $checks['session'] = [
@@ -128,7 +128,7 @@ if (!$sessionOk) {
     $overallOk = false;
 }
 
-// ── 7. Disk Space ─────────────────────────────────────────────────
+// â”€â”€ 7. Disk Space â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $freeBytes  = disk_free_space('../');
 $totalBytes = disk_total_space('../');
 
@@ -149,7 +149,7 @@ if ($freeBytes !== false && $totalBytes !== false) {
     $checks['disk'] = ['status' => 'unknown', 'message' => 'Could not determine disk space'];
 }
 
-// ── 8. Response Time ──────────────────────────────────────────────
+// â”€â”€ 8. Response Time â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $responseMs = round((microtime(true) - $startTime) * 1000, 2);
 
 $checks['performance'] = [
@@ -158,7 +158,7 @@ $checks['performance'] = [
     'message'     => 'Health check completed in ' . $responseMs . 'ms',
 ];
 
-// ── 9. Platform Stats Snapshot ────────────────────────────────────
+// â”€â”€ 9. Platform Stats Snapshot â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if ($checks['database']['status'] === 'ok') {
     try {
         $snapStmt = $db->query("
@@ -180,7 +180,7 @@ if ($checks['database']['status'] === 'ok') {
     }
 }
 
-// ── Build Response ────────────────────────────────────────────────
+// â”€â”€ Build Response â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $statusCounts = array_count_values(array_column($checks, 'status'));
 
 $response = [

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/analytics/index.php
  * Analytics Dashboard
@@ -32,7 +32,7 @@ $interval = match($period) {
     default   => '30 DAY',
 };
 
-// ── Platform Usage Stats ───────────────────────────────────────
+// â”€â”€ Platform Usage Stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $stmt = $db->query("SELECT COUNT(*) FROM page_views WHERE created_at >= DATE_SUB(NOW(), INTERVAL $interval)");
 $totalViews = (int)$stmt->fetchColumn();
 
@@ -51,7 +51,7 @@ $chatbotQueries = (int)$stmt->fetchColumn();
 $stmt = $db->query("SELECT COALESCE(SUM(download_count),0) FROM resources");
 $downloads = (int)$stmt->fetchColumn();
 
-// ── Daily Views Trend ─────────────────────────────────────────
+// â”€â”€ Daily Views Trend â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $stmt = $db->query("
     SELECT DATE_FORMAT(created_at,'%d %b') as label,
            DATE(created_at) as day,
@@ -64,7 +64,7 @@ $stmt = $db->query("
 ");
 $dailyViews = $stmt->fetchAll();
 
-// ── Module Usage ──────────────────────────────────────────────
+// â”€â”€ Module Usage â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $moduleStats = [];
 $modules = [
     'knowledge-hub'    => 'Knowledge Hub',
@@ -78,7 +78,7 @@ foreach($modules as $slug => $label) {
     $moduleStats[$label] = (int)$s->fetchColumn();
 }
 
-// ── Reports by Type ───────────────────────────────────────────
+// â”€â”€ Reports by Type â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $stmt = $db->query("
     SELECT report_type, COUNT(*) as count
     FROM monitoring_reports
@@ -87,7 +87,7 @@ $stmt = $db->query("
 ");
 $reportsByType = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
-// ── Reports by County (Top 10) ────────────────────────────────
+// â”€â”€ Reports by County (Top 10) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $stmt = $db->query("
     SELECT county, COUNT(*) as count
     FROM monitoring_reports
@@ -99,7 +99,7 @@ $stmt = $db->query("
 ");
 $byCounty = $stmt->fetchAll();
 
-// ── Top Articles ──────────────────────────────────────────────
+// â”€â”€ Top Articles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $stmt = $db->query("
     SELECT title_en as title, view_count, category
     FROM knowledge_articles
@@ -109,7 +109,7 @@ $stmt = $db->query("
 ");
 $topArticles = $stmt->fetchAll();
 
-// ── Chatbot Feedback Rate ─────────────────────────────────────
+// â”€â”€ Chatbot Feedback Rate â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $stmt = $db->query("
     SELECT
         SUM(feedback='helpful') as positive,
@@ -121,7 +121,7 @@ $stmt = $db->query("
 ");
 $chatbotFeedback = $stmt->fetch();
 
-// ── Device Breakdown ──────────────────────────────────────────
+// â”€â”€ Device Breakdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $stmt = $db->query("
     SELECT device_type, COUNT(*) as count
     FROM page_views
@@ -319,7 +319,7 @@ $deviceBreakdown = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
                             <tr>
                                 <td><span class="rank-num"><?php echo $i+1; ?></span></td>
                                 <td><?php echo htmlspecialchars($art['title']); ?></td>
-                                <td><span class="cat-pill"><?php echo htmlspecialchars($art['category']??'—'); ?></span></td>
+                                <td><span class="cat-pill"><?php echo htmlspecialchars($art['category']??'â€”'); ?></span></td>
                                 <td><strong><?php echo number_format($art['view_count']); ?></strong></td>
                                 <td style="width:120px">
                                     <div class="mini-bar-wrap">

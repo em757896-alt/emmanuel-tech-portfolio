@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Database Configuration
  * PBO Compliance Platform - CRECO Kenya

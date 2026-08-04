@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 /**
  * api/admin-moderation.php
- * Admin Moderation API — approve, reject, flag, bulk actions
+ * Admin Moderation API â€” approve, reject, flag, bulk actions
  * PBO Compliance Hub | CRECO Kenya
  *
  * DB: if0_42280606_if0_42280606_
@@ -47,10 +47,10 @@ $db      = Database::getInstance()->getConnection();
 $action  = sanitizeInput($input['action'] ?? '');
 $adminId = (int)$_SESSION['user_id'];
 
-// ── Route Actions ─────────────────────────────────────────────────
+// â”€â”€ Route Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 switch ($action) {
 
-    // ── Single Report Actions ─────────────────────────────────────
+    // â”€â”€ Single Report Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     case 'approve':
     case 'reject':
     case 'flag':
@@ -59,7 +59,7 @@ switch ($action) {
         handleSingleAction($db, $action, $input, $adminId);
         break;
 
-    // ── Bulk Actions ──────────────────────────────────────────────
+    // â”€â”€ Bulk Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     case 'bulk_approve':
     case 'bulk_reject':
     case 'bulk_flag':
@@ -67,12 +67,12 @@ switch ($action) {
         handleBulkAction($db, $action, $input, $adminId);
         break;
 
-    // ── Update Severity ───────────────────────────────────────────
+    // â”€â”€ Update Severity â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     case 'update_severity':
         updateSeverity($db, $input, $adminId);
         break;
 
-    // ── Chatbot: Mark reviewed / dismiss flag ─────────────────────
+    // â”€â”€ Chatbot: Mark reviewed / dismiss flag â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     case 'chatbot_review':
         handleChatbotReview($db, $input, $adminId);
         break;
@@ -82,7 +82,7 @@ switch ($action) {
         echo json_encode(['success' => false, 'error' => 'Unknown moderation action']);
 }
 
-// ── Single Report Action ──────────────────────────────────────────
+// â”€â”€ Single Report Action â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function handleSingleAction(PDO $db, string $action, array $input, int $adminId): void {
     $reportId = intval($input['report_id'] ?? 0);
     $note     = sanitizeInput($input['reason'] ?? $input['note'] ?? '');
@@ -168,7 +168,7 @@ function handleSingleAction(PDO $db, string $action, array $input, int $adminId)
     }
 }
 
-// ── Bulk Action ───────────────────────────────────────────────────
+// â”€â”€ Bulk Action â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function handleBulkAction(PDO $db, string $action, array $input, int $adminId): void {
     $reportIds = $input['report_ids'] ?? [];
 
@@ -177,7 +177,7 @@ function handleBulkAction(PDO $db, string $action, array $input, int $adminId): 
         return;
     }
 
-    // Sanitize IDs — integers only
+    // Sanitize IDs â€” integers only
     $ids = array_filter(array_map('intval', $reportIds));
     if (empty($ids)) {
         echo json_encode(['success' => false, 'error' => 'Invalid report IDs']);
@@ -249,7 +249,7 @@ function handleBulkAction(PDO $db, string $action, array $input, int $adminId): 
     }
 }
 
-// ── Update Severity ───────────────────────────────────────────────
+// â”€â”€ Update Severity â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function updateSeverity(PDO $db, array $input, int $adminId): void {
     $reportId    = intval($input['report_id'] ?? 0);
     $newSeverity = sanitizeInput($input['severity'] ?? '');
@@ -297,7 +297,7 @@ function updateSeverity(PDO $db, array $input, int $adminId): void {
     }
 }
 
-// ── Chatbot Review ────────────────────────────────────────────────
+// â”€â”€ Chatbot Review â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function handleChatbotReview(PDO $db, array $input, int $adminId): void {
     $logId         = intval($input['log_id'] ?? 0);
     $reviewAction  = sanitizeInput($input['review_action'] ?? 'dismiss');

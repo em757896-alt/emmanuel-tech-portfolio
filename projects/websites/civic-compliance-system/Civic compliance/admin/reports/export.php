@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 /**
  * admin/reports/export.php
- * Data Export — CSV, JSON, PDF-ready HTML
+ * Data Export â€” CSV, JSON, PDF-ready HTML
  * PBO Compliance Hub | CRECO Kenya
  *
  * DB: if0_42280606_if0_42280606_
@@ -18,7 +18,7 @@ requireAdmin();
 
 $db = Database::getInstance()->getConnection();
 
-// ── Export Parameters ─────────────────────────────────────────────
+// â”€â”€ Export Parameters â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $format     = sanitizeInput($_GET['format'] ?? '');
 $reportType = sanitizeInput($_GET['type'] ?? '');
 $county     = sanitizeInput($_GET['county'] ?? '');
@@ -157,7 +157,7 @@ if (in_array($format, ['csv','json'])) {
     }
 }
 
-// ── Export UI Page ────────────────────────────────────────────────
+// â”€â”€ Export UI Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $pageTitle   = 'Export Data - Admin';
 $currentPage = 'export';
 
@@ -339,7 +339,7 @@ $counties = $countyStmt->fetchAll(PDO::FETCH_COLUMN);
                     <a href="?format=csv" class="quick-export-item">
                         <div class="qe-icon qe-csv"><i class="fas fa-file-csv"></i></div>
                         <div class="qe-info">
-                            <strong>All Reports — CSV</strong>
+                            <strong>All Reports â€” CSV</strong>
                             <span><?php echo number_format($totalReports); ?> records</span>
                         </div>
                         <i class="fas fa-download qe-arrow"></i>
@@ -347,7 +347,7 @@ $counties = $countyStmt->fetchAll(PDO::FETCH_COLUMN);
                     <a href="?format=json" class="quick-export-item">
                         <div class="qe-icon qe-json"><i class="fas fa-file-code"></i></div>
                         <div class="qe-info">
-                            <strong>All Reports — JSON</strong>
+                            <strong>All Reports â€” JSON</strong>
                             <span><?php echo number_format($totalReports); ?> records</span>
                         </div>
                         <i class="fas fa-download qe-arrow"></i>
@@ -355,7 +355,7 @@ $counties = $countyStmt->fetchAll(PDO::FETCH_COLUMN);
                     <a href="?format=csv&type=incident" class="quick-export-item">
                         <div class="qe-icon qe-red"><i class="fas fa-exclamation-triangle"></i></div>
                         <div class="qe-info">
-                            <strong>Incidents Only — CSV</strong>
+                            <strong>Incidents Only â€” CSV</strong>
                             <span>All civic space incidents</span>
                         </div>
                         <i class="fas fa-download qe-arrow"></i>
@@ -363,7 +363,7 @@ $counties = $countyStmt->fetchAll(PDO::FETCH_COLUMN);
                     <a href="?format=csv&status=approved" class="quick-export-item">
                         <div class="qe-icon qe-green"><i class="fas fa-check-circle"></i></div>
                         <div class="qe-info">
-                            <strong>Approved Reports — CSV</strong>
+                            <strong>Approved Reports â€” CSV</strong>
                             <span>Verified submissions only</span>
                         </div>
                         <i class="fas fa-download qe-arrow"></i>
@@ -371,7 +371,7 @@ $counties = $countyStmt->fetchAll(PDO::FETCH_COLUMN);
                     <a href="?format=csv&severity=critical" class="quick-export-item">
                         <div class="qe-icon qe-critical"><i class="fas fa-skull-crossbones"></i></div>
                         <div class="qe-info">
-                            <strong>Critical Incidents — CSV</strong>
+                            <strong>Critical Incidents â€” CSV</strong>
                             <span>High-severity cases only</span>
                         </div>
                         <i class="fas fa-download qe-arrow"></i>
@@ -385,7 +385,7 @@ $counties = $countyStmt->fetchAll(PDO::FETCH_COLUMN);
             <h4><i class="fas fa-info-circle"></i> Export Notes</h4>
             <ul>
                 <li>All exports are limited to <strong>10,000 records</strong> per download for performance.</li>
-                <li>Personal data is included in exports — handle with care per the <strong>Kenya Data Protection Act 2019</strong>.</li>
+                <li>Personal data is included in exports â€” handle with care per the <strong>Kenya Data Protection Act 2019</strong>.</li>
                 <li>CSV files include a UTF-8 BOM for compatibility with Microsoft Excel.</li>
                 <li>All exports are logged in the system audit trail.</li>
                 <li>IP addresses are stored as cryptographic hashes to protect submitter privacy.</li>
@@ -604,7 +604,7 @@ function doExport(format, form) {
     position: relative;
 }
 
-.export-notes li::before { content: '•'; position: absolute; left: 0; color: #d97706; }
+.export-notes li::before { content: 'â€¢'; position: absolute; left: 0; color: #d97706; }
 
 @media (max-width: 900px) {
     .export-grid { grid-template-columns: 1fr; }

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/monitoring/index.php
  * Admin Monitoring Reports Management
@@ -21,7 +21,7 @@ $currentPage = 'monitoring';
 
 $db = Database::getInstance()->getConnection();
 
-// ── Filters ──────────────────────────────────────────────────────
+// â”€â”€ Filters â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $filterStatus  = sanitizeInput($_GET['status'] ?? '');
 $filterType    = sanitizeInput($_GET['type'] ?? '');
 $filterCounty  = sanitizeInput($_GET['county'] ?? '');
@@ -31,7 +31,7 @@ $page          = max(1, intval($_GET['page'] ?? 1));
 $perPage       = 20;
 $offset        = ($page - 1) * $perPage;
 
-// ── Build Query ───────────────────────────────────────────────────
+// â”€â”€ Build Query â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $conditions = ['1=1'];
 $params     = [];
 
@@ -89,7 +89,7 @@ $stmt = $db->prepare("
 $stmt->execute($params);
 $reports = $stmt->fetchAll();
 
-// ── Summary Counts ────────────────────────────────────────────────
+// â”€â”€ Summary Counts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $summaryStmt = $db->query("
     SELECT
         COUNT(*) as total,
@@ -102,7 +102,7 @@ $summaryStmt = $db->query("
 ");
 $summary = $summaryStmt->fetch();
 
-// ── Counties for filter ───────────────────────────────────────────
+// â”€â”€ Counties for filter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $countyStmt = $db->query("
     SELECT DISTINCT county
     FROM monitoring_reports
@@ -256,7 +256,7 @@ $availableCounties = $countyStmt->fetchAll(PDO::FETCH_COLUMN);
         <!-- Results Info -->
         <div class="results-info-bar">
             <span>
-                Showing <strong><?php echo number_format(($offset)+1); ?></strong>–
+                Showing <strong><?php echo number_format(($offset)+1); ?></strong>â€“
                 <strong><?php echo number_format(min($offset+$perPage,$totalReports)); ?></strong>
                 of <strong><?php echo number_format($totalReports); ?></strong> reports
             </span>
@@ -335,7 +335,7 @@ $availableCounties = $countyStmt->fetchAll(PDO::FETCH_COLUMN);
                             <td>
                                 <span class="county-cell">
                                     <i class="fas fa-map-marker-alt" style="color:#ef4444;font-size:0.7rem"></i>
-                                    <?php echo htmlspecialchars($report['submitter_county'] ?? '—'); ?>
+                                    <?php echo htmlspecialchars($report['submitter_county'] ?? 'â€”'); ?>
                                 </span>
                             </td>
                             <td>
@@ -354,7 +354,7 @@ $availableCounties = $countyStmt->fetchAll(PDO::FETCH_COLUMN);
                                     <i class="fas fa-paperclip"></i> <?php echo $report['attachments']; ?>
                                 </span>
                                 <?php else: ?>
-                                <span style="color:#d1d5db">—</span>
+                                <span style="color:#d1d5db">â€”</span>
                                 <?php endif; ?>
                             </td>
                             <td class="date-cell">
@@ -445,7 +445,7 @@ $availableCounties = $countyStmt->fetchAll(PDO::FETCH_COLUMN);
 <script>
 const CSRF = '<?php echo generateCSRFTokenValue(); ?>';
 
-// ── Row Selection ────────────────────────────────────────────────
+// â”€â”€ Row Selection â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function toggleSelectAll(master) {
     document.querySelectorAll('.row-select').forEach(cb => cb.checked = master.checked);
     updateBulkBar();
@@ -463,7 +463,7 @@ function updateBulkBar() {
     if(countEl) countEl.textContent = selected;
 }
 
-// ── Quick Action (single row) ────────────────────────────────────
+// â”€â”€ Quick Action (single row) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function quickAction(action, id) {
     if(action === 'reject' && !confirm('Reject report #' + id + '?')) return;
     if(action === 'approve' && !confirm('Approve report #' + id + '?')) return;
@@ -483,7 +483,7 @@ async function quickAction(action, id) {
     }
 }
 
-// ── Bulk Action ──────────────────────────────────────────────────
+// â”€â”€ Bulk Action â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function bulkAction(action) {
     const ids = [...document.querySelectorAll('.row-select:checked')].map(cb => parseInt(cb.value));
     if(ids.length === 0) return;

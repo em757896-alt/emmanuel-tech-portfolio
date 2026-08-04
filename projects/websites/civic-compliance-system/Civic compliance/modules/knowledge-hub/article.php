@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 /**
  * modules/knowledge-hub/article.php
- * Single Article View — Knowledge Hub
+ * Single Article View â€” Knowledge Hub
  * PBO Compliance Hub | CRECO Kenya
  *
  * DB: if0_42280606_if0_42280606_
@@ -24,7 +24,7 @@ if (!$articleId) {
     exit;
 }
 
-// ── Fetch Article ────────────────────────────────────────────────
+// â”€â”€ Fetch Article â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $stmt = $db->prepare("
     SELECT a.*
     FROM knowledge_articles a
@@ -38,7 +38,7 @@ if (!$article) {
     exit;
 }
 
-// ── Increment View Count ──────────────────────────────────────────
+// â”€â”€ Increment View Count â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $db->prepare("UPDATE knowledge_articles SET view_count = view_count + 1 WHERE id = :id")
    ->execute([':id' => $articleId]);
 
@@ -55,7 +55,7 @@ try {
     ]);
 } catch(Exception $e) { /* Non-blocking */ }
 
-// ── Related Articles ──────────────────────────────────────────────
+// â”€â”€ Related Articles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $stmt = $db->prepare("
     SELECT id, title_en AS title, title_sw, summary_en AS summary,
            view_count
@@ -69,7 +69,7 @@ $stmt = $db->prepare("
 $stmt->execute([':cat' => $article['category'], ':id' => $articleId]);
 $relatedArticles = $stmt->fetchAll();
 
-// ── Prev / Next Navigation ────────────────────────────────────────
+// â”€â”€ Prev / Next Navigation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $prevStmt = $db->prepare("
     SELECT id, title_en AS title FROM knowledge_articles
     WHERE id < :id AND is_published=1 AND category=:cat
@@ -86,7 +86,7 @@ $nextStmt = $db->prepare("
 $nextStmt->execute([':id'=>$articleId, ':cat'=>$article['category']]);
 $nextArticle = $nextStmt->fetch();
 
-// ── FAQs linked to this article ───────────────────────────────────
+// â”€â”€ FAQs linked to this article â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $faqStmt = $db->prepare("
     SELECT question, answer, question_sw, answer_sw
     FROM faqs
@@ -416,7 +416,7 @@ $currentPage = 'knowledge';
 <?php include '../../includes/footer.php'; ?>
 
 <script>
-// ── Reading Progress Bar ─────────────────────────────────────────
+// â”€â”€ Reading Progress Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 window.addEventListener('scroll', () => {
     const article = document.getElementById('articleContent');
     const fill    = document.getElementById('progressFill');
@@ -429,7 +429,7 @@ window.addEventListener('scroll', () => {
     fill.style.width = pct + '%';
 });
 
-// ── Table of Contents Generator ──────────────────────────────────
+// â”€â”€ Table of Contents Generator â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 document.addEventListener('DOMContentLoaded', () => {
     const content = document.getElementById('articleContent');
     const toc     = document.getElementById('tableOfContents');
@@ -464,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ── FAQ Accordion ─────────────────────────────────────────────────
+// â”€â”€ FAQ Accordion â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function toggleFAQ(i) {
     const answer = document.getElementById('faq-answer-' + i);
     const arrow  = document.querySelector('#faq-' + i + ' .faq-arrow');
@@ -479,7 +479,7 @@ function toggleFAQ(i) {
     }
 }
 
-// ── Share Article ─────────────────────────────────────────────────
+// â”€â”€ Share Article â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function shareArticle(type) {
     const url   = window.location.href;
     const title = document.title;
@@ -492,7 +492,7 @@ function shareArticle(type) {
     }
 }
 
-// ── Feedback ─────────────────────────────────────────────────────
+// â”€â”€ Feedback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function submitFeedback(type, id) {
     document.querySelectorAll('.feedback-btn').forEach(b => b.disabled = true);
     try {
@@ -506,7 +506,7 @@ async function submitFeedback(type, id) {
     document.querySelector('.feedback-buttons').style.display = 'none';
 }
 
-// ── Toast ─────────────────────────────────────────────────────────
+// â”€â”€ Toast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function showToast(msg) {
     const t = document.createElement('div');
     t.className = 'article-toast';
@@ -792,7 +792,7 @@ function showToast(msg) {
 }
 
 .key-takeaways li::before {
-    content: '✓';
+    content: 'âœ“';
     color: #10b981;
     font-weight: 700;
     flex-shrink: 0;

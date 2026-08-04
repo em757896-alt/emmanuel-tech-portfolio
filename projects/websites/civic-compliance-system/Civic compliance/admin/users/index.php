@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 /**
  * admin/users/index.php
- * User Management — Admin Panel
+ * User Management â€” Admin Panel
  * PBO Compliance Hub | CRECO Kenya
  *
  * DB: if0_42280606_if0_42280606_
@@ -21,7 +21,7 @@ $currentPage = 'users';
 
 $db = Database::getInstance()->getConnection();
 
-// ── Handle Quick Actions ──────────────────────────────────────────
+// â”€â”€ Handle Quick Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validateCSRFToken($_POST['csrf_token'] ?? '')) {
         $actionMsg  = 'Invalid security token.';
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     break;
 
                 case 'delete':
-                    // Soft delete — anonymize rather than remove
+                    // Soft delete â€” anonymize rather than remove
                     $db->prepare("
                         UPDATE users
                         SET name='[Deleted User]',
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// ── Filters ──────────────────────────────────────────────────────
+// â”€â”€ Filters â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $filterRole   = sanitizeInput($_GET['role'] ?? '');
 $filterStatus = sanitizeInput($_GET['status'] ?? '');
 $search       = sanitizeInput($_GET['q'] ?? '');
@@ -302,7 +302,7 @@ $summary = $summaryStmt->fetch();
         <!-- Results Info -->
         <div class="results-info-bar">
             <span>
-                Showing <strong><?php echo number_format($offset + 1); ?></strong>–
+                Showing <strong><?php echo number_format($offset + 1); ?></strong>â€“
                 <strong><?php echo number_format(min($offset + $perPage, $totalUsers)); ?></strong>
                 of <strong><?php echo number_format($totalUsers); ?></strong> users
             </span>
@@ -358,12 +358,12 @@ $summary = $summaryStmt->fetch();
                             </td>
                             <td>
                                 <span style="font-size:0.82rem;color:#6b7280">
-                                    <?php echo htmlspecialchars($user['organization'] ?? '—'); ?>
+                                    <?php echo htmlspecialchars($user['organization'] ?? 'â€”'); ?>
                                 </span>
                             </td>
                             <td>
                                 <span style="font-size:0.82rem;color:#374151">
-                                    <?php echo htmlspecialchars($user['county'] ?? '—'); ?>
+                                    <?php echo htmlspecialchars($user['county'] ?? 'â€”'); ?>
                                 </span>
                             </td>
                             <td>

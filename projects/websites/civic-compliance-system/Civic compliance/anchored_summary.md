@@ -1,12 +1,12 @@
-# PBO Kenya Platform — Anchored Summary
+﻿# PBO Kenya Platform â€” Anchored Summary
 
 ## Goal
 - Complete the PBO Kenya Platform by fixing all remaining SQL/column mismatches between code and schema, creating all missing pages referenced from navigation/links, and making the project fully functional for its live InfinityFree deployment.
 
 ## Constraints & Preferences
-- Keep the existing format/style of every file — do not change the current look and feel
+- Keep the existing format/style of every file â€” do not change the current look and feel
 - Use the existing database password (`AES256:4m0deNaMM0HA+yKw/HIgbYzFLvAjq8o1cD7cfheTaOSB8M/MqTc/Edx85mfbuzOL`) from `config/database.php` in all new files that need database access (via the centralized config includes)
-- The live database on InfinityFree already matches `schema.sql` — fix code queries to match schema column names, not vice versa
+- The live database on InfinityFree already matches `schema.sql` â€” fix code queries to match schema column names, not vice versa
 - Create all pages referenced in navigation and links so the website becomes functional end-to-end
 - Follow existing patterns: `includes/navbar.php`, `includes/footer.php`, Bootstrap 5, Font Awesome, AOS animations, same CSS classes
 
@@ -17,18 +17,18 @@
 - Added `requireAdmin()` method to Auth class in `config/auth.php` and a global `requireAdmin()` function
 - Updated `database/schema.sql`: added `monitoring_attachments` table and `report_data` column to `monitoring_reports`
 - Fixed SQL column name mismatches across 8 existing admin/API files to match `schema.sql`:
-  - `admin/dashboard.php` — 7 queries fixed
-  - `admin/knowledge/index.php` — fixed publish/unpublish/feature actions, filters, table display, editor form, removed type filter
-  - `admin/monitoring/index.php` — SELECT, filters, ordering fixed
-  - `admin/monitoring/view.php` — moderation actions, related reports fixed
-  - `admin/reports/export.php` — SELECT aliases, county summaries fixed
-  - `admin/chatbot/index.php` — table renames, column fixes, KB INSERT fixed
-  - `admin/analytics/index.php` — 6 column fixes, removed `knowledge_categories` join
-  - `api/monitoring.php` — INSERT columns, email config fixed
+  - `admin/dashboard.php` â€” 7 queries fixed
+  - `admin/knowledge/index.php` â€” fixed publish/unpublish/feature actions, filters, table display, editor form, removed type filter
+  - `admin/monitoring/index.php` â€” SELECT, filters, ordering fixed
+  - `admin/monitoring/view.php` â€” moderation actions, related reports fixed
+  - `admin/reports/export.php` â€” SELECT aliases, county summaries fixed
+  - `admin/chatbot/index.php` â€” table renames, column fixes, KB INSERT fixed
+  - `admin/analytics/index.php` â€” 6 column fixes, removed `knowledge_categories` join
+  - `api/monitoring.php` â€” INSERT columns, email config fixed
 - Fixed `modules/knowledge-hub/article.php`: removed `knowledge_categories` JOIN, replaced all old column names with schema columns, removed dead `key_takeaways` block
 - Fixed `modules/knowledge-hub/index.php` SQL: removed `knowledge_categories` join, replaced column names, category filter uses ENUM labels
-- Fixed `modules/monitoring/index.php`: `submitter_county`→`county`, `status='approved'`→`status='verified'`, `privacy-policy.php`→`/privacy.php`
-- Fixed `api/admin-dashboard.php`, `api/health-check.php`, `admin/reports/export.php`: `status='published'`→`is_published=1`
+- Fixed `modules/monitoring/index.php`: `submitter_county`â†’`county`, `status='approved'`â†’`status='verified'`, `privacy-policy.php`â†’`/privacy.php`
+- Fixed `api/admin-dashboard.php`, `api/health-check.php`, `admin/reports/export.php`: `status='published'`â†’`is_published=1`
 - Fixed `api/health-check.php`: removed `knowledge_categories` from required tables list
 - Fixed `api/admin-moderation.php`: table renames, column fixes for chatbot moderation
 - Fixed `api/admin-dashboard.php` chatbot queries: table renames, column fixes
@@ -51,12 +51,12 @@
 
 ### Blocked
 - `uploads/` and `logs/` directories need to be created on InfinityFree server via file manager (they are empty in local repo but must exist and be writable on live server)
-  - `logs/` — stores rate-limiting temp files, PHP error logs
-  - `uploads/`, `uploads/documents/`, `uploads/images/`, `uploads/monitoring/` — stores submitted attachments (the `api/monitoring.php` auto-creates YEAR/MONTH subdirs via `mkdir(0755,true)` but parent must exist)
+  - `logs/` â€” stores rate-limiting temp files, PHP error logs
+  - `uploads/`, `uploads/documents/`, `uploads/images/`, `uploads/monitoring/` â€” stores submitted attachments (the `api/monitoring.php` auto-creates YEAR/MONTH subdirs via `mkdir(0755,true)` but parent must exist)
 
 ## Key Decisions
 - Static `SECRET_KEY` value used instead of regenerating per request (was breaking all token-based functionality)
-- Centralized `DB_PASS` from `config/database.php` used in all new files via `require_once` — no hardcoded passwords in new code
+- Centralized `DB_PASS` from `config/database.php` used in all new files via `require_once` â€” no hardcoded passwords in new code
 - Fixed code SQL to match `schema.sql` column names (not vice versa) because the live InfinityFree database matches `schema.sql`
 - Used `monitoring_attachments` table and `report_data` column added to schema since multiple existing code paths reference them
 - New pages follow the exact template pattern of existing files: same includes, same Bootstrap/FontAwesome/AOS stack, same CSS classes
@@ -71,10 +71,10 @@
 ## Critical Context
 - **Database host**: `sql303.infinityfree.com`, **DB name**: `if0_42280606_if0_42280606_`, **DB user**: `if0_42280606`, **DB pass**: `AES256:4m0deNaMM0HA+yKw/HIgbYzFLvAjq8o1cD7cfheTaOSB8M/MqTc/Edx85mfbuzOL`
 - **Application URL**: `https://pbokenya.infinityfreeapp.com`
-- The Auth class constructor calls `session_start()` conditionally — already handled
+- The Auth class constructor calls `session_start()` conditionally â€” already handled
 - `generateCSRFToken()`, `generateCSRFField()`, `generateCSRFTokenValue()`, `validateCSRFToken()` are now global functions in `config/config.php`; `Auth::generateCSRF()` and `Auth::verifyCSRF()` are instance methods on Auth class
 - `requireAdmin()` is both an Auth class method and a global function (creates Auth instance internally)
-- The navbar links to: `about.php`, `dashboard.php`, `profile.php`, `search.php`, `modules/*`, `auth/*` — all now exist
+- The navbar links to: `about.php`, `dashboard.php`, `profile.php`, `search.php`, `modules/*`, `auth/*` â€” all now exist
 - Modules monitoring page (`modules/monitoring/index.php`) already existed and handles 4 report types in one form (compliance, barrier, incident, enabling) via AJAX to `api/monitoring.php`; the new `report.php` and `incident.php` are standalone traditional-POST alternatives
 - The `config/database.php` `Database` class has both a generic `query()` method and `getConnection()` returning the raw PDO instance
 - `knowledge_articles` schema: `title_en`/`title_sw`, `summary_en`/`summary_sw`, `content_en`/`content_sw`, `category` ENUM (not FK), `is_published`, `is_featured`, `pbo_act_section`, `view_count`, no `content_type`, `read_time_minutes`, `has_kiswahili`, `status`, `featured` columns
@@ -85,14 +85,14 @@
 - `config/database.php`: Database singleton, PDO connection with live credentials
 - `config/auth.php`: Auth class with login/register/logout, session management, auto-login after registration
 - `database/schema.sql`: 15 tables updated with monitoring_attachments + report_data
-- `includes/navbar.php`: main navigation — links must stay in sync with created pages
+- `includes/navbar.php`: main navigation â€” links must stay in sync with created pages
 - `includes/footer.php`: 4-column footer with module links + disclaimer
 - `assets/css/style.css`: main site styles
 - `assets/css/auth.css`: auth page split-panel layout (now properly used by login/register)
 - `assets/css/admin.css`: admin panel styles (located at `admin/assets/css/admin.css`)
-- `modules/knowledge-hub/index.php`: front-end knowledge hub — rewritten to use schema columns
-- `modules/knowledge-hub/article.php`: single article view — rewritten to use schema columns
-- `admin/knowledge/index.php`: admin knowledge management — rewritten queries + form
+- `modules/knowledge-hub/index.php`: front-end knowledge hub â€” rewritten to use schema columns
+- `modules/knowledge-hub/article.php`: single article view â€” rewritten to use schema columns
+- `admin/knowledge/index.php`: admin knowledge management â€” rewritten queries + form
 - `admin/includes/admin-sidebar.php`: shared admin sidebar used by all admin sub-pages
 - `assets/js/main.js`: shared frontend JavaScript utilities
 - `assets/js/chatbot.js`: chatbot widget JavaScript

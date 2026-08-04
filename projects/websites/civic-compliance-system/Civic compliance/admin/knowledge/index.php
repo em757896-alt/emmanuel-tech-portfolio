@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * admin/knowledge/index.php
  * Knowledge Hub Content Management
@@ -21,7 +21,7 @@ $currentPage = 'knowledge';
 
 $db = Database::getInstance()->getConnection();
 
-// ── Handle Actions ────────────────────────────────────────────────
+// â”€â”€ Handle Actions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $actionMsg  = '';
 $actionType = '';
 
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title       = sanitizeInput($_POST['title'] ?? '');
             $titleSw     = sanitizeInput($_POST['title_sw'] ?? '');
             $summary     = sanitizeInput($_POST['summary'] ?? '');
-            $content     = $_POST['content'] ?? ''; // HTML content — not sanitized here for rich text
+            $content     = $_POST['content'] ?? ''; // HTML content â€” not sanitized here for rich text
             $contentSw   = $_POST['content_sw'] ?? '';
             $categoryId  = sanitizeInput($_POST['category'] ?? 'pbo_act');
             $actSection  = sanitizeInput($_POST['pbo_act_section'] ?? '');
@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// ── Filters ──────────────────────────────────────────────────────
+// â”€â”€ Filters â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $filterStatus = sanitizeInput($_GET['status'] ?? '');
 $filterCat    = sanitizeInput($_GET['category'] ?? '');
 $search       = sanitizeInput($_GET['q'] ?? '');
@@ -178,7 +178,7 @@ $articles = $stmt->fetchAll();
 
 // Categories (ENUM values)
 $categoryOptions = [
-    '' => '— Select Category —',
+    '' => 'â€” Select Category â€”',
     'pbo_act' => 'PBO Act',
     'registration' => 'Registration',
     'compliance' => 'Compliance',
@@ -327,12 +327,12 @@ if (!empty($_GET['edit'])) {
                                       placeholder="Brief description (shown in article cards)"><?php echo htmlspecialchars($editArticle['summary_en'] ?? ''); ?></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Content (English) — HTML supported</label>
+                            <label>Content (English) â€” HTML supported</label>
                             <textarea name="content" rows="12" class="content-editor"
                                       placeholder="Full article content. Use &lt;h2&gt;, &lt;h3&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;strong&gt;, &lt;blockquote&gt; tags."><?php echo htmlspecialchars($editArticle['content_en'] ?? ''); ?></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Content (Kiswahili) — optional</label>
+                            <label>Content (Kiswahili) â€” optional</label>
                             <textarea name="content_sw" rows="8" class="content-editor"
                                       placeholder="Maudhui ya makala kwa Kiswahili..."><?php echo htmlspecialchars($editArticle['content_sw'] ?? ''); ?></textarea>
                         </div>
@@ -487,16 +487,16 @@ if (!empty($_GET['edit'])) {
                             </td>
                             <td>
                                 <?php if ($art['title_sw']): ?>
-                                <span style="font-size:0.85rem">🇰🇪</span>
+                                <span style="font-size:0.85rem">ðŸ‡°ðŸ‡ª</span>
                                 <?php else: ?>
-                                <span style="color:#d1d5db">—</span>
+                                <span style="color:#d1d5db">â€”</span>
                                 <?php endif; ?>
                             </td>
                             <td>
                                 <?php if ($art['is_featured']): ?>
                                 <i class="fas fa-star" style="color:#f59e0b"></i>
                                 <?php else: ?>
-                                <span style="color:#d1d5db">—</span>
+                                <span style="color:#d1d5db">â€”</span>
                                 <?php endif; ?>
                             </td>
                             <td class="date-cell">
