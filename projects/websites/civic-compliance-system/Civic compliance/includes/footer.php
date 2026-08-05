@@ -13,7 +13,7 @@ $currentYear = date('Y');
                     </div>
                     <p>Kenya's comprehensive platform for Public Benefit Organizations — providing legal knowledge, compliance tools, AI guidance, and civic space monitoring under the PBO Act 2013.</p>
                     <p class="mt-2">
-                        <small>Developed and maintained by <strong class="text-white">CRECO Kenya</strong></small>
+                        <small>Created by <strong class="text-white">Elevate Media Productions</strong></small>
                     </p>
                     <div class="social-links mt-3">
                         <a href="#" title="Twitter/X"><i class="fab fa-twitter"></i></a>
@@ -81,9 +81,9 @@ $currentYear = date('Y');
                 </div>
                 
                 <div class="mt-3" style="font-size:.8rem;color:rgba(255,255,255,.5);">
-                    <p><i class="fas fa-envelope me-1"></i>info@crecokenya.org</p>
-                    <p><i class="fas fa-phone me-1"></i>+254 700 000 000</p>
-                    <p><i class="fas fa-map-marker-alt me-1"></i>Nairobi, Kenya</p>
+                    <p><i class="fab fa-whatsapp me-1"></i>+254 775 333 673 (WhatsApp)</p>
+                    <p><i class="fas fa-phone me-1"></i>+254 111 275 630</p>
+                    <p><i class="fas fa-envelope me-1"></i>em757896@gmail.com</p>
                 </div>
             </div>
         </div>
@@ -92,7 +92,7 @@ $currentYear = date('Y');
         
         <div class="footer-bottom">
             <div>
-                &copy; <?= $currentYear ?> PBO Kenya Platform by CRECO Kenya. All rights reserved.
+                &copy; <?= $currentYear ?> PBO Kenya Platform by Elevate Media Productions. All rights reserved.
                 <span class="ms-2">| Kenya Data Protection Act 2019 Compliant</span>
             </div>
             <div class="d-flex align-items-center gap-3">

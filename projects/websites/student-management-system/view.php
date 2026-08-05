@@ -126,7 +126,8 @@ $result = $conn->query("SELECT * FROM students ORDER BY id DESC");
 </div>
 
 <div class="footer">
-    &copy; 2026 Student Management System
+    &copy; 2026 Student Management System | Created by Elevate Media Productions<br>
+    WhatsApp: +254 775 333 673 | Call: +254 111 275 630 | Email: em757896@gmail.com
 </div>
 
 </body>

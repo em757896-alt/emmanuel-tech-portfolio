@@ -76,6 +76,31 @@ fun SettingsScreen(onLogout: () -> Unit) {
                 Spacer(Modifier.width(8.dp))
                 Text("Logout")
             }
+
+            Spacer(Modifier.weight(1f))
+            Spacer(Modifier.height(24.dp))
+            Text(
+                "Created by Elevate Media Productions",
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                "WhatsApp: +254 775 333 673",
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                "Call: +254 111 275 630",
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                "Email: em757896@gmail.com",
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
