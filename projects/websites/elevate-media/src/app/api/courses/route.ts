@@ -15,11 +15,27 @@ export async function GET() {
 
     const { data: courses, error } = await supabase
       .from("courses")
-      .select("*")
+      .select("*, departments(name)")
       .order("code", { ascending: true });
 
     if (error) throw new Error(error.message);
-    return NextResponse.json({ courses: courses || [] });
+
+    const courseIds = (courses || []).map((c: { id: string }) => c.id);
+    const enrollCounts: Record<string, number> = {};
+    if (courseIds.length) {
+      const { data: enrollments } = await supabase.from("course_enrollments").select("courseId").in("courseId", courseIds);
+      (enrollments || []).forEach((e: { courseId: string }) => {
+        enrollCounts[e.courseId] = (enrollCounts[e.courseId] || 0) + 1;
+      });
+    }
+
+    const normalized = (courses || []).map((c: any) => ({
+      ...c,
+      department: Array.isArray(c.departments) ? c.departments[0] : c.departments || undefined,
+      _count: { enrollments: enrollCounts[c.id] || 0 },
+    }));
+
+    return NextResponse.json({ courses: normalized });
   } catch (error) {
     console.error("Error fetching courses:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
