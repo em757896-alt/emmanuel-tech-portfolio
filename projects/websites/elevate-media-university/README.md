@@ -152,7 +152,7 @@ git clone https://github.com/em757896-alt/emmanuel-tech-portfolio.git
 Navigate into the project
 
 ```bash
-cd projects/websites/elevate-media
+cd projects/websites/elevate-media-university
 ```
 
 Install dependencies

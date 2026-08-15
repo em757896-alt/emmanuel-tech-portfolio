@@ -8,14 +8,14 @@ A curated portfolio of production-grade digital products spanning modern web app
 
 ## 🚀 Featured Project
 
-### Elevate Media University — Student Management System
+### Elevate Media University — Official Institution Website
 
 > **Next.js 16 · TypeScript · Supabase · Auth.js · Tailwind CSS**
 
 A comprehensive, role-based university management platform powering students, faculty, and administrators through a single secure ecosystem.
 
 - **Live:** https://elevate-media-dun.vercel.app
-- **Source:** [`projects/websites/elevate-media`](projects/websites/elevate-media)
+- **Source:** [`projects/websites/elevate-media-university`](projects/websites/elevate-media-university)
 
 | Capability | Details |
 |------------|---------|
@@ -30,13 +30,13 @@ A comprehensive, role-based university management platform powering students, fa
 
 ## 🗂️ Project Catalogue
 
-### 1. Elevate Media University — Student Management System
+### 1. Elevate Media University — Official Institution Website
 **Next.js 16 · TypeScript · Supabase · Auth.js · Tailwind CSS**
 
-A secure multi-portal university management platform with email-verified student onboarding, scoped teacher & HOD dashboards, faculty-wide analytics, and full administrative oversight.
+A secure multi-portal university institution website with email-verified student onboarding, scoped teacher & HOD dashboards, faculty-wide analytics, and full administrative oversight.
 
 - **Live:** https://elevate-media-dun.vercel.app
-- **Source:** [`projects/websites/elevate-media`](projects/websites/elevate-media)
+- **Source:** [`projects/websites/elevate-media-university`](projects/websites/elevate-media-university)
 
 ### 2. Civic Compliance System
 **PHP · MySQL · Bootstrap · jQuery · Chart.js**
@@ -92,7 +92,7 @@ emmanuel-tech-portfolio/
 │
 ├── projects/
 │   ├── websites/
-│   │   ├── elevate-media/                 # Next.js Student Management System (Vercel)
+│   │   ├── elevate-media-university/       # Next.js Student Management System (Vercel)
 │   │   ├── civic-compliance-system/       # PHP Civic Compliance Platform
 │   │   └── student-management-system/     # PHP + MySQL + Three.js student management platform
 │   └── applications/
