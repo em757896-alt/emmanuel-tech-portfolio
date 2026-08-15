@@ -1,6 +1,6 @@
-# Elevate Media — Student Management System
+# Elevate Media University — Official Institution Website
 
-> A modern, full-stack student management platform built with Next.js, TypeScript, Tailwind CSS, and Supabase — featuring three dedicated portals (Student, Teacher, Admin), role-based access control, email verification, and a complete academic approval workflow.
+> The official website for Elevate Media University — a modern, full-stack institution website built with Next.js, TypeScript, Tailwind CSS, and Supabase. It presents the university to the public (programs, courses, achievements, applications) and powers secure online portals for students, teaching staff, and administrators.
 
 **🌐 Live Demo:** https://elevate-media-dun.vercel.app
 
@@ -8,13 +8,20 @@
 
 ## Overview
 
-Elevate Media University's Student Management System (SMS) is a comprehensive academic administration platform that centralizes student, staff, course, and result management for the institution.
+Elevate Media University's official website serves two audiences. For the public, it is an informational and marketing website — showcasing the institution, its programs and courses, achievements, and application channels. For the university community, it provides **three independent, role-scoped portals** — a student portal, a staff portal (with Unit Lecturer and HOD views), and an admin portal — each showing only the features relevant to its role.
 
-The platform delivers **three independent, role-scoped portals** — a student portal, a teacher portal (with Unit Lecturer and HOD views), and an admin portal — each showing only the features relevant to its role. From student applications and email-verified account activation to course enrollment, assignment submissions, exam results, attendance tracking, and POE (Portfolio of Evidence) approvals, the system automates the full academic lifecycle.
+> **Note:** The separate, classic PHP/MySQL **Student Management System (SMS)** lives in its own project — [`projects/websites/student-management-system`](https://github.com/em757896-alt/emmanuel-tech-portfolio/tree/main/projects/websites/student-management-system). This project is the institution's website.
 
 ---
 
 ## Key Features
+
+### Public Website
+- Landing page with university branding and tagline
+- Courses and programs listing
+- Achievements page
+- Student application form (`/student-apply`)
+- Staff application form (`/teacher-apply`)
 
 ### Student Portal
 - Email-verified registration with unique Admission Number (e.g. `EM20261001`)
@@ -24,7 +31,7 @@ The platform delivers **three independent, role-scoped portals** — a student p
 - Attendance sign-in and status tracking
 - Dashboard with personal academic overview
 
-### Teacher Portal
+### Staff Portal
 - Login with Employee ID + Email + Password, with Unit Lecturer / HOD role selection
 - Lecturer dashboard scoped to own courses, students, and pending submissions
 - HOD dashboard scoped to department or faculty overview
@@ -91,15 +98,15 @@ The platform delivers **three independent, role-scoped portals** — a student p
 ## Core Modules
 
 - Public Landing Page
-- Student Application (`/student-apply`)
-- Teacher Application (`/teacher-apply`)
-- Student Portal (`/student-login` → `/dashboard`)
-- Teacher Portal (`/teacher-login` → `/teacher` or `/teacher/hod`)
-- Admin Portal (`/admin-login` → `/admin`)
 - Courses & Achievements (public pages)
-- Student Dashboard sub-pages (courses, assignments, exams, attendance, results, profile)
-- Teacher Dashboard sub-pages (classes, submissions, results, POE approvals, attendance, HOD overview)
-- Admin Dashboard sub-pages (users, courses, departments, setup)
+- Student Application (`/student-apply`)
+- Staff Application (`/teacher-apply`)
+- Student Portal (`/student-login` → `/dashboard`)
+- Staff Portal (`/teacher-login` → `/teacher` or `/teacher/hod`)
+- Admin Portal (`/admin-login` → `/admin`)
+- Student Portal pages (courses, assignments, exams, attendance, results, profile)
+- Staff Portal pages (classes, submissions, results, POE approvals, attendance, HOD overview)
+- Admin Portal pages (users, courses, departments, setup)
 
 ---
 
@@ -116,8 +123,6 @@ The platform delivers **three independent, role-scoped portals** — a student p
 <img src="Screenshots/Screenshot (113).png" alt="Elevate Media — Dashboard View" />
 
 <img src="Screenshots/Screenshot (114).png" alt="Elevate Media — Dashboard View" />
-
-<img src="Screenshots/Screenshot (5).png" alt="Elevate Media — Application View" />
 
 ---
 
@@ -202,12 +207,12 @@ elevate-media/
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/          # Login redirect, registration
-│   │   ├── (dashboard)/     # Student, Teacher & Admin dashboards
+│   │   ├── (dashboard)/     # Student, Staff & Admin portals
 │   │   ├── admin-login/     # Admin portal
 │   │   ├── student-login/   # Student portal
-│   │   ├── teacher-login/   # Teacher portal
+│   │   ├── teacher-login/   # Staff portal
 │   │   ├── student-apply/   # Student application form
-│   │   ├── teacher-apply/   # Teacher application form
+│   │   ├── teacher-apply/   # Staff application form
 │   │   ├── courses/         # Public courses listing
 │   │   ├── achievements/    # Public achievements page
 │   │   ├── api/             # API route handlers (Supabase HTTP)
