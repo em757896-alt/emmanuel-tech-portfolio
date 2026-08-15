@@ -46,10 +46,10 @@ A secure, responsive platform strengthening civic participation in Kenya — sup
 - **Live:** https://civiccompliancehub.gt.tc
 - **Source:** [`projects/websites/civic-compliance-system`](projects/websites/civic-compliance-system)
 
-### 3. Student Management System (Legacy)
-**PHP · MySQL**
+### 3. Student Management System
+**PHP · MySQL · Three.js**
 
-A web application for registering, viewing, and searching student records — the foundational project that shaped the modern Elevate Media system.
+A standalone student management platform featuring an interactive 3D campus, live timetables, a digital library, and a full admin dashboard — produced under the Elevate Media Productions banner.
 
 - **Live:** https://studentmanagement.gt.tc
 - **Source:** [`projects/websites/student-management-system`](projects/websites/student-management-system)
@@ -94,7 +94,7 @@ emmanuel-tech-portfolio/
 │   ├── websites/
 │   │   ├── elevate-media/                 # Next.js Student Management System (Vercel)
 │   │   ├── civic-compliance-system/       # PHP Civic Compliance Platform
-│   │   └── student-management-system/     # Legacy PHP + MySQL system
+│   │   └── student-management-system/     # PHP + MySQL + Three.js student management platform
 │   └── applications/
 │       ├── mobile apps/
 │       │   └── trackspend-native/          # Kotlin/Jetpack Compose expense tracker

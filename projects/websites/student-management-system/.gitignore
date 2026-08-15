@@ -1,0 +1,15 @@
+# Database credentials must never be committed
+db.php
+
+# Node test tooling (playwright) — not part of the site
+node_modules/
+package.json
+package-lock.json
+_test3d.html
+
+# Editor / OS noise
+.vscode/
+.idea/
+*.log
+Thumbs.db
+.DS_Store

@@ -1,7 +1,7 @@
 <?php
-// logout.php
-session_start();
+declare(strict_types=1);
+require_once __DIR__ . '/includes/config.php';
+
 session_unset();
 session_destroy();
-header("Location: home.php?msg=Logged+out");
-exit;
+redirect('home.php');

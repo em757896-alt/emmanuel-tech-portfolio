@@ -1,136 +1,123 @@
-# Student Management System
+<p align="center">
+  <strong style="font-size:1.5rem; letter-spacing:.14em; text-transform:uppercase;">Student Management System</strong><br>
+  <span style="letter-spacing:.28em; text-transform:uppercase; opacity:.7; font-size:.8rem;">Elevate Media Productions</span>
+</p>
 
-> A web-based application for registering, viewing, searching, and managing student records — a simple, efficient tool for academic administration.
+<p align="center">
+  A production-grade student management platform — interactive <strong>3D campus</strong>, live timetables,
+  a digital library, and complete student record management.
+</p>
 
-**🌐 Live Demo:** https://studentmanagement.gt.tc
+<p align="center">
+  <a href="https://studentmanagement.gt.tc"><strong>View Live Demo</strong></a>
+  &nbsp;&middot;&nbsp; Admin demo: <code>admin</code> / <code>admin123</code>
+</p>
 
 ---
 
 ## Overview
 
-The Student Management System is a lightweight web application built with PHP and MySQL that enables institutions to manage student records digitally. It provides core academic administration features including student registration, record viewing, and search — replacing paper-based record keeping with a clean, functional web interface.
+This **Student Management System** is a standalone web platform that brings academic administration into
+one place. Instead of a flat list of records, the system opens with an **interactive 3D campus** — visitors
+can rotate and zoom around the grounds and click any building to explore its departments, classrooms, and
+timetable.
 
-The project served as the foundational system that shaped the modern **Elevate Media University Student Management System** (a full multi-portal platform built with Next.js and Supabase).
+The project is a production of **Elevate Media Productions**.
 
----
+## Features
 
-## Key Features
+| Area | What it does |
+|---|---|
+| 🏫 **Interactive 3D Campus** | Full Three.js scene — buildings, lawns and paths. Click a building to open its department, a classroom to see its timetable, or a student avatar to view their profile. Graceful 2D fallback on devices without WebGL. |
+| 🎓 **Student Management** | Register, search, edit and delete student records. Enrolment by department with live counts. |
+| 🏛️ **Departments & Classrooms** | Department pages with building, colour identity and classroom lists; room-tagged timetable lookups. |
+| 📅 **Live Timetables** | Daily schedules grouped by classroom and department, always fetched from the database. |
+| 📚 **Library & Loans** | Book catalogue with availability status, plus loan tracking (active vs returned). |
+| 🔐 **Admin Dashboard** | Staff-only area to manage students, departments, classrooms, timetables and library stock. |
+| 📬 **Contact** | Working enquiry form wired to a processing script. |
 
-- Student registration and record creation
-- Student record viewing and management
-- Student search functionality
-- Secure login and session management
-- Simple, responsive interface
-- MySQL-based data storage
+## Tech Stack
 
----
+- **Backend** — PHP 8 (procedural, no framework) + PDO prepared statements
+- **Database** — MySQL / MariaDB
+- **Frontend** — Semantic HTML5, modern CSS (custom design system), vanilla JavaScript
+- **3D** — Three.js (r160 module build on campus, r149 UMD on the hero) with an import-map-driven module graph
+- **Hosting** — [InfinityFree](https://infinityfree.net) with a free MySQL database
 
-## Technology Stack
+## Getting Started
 
-### Frontend
-- HTML5
-- CSS3
-- JavaScript
+### 1. Requirements
+- PHP **8.0+** with PDO and the MySQL driver enabled
+- MySQL / MariaDB server
+- Any web server (Apache, Nginx, or PHP's built-in server)
 
-### Backend
-- PHP
-
-### Database
-- MySQL
-
----
-
-## Live Demo
-
-🌐 https://studentmanagement.gt.tc
-
----
-
-## Installation
-
-1. Clone the repository
+### 2. Clone & configure
 
 ```bash
 git clone https://github.com/em757896-alt/emmanuel-tech-portfolio.git
+cd emmanuel-tech-portfolio/projects/websites/student-management-system
 ```
 
-2. Navigate into the project
+1. Copy `db.example.php` to `db.php` and fill in your database credentials.
+2. Create a database and import `database.sql` (self-cleaning import — safe to re-run).
+3. Seed the first admin account by visiting `setup_admin.php` once, or create one via SQL.
+4. Serve the folder and open `index.php` — it redirects to `home.php`.
 
-```bash
-cd projects/websites/student-management-system
-```
+### 3. Default admin credentials
 
-3. Move the project into your web server directory (XAMPP/WAMP/Laragon), for example:
+| Username | Password |
+|----------|----------|
+| `admin`  | `admin123` |
 
-```
-C:\xampp\htdocs\student-management-system\
-```
+> ⚠️ **Change the admin password immediately** after your first login.
 
-4. Create the required MySQL database and import `database.sql`.
-
-5. Copy `db.example.php` to `db.php` (or your active config file) and set your real database credentials:
-
-```php
-$host   = "localhost";
-$user   = "YOUR_DB_USERNAME";
-$pass   = "YOUR_DB_PASSWORD";
-$dbname = "YOUR_DB_NAME";
-```
-
-6. Start Apache and MySQL, then visit:
-
-```
-http://localhost/student-management-system/
-```
-
----
-
-## Repository Structure
+## Project Structure
 
 ```
 student-management-system/
-│
-├── database.sql            # MySQL database dump
-├── db.example.php          # Sample database config (no real credentials)
-├── home.php                # Homepage
-├── index.php               # Root redirect to home.php
-├── login.php               # User login
-├── logout.php              # User logout
-├── register.php            # Student registration
-├── view.php                # View student records
-├── search.php              # Search student records
-├── process_login.php       # Login handler
-├── process_register.php    # Registration handler
-├── delete_student.php      # Delete student record
-└── README.md
+├── assets/
+│   ├── css/styles.css      # Full design system
+│   └── js/
+│       ├── campus3d.js     # 3D campus scene (ES module)
+│       └── hero3d.js       # Home hero background scene
+├── includes/
+│   ├── config.php          # Config, DB connection, helpers
+│   ├── header.php          # Shared header / navigation
+│   └── footer.php          # Shared footer / contact details
+├── admin/                  # Admin dashboard pages
+├── api/search.php          # JSON endpoint for live admin student search
+├── campus.php              # 3D campus page
+├── students.php            # Student registration & search
+├── departments.php         # Department directory
+├── department.php          # Single department detail
+├── timetable.php           # Live timetables
+├── library.php             # Library catalogue & loans
+├── contact.php             # Contact form
+├── database.sql            # Schema + seed data (self-cleaning)
+└── db.example.php          # DB credentials template (copy to db.php)
 ```
 
----
+## Deployment Notes
 
-## Project Status
+- This is a **shared-hosting-friendly** app: no build step, no server-side runtime beyond PHP, no package
+  manager required at runtime.
+- The 3D campus loads its Three.js modules from a public CDN (jsDelivr) via an **import map** declared in
+  `campus.php`. The page falls back to a 2D layout automatically if WebGL is unavailable.
+- `db.php` contains live credentials and is **git-ignored** by design — never commit it.
 
-**Maintained**
+## Security
 
-A foundational portfolio project demonstrating core PHP and MySQL web development skills. Its successor, the Elevate Media University Student Management System, extends this concept into a modern multi-portal platform with role-based dashboards and cloud infrastructure.
+- PDO prepared statements everywhere — no SQL injection.
+- Output escaping via the `e()` helper — no reflected XSS.
+- Admin area is behind session-based access checks.
+- Credentials and the `db.php` file are excluded from version control.
 
----
+## Production
 
-## Author
-
-### Emmanuel Michael
-**Founder & Owner — Elevate Media Productions**
-Full-Stack System Developer | ICT Technology Specialist
-
-- 📧 Email: em757896@gmail.com
-- 📞 Phone / WhatsApp: +254111275630 · +254775333673
-- 📍 Mombasa, Kenya
-- GitHub: https://github.com/em757896-alt
-- Portfolio: https://github.com/em757896-alt/emmanuel-tech-portfolio
-
----
+- **Live:** https://studentmanagement.gt.tc
+- **Host:** InfinityFree (shared hosting, PHP 8.3 + MariaDB)
 
 ## License
 
-This project is provided for demonstration and portfolio purposes.
-
+Provided for demonstration and portfolio purposes.
 © 2026 Emmanuel Michael · Elevate Media Productions. All Rights Reserved.
