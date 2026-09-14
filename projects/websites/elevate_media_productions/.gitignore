@@ -8,6 +8,7 @@ build/
 !.env.example
 .DS_Store
 *.log
+*output*.txt
 .vercel
 vercel/
 .vercel
