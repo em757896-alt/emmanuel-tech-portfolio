@@ -10,12 +10,33 @@
   let subject = $state('');
   let message = $state('');
   let submitted = $state(false);
+  let submitting = $state(false);
+  let errorMsg = $state('');
   let openFaq = $state<number | null>(null);
 
-  function onSubmit(e: Event) {
+  async function onSubmit(e: Event) {
     e.preventDefault();
-    submitted = true;
-    setTimeout(() => { name = ''; email = ''; subject = ''; message = ''; }, 3000);
+    if (submitting) return;
+    submitting = true;
+    errorMsg = '';
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ name, email, subject, message })
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        errorMsg = (data as { error?: string }).error ?? 'Something went wrong. Please try again.';
+        return;
+      }
+      submitted = true;
+      setTimeout(() => { name = ''; email = ''; subject = ''; message = ''; }, 3000);
+    } catch {
+      errorMsg = 'Network error. Please try again.';
+    } finally {
+      submitting = false;
+    }
   }
 </script>
 
@@ -107,9 +128,17 @@
                     class="w-full rounded-xl border border-slate-200/80 bg-fog-light px-4 py-3 text-sm text-ink outline-none focus:border-primary-500 dark:border-white/10 dark:bg-night-lighter dark:text-white resize-y"></textarea>
                 </div>
               </div>
-              <div class="mt-6 flex justify-end">
-                <button type="submit" class="btn-gradient !px-6 !py-3">
-                  <Send size={15} /> Send message
+              <div class="mt-6 flex flex-col items-end gap-3">
+                {#if errorMsg}
+                  <p class="text-sm text-red-500" role="alert">{errorMsg}</p>
+                {/if}
+                <button type="submit" class="btn-gradient !px-6 !py-3" disabled={submitting}>
+                  {#if submitting}
+                    <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" aria-hidden="true"></span>
+                    Sending...
+                  {:else}
+                    <Send size={15} /> Send message
+                  {/if}
                 </button>
               </div>
             </form>

@@ -4,7 +4,7 @@ export const site = {
   tagline: 'We craft digital experiences that elevate brands.',
   description:
     'Elevate Media Productions is a digital studio building web applications, mobile apps and brand platforms that help organizations launch, grow and engage their communities.',
-  email: 'hello@elevatemedia.io',
+  email: 'elevatemediaproductions1@gmail.com',
   location: 'Nairobi, Kenya',
   github: 'https://github.com/emmanuel-tech-resources',
   linkedin: 'https://www.linkedin.com',
