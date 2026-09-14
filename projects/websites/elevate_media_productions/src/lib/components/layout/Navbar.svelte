@@ -5,6 +5,7 @@
   import Logo from '$lib/components/ui/Logo.svelte';
   import { nav } from '$lib/config';
   import { theme } from '$lib/stores/theme';
+  import { session } from '$lib/stores/session';
 
   let scrolled = $state(false);
   let mobileOpen = $state(false);
@@ -85,9 +86,19 @@
         <span class="hidden md:inline">Community</span>
       </a>
 
-      <a href="/auth/login" class="btn-gradient hidden !px-4 !py-2 !text-sm sm:inline-flex">
-        Sign in
-      </a>
+      {#if $session.user}
+        <a
+          href="/dashboard"
+          class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500 text-sm font-bold text-white transition-transform hover:scale-105"
+          aria-label="Go to dashboard"
+        >
+          {($session.user.full_name ?? $session.user.username ?? 'U').slice(0, 1).toUpperCase()}
+        </a>
+      {:else}
+        <a href="/auth/login" class="btn-gradient hidden !px-4 !py-2 !text-sm sm:inline-flex">
+          Sign in
+        </a>
+      {/if}
 
       <button
         class="flex h-10 w-10 items-center justify-center rounded-lg text-ink-light dark:text-slate-300 lg:hidden"
@@ -123,10 +134,14 @@
           </a>
         {/each}
         <div class="mt-2 flex gap-2 border-t border-slate-200/60 pt-3 dark:border-white/10">
-          <a href="/auth/login" class="btn-gradient flex-1 !py-2.5">Sign in</a>
-          <a href="/auth/signup" class="btn-outline flex-1 !py-2.5 !text-ink dark:!text-slate-200">
-            Join free
-          </a>
+          {#if $session.user}
+            <a href="/dashboard" class="btn-gradient flex-1 !py-2.5" onclick={() => (mobileOpen = false)}>Dashboard</a>
+          {:else}
+            <a href="/auth/login" class="btn-gradient flex-1 !py-2.5" onclick={() => (mobileOpen = false)}>Sign in</a>
+            <a href="/auth/signup" class="btn-outline flex-1 !py-2.5 !text-ink dark:!text-slate-200" onclick={() => (mobileOpen = false)}>
+              Join free
+            </a>
+          {/if}
         </div>
       </div>
     </div>

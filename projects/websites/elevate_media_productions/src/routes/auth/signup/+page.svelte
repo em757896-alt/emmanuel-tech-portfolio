@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { Mail, Lock, User, Eye, EyeOff, Github } from 'lucide-svelte';
+  import { Mail, Lock, User, Eye, EyeOff, Github, ArrowLeft } from 'lucide-svelte';
   import Reveal from '$lib/components/ui/Reveal.svelte';
   import Logo from '$lib/components/ui/Logo.svelte';
+  import { goto } from '$app/navigation';
+  import { supabase, supabaseConfigured } from '$lib/supabase';
 
   let name = $state('');
   let email = $state('');
@@ -9,14 +11,34 @@
   let showPw = $state(false);
   let loading = $state(false);
   let error = $state('');
+  let sent = $state(false);
 
   async function onSubmit(e: Event) {
     e.preventDefault();
     loading = true;
     error = '';
     try {
-      await new Promise((r) => setTimeout(r, 1000));
-      error = 'Supabase is not configured yet. Add your keys to .env to enable authentication.';
+      if (!supabaseConfigured || !supabase) {
+        error = 'Authentication is not configured yet. Add your Supabase keys to .env and redeploy.';
+        return;
+      }
+      const { data, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: name, username: email.split('@')[0] },
+          emailRedirectTo: `${window.location.origin}/auth/login`
+        }
+      });
+      if (authError) {
+        error = authError.message;
+        return;
+      }
+      if (data.session) {
+        goto('/dashboard');
+      } else {
+        sent = true;
+      }
     } catch {
       error = 'An error occurred. Please try again.';
     } finally {
@@ -47,7 +69,16 @@
         </div>
       {/if}
 
-      <form onsubmit={onSubmit} class="space-y-4">
+      {#if sent}
+        <div class="rounded-xl bg-accent-500/10 px-4 py-6 text-center">
+          <p class="text-sm font-medium text-accent-500">Check your inbox!</p>
+          <p class="mt-1 text-sm text-ink-light dark:text-slate-400">We sent a confirmation link to <span class="font-medium text-ink dark:text-white">{email}</span>. Click it to activate your account, then sign in.</p>
+        </div>
+        <a href="/auth/login" class="btn-outline mt-6 w-full !py-3 !text-ink dark:!text-slate-200">
+          <ArrowLeft size={16} /> Go to sign in
+        </a>
+      {:else}
+        <form onsubmit={onSubmit} class="space-y-4">
         <div>
           <label for="name" class="mb-1.5 block text-sm font-medium text-ink dark:text-slate-200">Full name</label>
           <div class="relative">
@@ -95,6 +126,7 @@
         Already have an account?
         <a href="/auth/login" class="font-medium text-primary-500 hover:underline"> Sign in</a>
       </p>
+      {/if}
     </div>
   </Reveal>
 </div>

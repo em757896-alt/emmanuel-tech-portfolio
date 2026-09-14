@@ -5,6 +5,7 @@
   import Footer from '$lib/components/layout/Footer.svelte';
   import { theme } from '$lib/stores/theme';
   import { getInitialTheme, applyTheme } from '$lib/theme';
+  import { syncAuthState } from '$lib/supabase';
 
   let { children } = $props();
 
@@ -12,6 +13,7 @@
     const initial = getInitialTheme();
     applyTheme(initial);
     theme.set(initial);
+    return syncAuthState();
   });
 
   $effect(() => {

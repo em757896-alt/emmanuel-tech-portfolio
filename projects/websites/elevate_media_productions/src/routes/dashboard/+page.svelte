@@ -3,6 +3,7 @@
   import { projects } from '$lib/data/projects';
   import { blogPosts } from '$lib/data/blog';
   import { forumThreads } from '$lib/data/forum';
+  import { session } from '$lib/stores/session';
 
   const cards = [
     { label: 'Total Projects', value: projects.length, icon: FolderOpen, color: 'from-primary-500 to-purple-500' },
@@ -18,7 +19,13 @@
 
 <div class="space-y-6">
   <div>
-    <h1 class="font-display text-2xl font-bold text-ink dark:text-white">Dashboard</h1>
+    <h1 class="font-display text-2xl font-bold text-ink dark:text-white">
+      {#if $session.user && $session.user.full_name}
+        Welcome back, {$session.user.full_name.split(' ')[0]}!
+      {:else}
+        Dashboard
+      {/if}
+    </h1>
     <p class="mt-1 text-sm text-ink-light dark:text-slate-400">Overview of your Elevate Media platform.</p>
   </div>
 

@@ -2,6 +2,8 @@
   import { Mail, Lock, Github, Eye, EyeOff } from 'lucide-svelte';
   import Reveal from '$lib/components/ui/Reveal.svelte';
   import Logo from '$lib/components/ui/Logo.svelte';
+  import { goto } from '$app/navigation';
+  import { supabase, supabaseConfigured } from '$lib/supabase';
 
   let email = $state('');
   let password = $state('');
@@ -14,9 +16,16 @@
     loading = true;
     error = '';
     try {
-      // Supabase auth will be connected when keys are configured
-      await new Promise((r) => setTimeout(r, 1000));
-      error = 'Supabase is not configured yet. Add your keys to .env to enable authentication.';
+      if (!supabaseConfigured || !supabase) {
+        error = 'Authentication is not configured yet. Add your Supabase keys to .env and redeploy.';
+        return;
+      }
+      const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
+      if (authError) {
+        error = authError.message;
+        return;
+      }
+      goto('/dashboard');
     } catch {
       error = 'An error occurred. Please try again.';
     } finally {

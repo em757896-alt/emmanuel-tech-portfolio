@@ -2,6 +2,7 @@
   import { Mail, ArrowLeft } from 'lucide-svelte';
   import Reveal from '$lib/components/ui/Reveal.svelte';
   import Logo from '$lib/components/ui/Logo.svelte';
+  import { supabase, supabaseConfigured } from '$lib/supabase';
 
   let email = $state('');
   let sent = $state(false);
@@ -13,7 +14,17 @@
     loading = true;
     error = '';
     try {
-      await new Promise((r) => setTimeout(r, 1000));
+      if (!supabaseConfigured || !supabase) {
+        error = 'Authentication is not configured yet. Add your Supabase keys to .env and redeploy.';
+        return;
+      }
+      const { error: authError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/reset`
+      });
+      if (authError) {
+        error = authError.message;
+        return;
+      }
       sent = true;
     } catch {
       error = 'An error occurred. Please try again.';
