@@ -16,11 +16,11 @@ create table if not exists public.profiles (
 
 alter table public.profiles enable row level security;
 
-create policy "Public profiles are viewable by everyone"
+create policy if not exists "Public profiles are viewable by everyone"
   on public.profiles for select
   using (true);
 
-create policy "Users can update their own profile"
+create policy if not exists "Users can update their own profile"
   on public.profiles for update
   using (auth.uid() = id);
 
@@ -41,6 +41,8 @@ begin
   return new;
 end;
 $$;
+
+drop trigger if exists on_auth_user_created on auth.users;
 
 create trigger on_auth_user_created
   after insert on auth.users
@@ -68,18 +70,18 @@ create table if not exists public.projects (
 
 alter table public.projects enable row level security;
 
-create policy "Projects are viewable by everyone"
+create policy if not exists "Projects are viewable by everyone"
   on public.projects for select using (true);
 
-create policy "Only admins can insert projects"
+create policy if not exists "Only admins can insert projects"
   on public.projects for insert
   with check (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
 
-create policy "Only admins can update projects"
+create policy if not exists "Only admins can update projects"
   on public.projects for update
   using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
 
-create policy "Only admins can delete projects"
+create policy if not exists "Only admins can delete projects"
   on public.projects for delete
   using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
 
@@ -105,11 +107,11 @@ create table if not exists public.posts (
 
 alter table public.posts enable row level security;
 
-create policy "Published posts are viewable by everyone"
+create policy if not exists "Published posts are viewable by everyone"
   on public.posts for select
   using (published = true OR exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
 
-create policy "Admin can manage posts"
+create policy if not exists "Admin can manage posts"
   on public.posts for all
   using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'))
   with check (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
@@ -131,10 +133,10 @@ create table if not exists public.forum_categories (
 
 alter table public.forum_categories enable row level security;
 
-create policy "Categories are viewable by everyone"
+create policy if not exists "Categories are viewable by everyone"
   on public.forum_categories for select using (true);
 
-create policy "Admin can manage categories"
+create policy if not exists "Admin can manage categories"
   on public.forum_categories for all
   using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'))
   with check (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
@@ -160,18 +162,18 @@ create table if not exists public.forum_threads (
 
 alter table public.forum_threads enable row level security;
 
-create policy "Threads are viewable by everyone"
+create policy if not exists "Threads are viewable by everyone"
   on public.forum_threads for select using (true);
 
-create policy "Authenticated users can post threads"
+create policy if not exists "Authenticated users can post threads"
   on public.forum_threads for insert
   with check (auth.uid() = author_id);
 
-create policy "Authors and admins can update threads"
+create policy if not exists "Authors and admins can update threads"
   on public.forum_threads for update
   using (auth.uid() = author_id OR exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
 
-create policy "Authors and admins can delete threads"
+create policy if not exists "Authors and admins can delete threads"
   on public.forum_threads for delete
   using (auth.uid() = author_id OR exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
 
@@ -191,18 +193,18 @@ create table if not exists public.forum_replies (
 
 alter table public.forum_replies enable row level security;
 
-create policy "Replies are viewable by everyone"
+create policy if not exists "Replies are viewable by everyone"
   on public.forum_replies for select using (true);
 
-create policy "Authenticated users can post replies"
+create policy if not exists "Authenticated users can post replies"
   on public.forum_replies for insert
   with check (auth.uid() = author_id);
 
-create policy "Authors and admins can update replies"
+create policy if not exists "Authors and admins can update replies"
   on public.forum_replies for update
   using (auth.uid() = author_id OR exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
 
-create policy "Authors and admins can delete replies"
+create policy if not exists "Authors and admins can delete replies"
   on public.forum_replies for delete
   using (auth.uid() = author_id OR exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
 
@@ -222,10 +224,10 @@ create table if not exists public.forum_votes (
 
 alter table public.forum_votes enable row level security;
 
-create policy "Users can view votes"
+create policy if not exists "Users can view votes"
   on public.forum_votes for select using (true);
 
-create policy "Users can vote"
+create policy if not exists "Users can vote"
   on public.forum_votes for insert
   with check (auth.uid() = user_id);
 
@@ -243,11 +245,11 @@ create table if not exists public.subscribers (
 
 alter table public.subscribers enable row level security;
 
-create policy "Anyone can subscribe"
+create policy if not exists "Anyone can subscribe"
   on public.subscribers for insert
   with check (true);
 
-create policy "Only admins can view subscribers"
+create policy if not exists "Only admins can view subscribers"
   on public.subscribers for select
   using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
 
@@ -267,11 +269,11 @@ create table if not exists public.messages (
 
 alter table public.messages enable row level security;
 
-create policy "Anyone can send a message"
+create policy if not exists "Anyone can send a message"
   on public.messages for insert
   with check (true);
 
-create policy "Only admins can view messages"
+create policy if not exists "Only admins can view messages"
   on public.messages for select
   using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
 
@@ -292,10 +294,10 @@ create table if not exists public.testimonials (
 
 alter table public.testimonials enable row level security;
 
-create policy "Testimonials are viewable by everyone"
+create policy if not exists "Testimonials are viewable by everyone"
   on public.testimonials for select using (true);
 
-create policy "Admin can manage testimonials"
+create policy if not exists "Admin can manage testimonials"
   on public.testimonials for all
   using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'))
   with check (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
