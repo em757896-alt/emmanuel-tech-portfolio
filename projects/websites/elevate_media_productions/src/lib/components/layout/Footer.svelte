@@ -1,13 +1,14 @@
 <script lang="ts">
-  import { Github, Linkedin, Twitter, Youtube, Heart, ArrowUpRight } from 'lucide-svelte';
+  import { Github, Linkedin, Phone, Heart, ArrowUpRight } from 'lucide-svelte';
+  import WhatsApp from '$lib/components/ui/WhatsApp.svelte';
   import Logo from '$lib/components/ui/Logo.svelte';
   import { nav, site } from '$lib/config';
 
   const socials = [
     { label: 'GitHub', href: site.github, Icon: Github },
     { label: 'LinkedIn', href: site.linkedin, Icon: Linkedin },
-    { label: 'Twitter', href: site.twitter, Icon: Twitter },
-    { label: 'YouTube', href: site.youtube, Icon: Youtube }
+    { label: 'WhatsApp', href: site.whatsapp, Icon: WhatsApp },
+    { label: 'Call', href: site.phone, Icon: Phone }
   ];
 
   const year = new Date().getFullYear();
@@ -102,7 +103,7 @@
     >
       <p>© {year} {site.name}. All rights reserved.</p>
       <p class="inline-flex items-center gap-1.5">
-        Crafted with <Heart size={14} class="text-secondary-500" fill="currentColor" /> in {site.location}
+        Crafted with <Heart size={14} class="text-secondary-500" fill="currentColor" />
       </p>
     </div>
   </div>

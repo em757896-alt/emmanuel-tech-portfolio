@@ -109,9 +109,8 @@ emmanuel-tech-portfolio/
 **ICT Specialist · Full-Stack Web Developer**
 *Engineering under Elevate Media Productions*
 
-- 📧 **Email:** em757896@gmail.com
+- 📧 **Email:** elevatemediaproductions1@gmail.com
 - 📞 **Phone / WhatsApp:** +254111275630 · +254775333673
-- 📍 **Location:** Mombasa, Kenya
 - 🌐 **GitHub:** https://github.com/em757896-alt
 
 ---

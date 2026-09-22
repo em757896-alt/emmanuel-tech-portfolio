@@ -16,11 +16,9 @@ $currentYear = date('Y');
                         <small>Created by <strong class="text-white">Elevate Media Productions</strong></small>
                     </p>
                     <div class="social-links mt-3">
-                        <a href="#" title="Twitter/X"><i class="fab fa-twitter"></i></a>
+                        <a href="https://wa.me/254775333673" title="WhatsApp" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
                         <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
-                        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
             </div>
@@ -83,7 +81,7 @@ $currentYear = date('Y');
                 <div class="mt-3" style="font-size:.8rem;color:rgba(255,255,255,.5);">
                     <p><i class="fab fa-whatsapp me-1"></i>+254 775 333 673 (WhatsApp)</p>
                     <p><i class="fas fa-phone me-1"></i>+254 111 275 630</p>
-                    <p><i class="fas fa-envelope me-1"></i>em757896@gmail.com</p>
+                    <p><i class="fas fa-envelope me-1"></i>elevatemediaproductions1@gmail.com</p>
                 </div>
             </div>
         </div>

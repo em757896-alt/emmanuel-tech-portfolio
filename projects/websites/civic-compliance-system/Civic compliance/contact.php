@@ -116,6 +116,13 @@ $currentPage = 'contact';
                             </div>
                         </div>
                         <div class="d-flex gap-3 mb-3">
+                            <i class="fab fa-whatsapp fa-lg text-success mt-1"></i>
+                            <div>
+                                <strong>WhatsApp</strong><br>
+                                <a href="https://wa.me/254775333673" target="_blank" rel="noopener">+254 775 333 673</a>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3 mb-3">
                             <i class="fas fa-phone fa-lg text-primary mt-1"></i>
                             <div>
                                 <strong>Phone</strong><br>
@@ -123,13 +130,6 @@ $currentPage = 'contact';
                             </div>
                         </div>
                         <div class="d-flex gap-3 mb-3">
-                            <i class="fas fa-map-marker-alt fa-lg text-primary mt-1"></i>
-                            <div>
-                                <strong>Location</strong><br>
-                                Nairobi, Kenya
-                            </div>
-                        </div>
-                        <div class="d-flex gap-3">
                             <i class="fas fa-globe fa-lg text-primary mt-1"></i>
                             <div>
                                 <strong>Website</strong><br>
@@ -139,10 +139,8 @@ $currentPage = 'contact';
                         <hr>
                         <h5>Follow Us</h5>
                         <div class="d-flex gap-3">
-                            <a href="#" class="btn btn-outline-primary btn-sm rounded-circle"><i class="fab fa-twitter"></i></a>
                             <a href="#" class="btn btn-outline-primary btn-sm rounded-circle"><i class="fab fa-facebook-f"></i></a>
                             <a href="#" class="btn btn-outline-primary btn-sm rounded-circle"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#" class="btn btn-outline-primary btn-sm rounded-circle"><i class="fab fa-youtube"></i></a>
                         </div>
                     </div>
                 </div>

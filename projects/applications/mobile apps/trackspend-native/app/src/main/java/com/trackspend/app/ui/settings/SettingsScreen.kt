@@ -97,7 +97,7 @@ fun SettingsScreen(onLogout: () -> Unit) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                "Email: em757896@gmail.com",
+                "Email: elevatemediaproductions1@gmail.com",
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

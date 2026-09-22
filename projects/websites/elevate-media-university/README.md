@@ -242,7 +242,7 @@ elevate-media/
 
 ICT Specialist | Full-Stack Web Developer
 
-📧 Email: em757896@gmail.com
+📧 Email: elevatemediaproductions1@gmail.com
 
 📞 Phone: +254111275630
 
@@ -266,7 +266,7 @@ This project is provided for demonstration and portfolio purposes.
 
 ## Acknowledgements
 
-Built by **Elevate Media Productions** — WhatsApp +254775333673 | Call +254111275630 | Email em757896@gmail.com.
+Built by **Elevate Media Productions** — WhatsApp +254775333673 | Call +254111275630 | Email elevatemediaproductions1@gmail.com.
 
 Special thanks to the open-source ecosystem — Next.js, Supabase, Tailwind CSS, and the wider developer community whose technologies helped shape this project.
 

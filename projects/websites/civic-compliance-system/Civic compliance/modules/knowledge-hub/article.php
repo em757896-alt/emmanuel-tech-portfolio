@@ -211,9 +211,6 @@ $currentPage = 'knowledge';
                             <button class="share-btn" onclick="shareArticle('copy')" title="Copy link">
                                 <i class="fas fa-link"></i>
                             </button>
-                            <button class="share-btn" onclick="shareArticle('twitter')" title="Share on Twitter">
-                                <i class="fab fa-twitter"></i>
-                            </button>
                             <button class="share-btn" onclick="shareArticle('whatsapp')" title="Share on WhatsApp">
                                 <i class="fab fa-whatsapp"></i>
                             </button>

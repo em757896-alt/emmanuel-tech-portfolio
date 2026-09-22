@@ -239,7 +239,7 @@ Build uses dummy DATABASE_URL for `prisma generate` (not real DB). Vercel instal
 - School name: "Elevate Media University"
 - Tagline: "Empowering the next generation of professionals through innovative education, cutting-edge technology, and a commitment to academic excellence."
 - Roles section with 3 cards: Students (Apply Now + Student Login), Teachers (Join Staff + Teacher Login), Admin (Admin Login)
-- Footer on every page: WhatsApp (+254775333673), Call (+254111275630), Email (em757896@gmail.com), "Created by Elevate Media Productions"
+- Footer on every page: WhatsApp (+254775333673), Call (+254111275630), Email (elevatemediaproductions1@gmail.com), "Created by Elevate Media Productions"
 - Footer links: Student Portal, Teacher Portal, Admin Portal
 
 ## Middleware Rules

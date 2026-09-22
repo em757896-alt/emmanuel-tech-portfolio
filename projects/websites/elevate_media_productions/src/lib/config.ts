@@ -5,11 +5,10 @@ export const site = {
   description:
     'Elevate Media Productions is a digital studio building web applications, mobile apps and brand platforms that help organizations launch, grow and engage their communities.',
   email: 'elevatemediaproductions1@gmail.com',
-  location: 'Nairobi, Kenya',
+  whatsapp: 'https://wa.me/254775333673',
+  phone: 'tel:+254111275630',
   github: 'https://github.com/emmanuel-tech-resources',
   linkedin: 'https://www.linkedin.com',
-  twitter: 'https://twitter.com',
-  youtube: 'https://youtube.com',
   discord: 'https://discord.com',
   repoUrl: 'https://github.com/emmanuel-tech-resources/elevate-media-productions'
 } as const;

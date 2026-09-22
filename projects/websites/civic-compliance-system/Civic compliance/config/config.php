@@ -14,8 +14,8 @@ define('APP_NAME', 'PBO Kenya Platform');
 define('APP_FULL_NAME', 'Public Benefit Organizations Compliance & Awareness Platform');
 define('APP_TAGLINE', 'Empowering Civil Society Through Legal Knowledge');
 define('APP_URL', 'https://civiccompliancehub.gt.tc');
-define('APP_EMAIL', 'info@crecokenya.org');
-define('APP_PHONE', '+254 700 000 000');
+define('APP_EMAIL', 'elevatemediaproductions1@gmail.com');
+define('APP_PHONE', '+254 111 275 630');
 define('ORGANIZATION', 'CRECO Kenya');
 
 // â”€â”€ Database (see database.php) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€

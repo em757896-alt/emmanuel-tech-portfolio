@@ -251,7 +251,7 @@ civic-compliance-system/
 
 ICT Specialist | Full-Stack Web Developer
 
-📧 Email: em757896@gmail.com
+📧 Email: elevatemediaproductions1@gmail.com
 
 📞 Phone: +254111275630
 

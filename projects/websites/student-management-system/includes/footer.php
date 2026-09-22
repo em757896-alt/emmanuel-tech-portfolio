@@ -12,16 +12,14 @@ $base_url = $base_url ?? '';
                 <span class="logo-mark">EM</span>
                 <span>
                     <strong>Elevate Media College</strong>
-                    <small>Est. 2015 &middot; Nairobi, Kenya</small>
+                    <small>Est. 2015</small>
                 </span>
             </div>
             <p>Empowering the next generation of media, technology and business leaders through interactive learning and modern campus life.</p>
             <div class="socials">
                 <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="#" aria-label="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
                 <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
                 <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
             </div>
         </div>
 
@@ -50,10 +48,9 @@ $base_url = $base_url ?? '';
         <div class="footer-col">
             <h4>Contact Us</h4>
             <ul class="footer-contact">
-                <li><i class="fa-solid fa-location-dot"></i> University Way, Nairobi CBD</li>
                 <li><a href="https://wa.me/254775333673" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> WhatsApp: 0775 333 673</a></li>
                 <li><a href="tel:+254111275630"><i class="fa-solid fa-phone"></i> Call: +254 111 275 630</a></li>
-                <li><a href="mailto:em757896@gmail.com"><i class="fa-solid fa-envelope"></i> em757896@gmail.com</a></li>
+                <li><a href="mailto:elevatemediaproductions1@gmail.com"><i class="fa-solid fa-envelope"></i> elevatemediaproductions1@gmail.com</a></li>
                 <li><i class="fa-solid fa-clock"></i> Mon &ndash; Fri, 8:00 &ndash; 17:00</li>
             </ul>
         </div>

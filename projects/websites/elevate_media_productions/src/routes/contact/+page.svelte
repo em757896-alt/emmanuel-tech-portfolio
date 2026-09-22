@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Mail, MapPin, Send, Github, Linkedin, Twitter, MessageCircle } from 'lucide-svelte';
+  import { Mail, Phone, Send, Github, Linkedin, MessageCircle } from 'lucide-svelte';
+  import WhatsApp from '$lib/components/ui/WhatsApp.svelte';
   import Reveal from '$lib/components/ui/Reveal.svelte';
   import SectionHeading from '$lib/components/ui/SectionHeading.svelte';
   import { site } from '$lib/config';
@@ -68,18 +69,27 @@
               </div>
             </div>
             <div class="flex items-center gap-4 rounded-xl p-4 transition-colors hover:bg-ink/5 dark:hover:bg-white/5">
-              <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary-500/10 text-secondary-500">
-                <MapPin size={20} />
+              <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-500/10 text-accent-500">
+                <WhatsApp size={20} />
               </div>
               <div>
-                <p class="text-xs text-ink-light dark:text-slate-500">Location</p>
-                <p class="text-sm font-medium text-ink dark:text-white">{site.location}</p>
+                <p class="text-xs text-ink-light dark:text-slate-500">WhatsApp</p>
+                <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-ink dark:text-white hover:text-primary-500">+254 775 333 673</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 rounded-xl p-4 transition-colors hover:bg-ink/5 dark:hover:bg-white/5">
+              <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary-500/10 text-secondary-500">
+                <Phone size={20} />
+              </div>
+              <div>
+                <p class="text-xs text-ink-light dark:text-slate-500">Call us</p>
+                <a href={site.phone} class="text-sm font-medium text-ink dark:text-white hover:text-primary-500">+254 111 275 630</a>
               </div>
             </div>
             <div class="border-t border-slate-200/50 pt-5 dark:border-white/5">
               <p class="mb-3 text-xs font-medium text-ink-light dark:text-slate-500">Find us on</p>
               <div class="flex gap-3">
-                {#each [{ icon: Github, href: site.github, label: 'GitHub' }, { icon: Linkedin, href: site.linkedin, label: 'LinkedIn' }, { icon: Twitter, href: site.twitter, label: 'Twitter' }] as social}
+                {#each [{ icon: Github, href: site.github, label: 'GitHub' }, { icon: Linkedin, href: site.linkedin, label: 'LinkedIn' }] as social}
                   <a href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label}
                     class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200/70 text-ink-light transition-all hover:-translate-y-0.5 hover:border-primary-500/50 hover:text-primary-500 dark:border-white/10 dark:text-slate-400 dark:hover:text-primary-400">
                     <social.icon size={17} />

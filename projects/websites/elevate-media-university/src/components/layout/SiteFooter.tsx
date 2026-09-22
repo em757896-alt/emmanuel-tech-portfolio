@@ -83,9 +83,9 @@ export function SiteFooter() {
                 </a>
               </li>
               <li>
-                <a href="mailto:em757896@gmail.com" className="flex items-center gap-2 text-sm text-background/60 hover:text-accent transition-colors">
+                <a href="mailto:elevatemediaproductions1@gmail.com" className="flex items-center gap-2 text-sm text-background/60 hover:text-accent transition-colors">
                   <Mail className="h-4 w-4 flex-shrink-0" />
-                  em757896@gmail.com
+                  elevatemediaproductions1@gmail.com
                 </a>
               </li>
             </ul>
