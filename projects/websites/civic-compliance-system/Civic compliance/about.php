@@ -87,6 +87,7 @@ $currentPage = 'about';
                         <p><strong><i class="fas fa-globe me-2"></i>Website:</strong><br><a href="https://crecokenya.org">crecokenya.org</a></p>
                         <p><strong><i class="fas fa-envelope me-2"></i>Email:</strong><br><?= APP_EMAIL ?></p>
                         <p><strong><i class="fas fa-phone me-2"></i>Phone:</strong><br><?= APP_PHONE ?></p>
+                        <p><strong><i class="fas fa-map-marker-alt me-2"></i>Location:</strong><br>Nairobi, Kenya</p>
                     </div>
                 </div>
             </div>

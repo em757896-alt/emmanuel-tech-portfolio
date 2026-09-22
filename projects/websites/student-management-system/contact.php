@@ -19,12 +19,12 @@ include __DIR__ . '/includes/header.php';
             <div>
                 <div class="info-tiles" style="grid-template-columns:1fr">
                     <div class="info-tile reveal">
-                        <i class="fa-brands fa-whatsapp"></i>
-                        <div><h4>WhatsApp</h4><p><a href="https://wa.me/254775333673" target="_blank" rel="noopener">+254 775 333 673</a></p></div>
+                        <i class="fa-solid fa-location-dot"></i>
+                        <div><h4>Visit us</h4><p>University Way, Nairobi CBD, Kenya</p></div>
                     </div>
                     <div class="info-tile reveal reveal-delay-1">
                         <i class="fa-solid fa-phone"></i>
-                        <div><h4>Call us</h4><p><a href="tel:+254111275630">+254 111 275 630</a> &middot; Mon&ndash;Fri 8:00&ndash;17:00</p></div>
+                        <div><h4>Call us</h4><p>+254 700 123 456 &middot; Mon&ndash;Fri 8:00&ndash;17:00</p></div>
                     </div>
                     <div class="info-tile reveal reveal-delay-2">
                         <i class="fa-solid fa-envelope"></i>

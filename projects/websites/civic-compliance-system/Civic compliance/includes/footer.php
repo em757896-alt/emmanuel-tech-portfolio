@@ -16,9 +16,11 @@ $currentYear = date('Y');
                         <small>Created by <strong class="text-white">Elevate Media Productions</strong></small>
                     </p>
                     <div class="social-links mt-3">
-                        <a href="https://wa.me/254775333673" title="WhatsApp" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" title="Twitter/X"><i class="fab fa-twitter"></i></a>
                         <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
             </div>
