@@ -17,11 +17,13 @@ import com.trackspend.app.ui.components.MainAppScreen
 import com.trackspend.app.ui.navigation.NavRoutes
 import com.trackspend.app.ui.onboarding.OnboardingScreen
 import com.trackspend.app.ui.theme.TrackSpendTheme
+import com.trackspend.app.util.AppLog
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppLog.i("MainActivity onCreate")
         val authRepo = AuthRepository()
         setContent {
             TrackSpendTheme {
@@ -34,10 +36,13 @@ class MainActivity : ComponentActivity() {
                     LaunchedEffect(Unit) {
                         try {
                             isLoggedIn = authRepo.isLoggedIn()
+                            AppLog.i("Session check -> loggedIn=$isLoggedIn")
                             if (isLoggedIn == true) {
                                 hasOnboarded = authRepo.hasOnboarded()
+                                AppLog.i("Onboarded=$hasOnboarded")
                             }
-                        } catch (_: Exception) {
+                        } catch (e: Exception) {
+                            AppLog.e("Session check failed", e)
                             isLoggedIn = false
                         }
                     }

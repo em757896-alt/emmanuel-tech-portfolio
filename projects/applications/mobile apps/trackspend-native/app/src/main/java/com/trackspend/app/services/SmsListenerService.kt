@@ -4,11 +4,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.provider.Telephony
-import android.util.Log
+import com.trackspend.app.util.AppLog
 
 class SmsListenerService : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
+            AppLog.i("SMS received broadcast")
             val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
             for (sms in messages) {
                 val body = sms.messageBody ?: continue
@@ -16,9 +17,10 @@ class SmsListenerService : BroadcastReceiver() {
 
                 val result = SmsParser.parse(body, sender)
                 if (result.transaction != null) {
-                    Log.d("SmsListener", "Parsed: ${result.transaction}")
-                    // Store parsed SMS for user review
+                    AppLog.i("Parsed SMS from $sender -> amount=${result.transaction.amount}, desc=${result.transaction.description}")
                     PendingSmsStore.add(result)
+                } else {
+                    AppLog.w("SMS from $sender not recognized as a transaction")
                 }
             }
         }

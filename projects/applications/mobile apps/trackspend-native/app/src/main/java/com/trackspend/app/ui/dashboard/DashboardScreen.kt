@@ -16,6 +16,7 @@ import com.trackspend.app.data.models.TransactionType
 import com.trackspend.app.data.remote.AuthRepository
 import com.trackspend.app.data.remote.TransactionRepository
 import com.trackspend.app.ui.components.BottomNavBar
+import com.trackspend.app.util.AppLog
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.*
@@ -34,26 +35,32 @@ fun DashboardScreen(onLogout: () -> Unit, onNavigate: (Int) -> Unit = {}) {
     var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        profile = authRepo.getProfile()
-        recentTransactions = txRepo.getRecent(5)
+        try {
+            profile = authRepo.getProfile()
+            recentTransactions = txRepo.getRecent(5)
+            AppLog.i("Dashboard: loaded profile=${profile?.fullName ?: "null"}, recent=${recentTransactions.size}")
 
-        val today = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-        val calendar = Calendar.getInstance()
+            val today = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            val calendar = Calendar.getInstance()
 
-        calendar.add(Calendar.DAY_OF_YEAR, -1)
-        val yesterday = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+            calendar.add(Calendar.DAY_OF_YEAR, -1)
+            val yesterday = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
 
-        calendar.add(Calendar.DAY_OF_YEAR, -7)
-        val weekAgo = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+            calendar.add(Calendar.DAY_OF_YEAR, -7)
+            val weekAgo = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
 
-        calendar.add(Calendar.MONTH, -1)
-        val monthAgo = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+            calendar.add(Calendar.MONTH, -1)
+            val monthAgo = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
 
-        todayTotal = txRepo.getTotalForPeriod(yesterday, today)
-        weekTotal = txRepo.getTotalForPeriod(weekAgo, today)
-        monthTotal = txRepo.getTotalForPeriod(monthAgo, today)
-
-        isLoading = false
+            todayTotal = txRepo.getTotalForPeriod(yesterday, today)
+            weekTotal = txRepo.getTotalForPeriod(weekAgo, today)
+            monthTotal = txRepo.getTotalForPeriod(monthAgo, today)
+            AppLog.i("Dashboard totals: today=$todayTotal week=$weekTotal month=$monthTotal")
+        } catch (e: Exception) {
+            AppLog.e("Dashboard load FAILED", e)
+        } finally {
+            isLoading = false
+        }
     }
 
     val currency = profile?.currency ?: "KES"

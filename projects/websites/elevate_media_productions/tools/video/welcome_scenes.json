@@ -1,0 +1,85 @@
+{
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "output_name": "elevate_welcome.mp4",
+  "scenes": [
+    {
+      "image": "assets_welcome/slide_01.png",
+      "narrate": "narration/scene01.mp3",
+      "duration": 7.6,
+      "zoom": 1.0,
+      "zoom_end": 1.07
+    },
+    {
+      "image": "assets_welcome/slide_02.png",
+      "narrate": "narration/scene02.mp3",
+      "duration": 9.2,
+      "zoom": 1.07,
+      "zoom_end": 1.0
+    },
+    {
+      "image": "assets_welcome/slide_03.png",
+      "narrate": "narration/scene03.mp3",
+      "duration": 9.9,
+      "zoom": 1.0,
+      "zoom_end": 1.07
+    },
+    {
+      "image": "assets_welcome/slide_04.png",
+      "narrate": "narration/scene04.mp3",
+      "duration": 11.8,
+      "zoom": 1.07,
+      "zoom_end": 1.0
+    },
+    {
+      "image": "assets_welcome/slide_05.png",
+      "narrate": "narration/scene05.mp3",
+      "duration": 9.5,
+      "zoom": 1.0,
+      "zoom_end": 1.07
+    },
+    {
+      "image": "assets_welcome/slide_06.png",
+      "narrate": "narration/scene06.mp3",
+      "duration": 11.3,
+      "zoom": 1.07,
+      "zoom_end": 1.0
+    },
+    {
+      "image": "assets_welcome/slide_07.png",
+      "narrate": "narration/scene07.mp3",
+      "duration": 10.9,
+      "zoom": 1.0,
+      "zoom_end": 1.07
+    },
+    {
+      "image": "assets_welcome/slide_08.png",
+      "narrate": "narration/scene08.mp3",
+      "duration": 9.5,
+      "zoom": 1.07,
+      "zoom_end": 1.0
+    },
+    {
+      "image": "assets_welcome/slide_09.png",
+      "narrate": "narration/scene09.mp3",
+      "duration": 10.8,
+      "zoom": 1.0,
+      "zoom_end": 1.07
+    },
+    {
+      "image": "assets_welcome/slide_10.png",
+      "narrate": "narration/scene10.mp3",
+      "duration": 7.1,
+      "zoom": 1.07,
+      "zoom_end": 1.0
+    },
+    {
+      "image": "assets_welcome/slide_11.png",
+      "narrate": null,
+      "duration": 6.0,
+      "zoom": 1.0,
+      "zoom_end": 1.06
+    }
+  ]
+}

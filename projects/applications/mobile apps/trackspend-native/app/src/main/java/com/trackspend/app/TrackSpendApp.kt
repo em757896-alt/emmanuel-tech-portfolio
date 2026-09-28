@@ -2,6 +2,7 @@ package com.trackspend.app
 
 import android.app.Application
 import com.trackspend.app.data.remote.SupabaseClient
+import com.trackspend.app.util.AppLog
 
 class TrackSpendApp : Application() {
     lateinit var supabaseClient: SupabaseClient
@@ -9,7 +10,12 @@ class TrackSpendApp : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        supabaseClient = SupabaseClient()
+        try {
+            supabaseClient = SupabaseClient()
+            AppLog.i("TrackSpendApp started, Supabase client configured")
+        } catch (e: Exception) {
+            AppLog.e("Failed to init Supabase", e)
+        }
     }
 
     companion object {

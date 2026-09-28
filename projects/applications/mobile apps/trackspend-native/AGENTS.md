@@ -1,5 +1,10 @@
 This is a brand new native Android project (Kotlin + Jetpack Compose) that replaces the Capacitor-based TrackSpend PWA.
 
+## SESSION RULES (never break these)
+1. **NO WASTING TIME** — If any process gets stuck, loads, hangs, or waits: KILL IT IMMEDIATELY and start a new approach. Never sit idle waiting. Always use short timeouts and move on.
+2. **SAVE EVERY SESSION** — At the end of every session (and at milestones), update `SESSION.md` in the project root with what was done, what's in progress, and what's next. Never leave progress only in chat.
+3. **LOGS ARE VISIBLE ON DEVICE** — The app must produce logs the user can see on their phone (in-app log viewer + Logcat). Silence is a bug.
+
 ## Architecture
 - **Language**: Kotlin
 - **UI**: Jetpack Compose (Material 3, dark theme only)

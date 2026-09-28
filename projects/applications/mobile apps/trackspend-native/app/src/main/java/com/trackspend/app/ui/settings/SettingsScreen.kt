@@ -20,7 +20,16 @@ fun SettingsScreen(onLogout: () -> Unit) {
     val authRepo = remember { AuthRepository() }
     val scope = rememberCoroutineScope()
     var profile by remember { mutableStateOf<Profile?>(null) }
-    LaunchedEffect(Unit) { profile = authRepo.getProfile() }
+    var showLogs by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        profile = authRepo.getProfile()
+        com.trackspend.app.util.AppLog.i("Settings screen loaded")
+    }
+
+    if (showLogs) {
+        LogViewerScreen(onBack = { showLogs = false })
+        return
+    }
 
     Scaffold(
         bottomBar = { BottomNavBar(selectedTab = 4) },
@@ -54,6 +63,8 @@ fun SettingsScreen(onLogout: () -> Unit) {
             SettingsItem(Icons.Default.Security, "Security", "Set or change PIN") { }
             Spacer(Modifier.height(8.dp))
             SettingsItem(Icons.Default.Notifications, "Notifications", "Manage alerts") { }
+            Spacer(Modifier.height(8.dp))
+            SettingsItem(Icons.Default.BugReport, "App Logs", "View live logs on device") { showLogs = true }
             Spacer(Modifier.height(8.dp))
             SettingsItem(Icons.Default.Info, "Updates", "Check for updates") { }
             Spacer(Modifier.height(8.dp))

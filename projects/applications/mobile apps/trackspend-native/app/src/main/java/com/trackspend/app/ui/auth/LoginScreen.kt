@@ -12,6 +12,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.trackspend.app.data.remote.AuthRepository
+import com.trackspend.app.util.AppLog
 import kotlinx.coroutines.launch
 
 @Composable
@@ -86,11 +87,14 @@ fun LoginScreen(
                     return@Button
                 }
                 isLoading = true
+                AppLog.i("Login attempt for $email")
                 scope.launch {
                     try {
                         authRepo.signIn(email, password)
+                        AppLog.i("Login success -> navigating to dashboard")
                         onLoginSuccess()
                     } catch (e: Exception) {
+                        AppLog.e("Login error", e)
                         error = e.message ?: "Login failed"
                     } finally {
                         isLoading = false

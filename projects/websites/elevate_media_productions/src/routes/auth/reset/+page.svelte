@@ -48,7 +48,7 @@
   <title>Reset password — Elevate Media Productions</title>
 </svelte:head>
 
-<div class="flex min-h-screen items-center justify-center px-6">
+<div class="flex min-h-[100dvh] items-center justify-center px-6 pb-14 pt-24 md:pt-28">
   <div class="absolute inset-0 -z-10 bg-grid opacity-30"></div>
   <div class="absolute -top-32 left-1/2 h-[480px] w-[680px] -translate-x-1/2 rounded-full bg-primary-500/20 blur-[160px] pointer-events-none"></div>
 

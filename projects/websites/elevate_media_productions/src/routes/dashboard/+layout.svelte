@@ -113,7 +113,7 @@
   </aside>
 
   <main class="flex-1 transition-all duration-300" class:ml-64={sidebarOpen} class:ml-[68px]={!sidebarOpen}>
-    <div class="p-6 lg:p-8">
+    <div class="p-6 pt-24 md:pt-28 lg:p-8">
       {@render children()}
     </div>
   </main>

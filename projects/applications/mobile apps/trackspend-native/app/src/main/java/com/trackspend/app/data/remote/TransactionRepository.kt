@@ -3,6 +3,7 @@ package com.trackspend.app.data.remote
 import com.trackspend.app.TrackSpendApp
 import com.trackspend.app.data.models.Transaction
 import com.trackspend.app.data.models.TransactionType
+import com.trackspend.app.util.AppLog
 import io.github.jan.supabase.postgrest.query.Order
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,9 +21,16 @@ class TransactionRepository {
 
     suspend fun getAll(): List<Transaction> = withContext(Dispatchers.IO) {
         val userId = client.auth.currentUserOrNull()?.id ?: return@withContext emptyList()
-        client.postgrest["transactions"]
-            .select { this.order("transaction_date", Order.DESCENDING) }
-            .decodeList<Transaction>()
+        try {
+            val tx = client.postgrest["transactions"]
+                .select { this.order("transaction_date", Order.DESCENDING) }
+                .decodeList<Transaction>()
+            AppLog.i("getAll -> ${tx.size} transactions")
+            tx
+        } catch (e: Exception) {
+            AppLog.e("getAll FAILED", e)
+            throw e
+        }
     }
 
     suspend fun getRecent(pageSize: Long = 5): List<Transaction> = withContext(Dispatchers.IO) {
@@ -61,8 +69,15 @@ class TransactionRepository {
 
     suspend fun create(transaction: Transaction): Transaction = withContext(Dispatchers.IO) {
         val userId = client.auth.currentUserOrNull()?.id ?: throw Exception("Not authenticated")
-        val body = json.encodeToString(transaction.copy(userId = userId))
-        client.postgrest["transactions"].insert(body) { }.decodeSingle<Transaction>()
+        try {
+            val body = json.encodeToString(transaction.copy(userId = userId))
+            val created = client.postgrest["transactions"].insert(body) { }.decodeSingle<Transaction>()
+            AppLog.i("create OK id=${created.id} amount=${created.amount}")
+            created
+        } catch (e: Exception) {
+            AppLog.e("create FAILED", e)
+            throw e
+        }
     }
 
     suspend fun update(transaction: Transaction) = withContext(Dispatchers.IO) {

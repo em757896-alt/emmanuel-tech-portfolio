@@ -2,6 +2,7 @@ package com.trackspend.app.data.remote
 
 import com.trackspend.app.TrackSpendApp
 import com.trackspend.app.data.models.Profile
+import com.trackspend.app.util.AppLog
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.Dispatchers
@@ -49,26 +50,44 @@ class AuthRepository {
     }
 
     suspend fun signUp(email: String, password: String, profile: Profile) = withContext(Dispatchers.IO) {
-        client.auth.signUpWith(Email) {
-            this.email = email
-            this.password = password
-            data = buildJsonObject {
-                put("full_name", JsonPrimitive(profile.fullName))
-                put("country", JsonPrimitive(profile.country))
-                put("currency", JsonPrimitive(profile.currency))
-                put("occupation", JsonPrimitive(profile.occupation))
+        try {
+            client.auth.signUpWith(Email) {
+                this.email = email
+                this.password = password
+                data = buildJsonObject {
+                    put("full_name", JsonPrimitive(profile.fullName))
+                    put("country", JsonPrimitive(profile.country))
+                    put("currency", JsonPrimitive(profile.currency))
+                    put("occupation", JsonPrimitive(profile.occupation))
+                }
             }
+            AppLog.i("signUp OK for $email")
+        } catch (e: Exception) {
+            AppLog.e("signUp FAILED for $email", e)
+            throw e
         }
     }
 
     suspend fun signIn(email: String, password: String) = withContext(Dispatchers.IO) {
-        client.auth.signInWith(Email) {
-            this.email = email
-            this.password = password
+        try {
+            client.auth.signInWith(Email) {
+                this.email = email
+                this.password = password
+            }
+            AppLog.i("signIn OK for $email")
+        } catch (e: Exception) {
+            AppLog.e("signIn FAILED for $email", e)
+            throw e
         }
     }
 
     suspend fun logout() = withContext(Dispatchers.IO) {
-        client.auth.signOut()
+        try {
+            client.auth.signOut()
+            AppLog.i("logout OK")
+        } catch (e: Exception) {
+            AppLog.e("logout FAILED", e)
+            throw e
+        }
     }
 }

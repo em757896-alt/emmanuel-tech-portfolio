@@ -1,5 +1,8 @@
 package com.trackspend.app.ui.sms
 
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -10,20 +13,34 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.trackspend.app.data.remote.TransactionRepository
 import com.trackspend.app.services.PendingSmsStore
 import com.trackspend.app.ui.components.BottomNavBar
+import com.trackspend.app.util.AppLog
 import kotlinx.coroutines.launch
 
 @Composable
 fun SmsDetectionScreen() {
     val repo = remember { TransactionRepository() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     var items by remember { mutableStateOf(PendingSmsStore.getAll()) }
     var error by remember { mutableStateOf<String?>(null) }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { result ->
+        AppLog.i("SMS permission result: $result")
+    }
+
+    LaunchedEffect(Unit) {
+        AppLog.i("SMS Detection screen opened, pending=${items.size}")
+        permissionLauncher.launch(arrayOf(Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS))
+    }
 
     Scaffold(
         bottomBar = { BottomNavBar(selectedTab = 2) }
