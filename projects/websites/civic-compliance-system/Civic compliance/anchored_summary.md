@@ -1,7 +1,7 @@
-﻿# PBO Kenya Platform â€” Anchored Summary
+﻿# Civic Compliance Hub — Anchored Summary
 
 ## Goal
-- Complete the PBO Kenya Platform by fixing all remaining SQL/column mismatches between code and schema, creating all missing pages referenced from navigation/links, and making the project fully functional for its live InfinityFree deployment.
+- Complete the Civic Compliance Hub (CRECO Kenya) platform by fixing all remaining SQL/column mismatches between code and schema, creating all missing pages referenced from navigation/links, and making the project fully functional for its live InfinityFree deployment.
 
 ## Constraints & Preferences
 - Keep the existing format/style of every file â€” do not change the current look and feel
@@ -70,7 +70,7 @@
 
 ## Critical Context
 - **Database host**: `sql303.infinityfree.com`, **DB name**: `if0_42280606_if0_42280606_`, **DB user**: `if0_42280606`, **DB pass**: `AES256:4m0deNaMM0HA+yKw/HIgbYzFLvAjq8o1cD7cfheTaOSB8M/MqTc/Edx85mfbuzOL`
-- **Application URL**: `https://pbokenya.infinityfreeapp.com`
+- **Application URL**: `https://civiccompliancehub.gt.tc`
 - The Auth class constructor calls `session_start()` conditionally â€” already handled
 - `generateCSRFToken()`, `generateCSRFField()`, `generateCSRFTokenValue()`, `validateCSRFToken()` are now global functions in `config/config.php`; `Auth::generateCSRF()` and `Auth::verifyCSRF()` are instance methods on Auth class
 - `requireAdmin()` is both an Auth class method and a global function (creates Auth instance internally)
