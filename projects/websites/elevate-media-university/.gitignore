@@ -45,3 +45,4 @@ prisma/migrations/
 .vercel/
 
 .vercel
+.env*

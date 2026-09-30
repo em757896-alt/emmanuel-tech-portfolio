@@ -858,6 +858,182 @@ const pages: Record<string, InfoContent> = {
       },
     ],
   },
+  "/privacy": {
+    slug: "/privacy",
+    section: "Legal",
+    title: "Privacy Policy",
+    subtitle: "How Elevate Media University collects, uses, protects, and manages your personal information in line with the Kenya Data Protection Act, 2019.",
+    description: "Privacy policy for Elevate Media University and its student management platform.",
+    sections: [
+      {
+        heading: "1. Introduction",
+        paragraphs: [
+          "This Privacy Policy explains how Elevate Media University ('we', 'our', 'us') collects, uses, discloses, stores, and safeguards personal information when you use our website, apply for admission, register an account, or use our student, teacher, and admin portals. We are committed to protecting your privacy and processing personal data lawfully, fairly, and transparently in accordance with the Kenya Data Protection Act, 2019 and other applicable data protection laws.",
+        ],
+      },
+      {
+        heading: "2. Information We Collect",
+        paragraphs: [
+          "Information you provide directly: your full name, email address, phone number, national ID or passport details, academic qualifications, examination records, application and admission details, and any other information you submit through forms on this site.",
+          "Account data: usernames, login credentials, student admission numbers, employee IDs, and role assignments for the student, teacher, and admin portals.",
+          "Usage data: pages visited, time spent, browser type and version, device information, operating system, and IP address, collected for analytics, security, and improvement purposes.",
+          "If you are a registered student, we may further collect attendance, assignments, grades, examination results, and programme of study information while you are enrolled.",
+        ],
+      },
+      {
+        heading: "3. How We Use Your Information",
+        bullets: [
+          "To process applications for admission and enrolment",
+          "To create and manage your student, teacher, or admin account",
+          "To deliver portals, courses, results, assignments, and academic services",
+          "To communicate important academic, administrative, and service updates",
+          "To maintain attendance, grading, and examination records",
+          "To improve the website, portals, and user experience",
+          "To detect, prevent, and respond to unauthorized access or misuse",
+          "To comply with legal and regulatory obligations",
+        ],
+      },
+      {
+        heading: "4. Legal Basis for Processing",
+        paragraphs: [
+          "We process personal data on the following lawful bases: consent where you have given it freely and specifically; performance of a contract where processing is necessary to provide the academic services you requested; legal obligation where required by applicable law; and legitimate interests where processing is necessary for our interests without overriding your rights and freedoms.",
+        ],
+      },
+      {
+        heading: "5. How We Share Your Information",
+        paragraphs: [
+          "We do not sell or rent your personal information. We may share data with service providers who operate and host this platform (such as hosting, database, authentication, and analytics providers) under confidentiality and security safeguards. We may also disclose data where required by law, to protect legal rights, or to respond to lawful requests from authorized authorities.",
+        ],
+      },
+      {
+        heading: "6. Cookies and Similar Technologies",
+        paragraphs: [
+          "We use cookies and similar technologies to maintain your session, remember your preferences, and gather aggregated usage analytics. You can control or delete cookies through your browser settings; however, disabling essential cookies may prevent you from logging into the portals or using certain features.",
+        ],
+      },
+      {
+        heading: "7. Data Security",
+        paragraphs: [
+          "We apply appropriate technical and organizational measures to protect personal data, including encrypted connections (HTTPS), secure password hashing, access controls, session management, and regular security testing. While no method of transmission or storage is completely secure, we work to keep your information safe and to meet the standards required under the Data Protection Act, 2019.",
+        ],
+      },
+      {
+        heading: "8. Data Retention",
+        paragraphs: [
+          "We retain personal data only as long as necessary for academic and administrative purposes, to comply with legal obligations, to resolve disputes, and to enforce agreements. Academic records are retained in line with institutional and regulatory requirements.",
+        ],
+      },
+      {
+        heading: "9. Your Rights",
+        paragraphs: [
+          "Under the Kenya Data Protection Act, 2019 you have the right to: access your personal data; correct inaccurate or incomplete data; delete your data subject to legal obligations; object to processing in certain circumstances; restrict processing; data portability; withdraw consent at any time where processing is based on consent; and lodge a complaint with the Office of the Data Protection Commissioner (ODPC) of Kenya.",
+        ],
+        bullets: [
+          "To exercise these rights, contact us using the details in Section 11",
+          "We will respond within the timeframes required by law",
+          "You may lodge a complaint at www.odpc.go.ke",
+        ],
+      },
+      {
+        heading: "10. Changes to This Privacy Policy",
+        paragraphs: [
+          "We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated date. Where changes are significant, we may also notify users by email or by a notice on the platform.",
+        ],
+      },
+      {
+        heading: "11. Contact Us",
+        paragraphs: [
+          "For questions, concerns, or requests relating to this Privacy Policy or your personal data, contact: Elevate Media University, via email at elevatemediaproductions1@gmail.com, by phone at +254 111 275 630, or by WhatsApp at +254 775 333 673.",
+        ],
+      },
+    ],
+  },
+  "/terms": {
+    slug: "/terms",
+    section: "Legal",
+    title: "Terms of Use",
+    subtitle: "The conditions governing your access to and use of the Elevate Media University website and portals.",
+    description: "Terms of use for Elevate Media University and its student management platform.",
+    sections: [
+      {
+        heading: "1. Acceptance of Terms",
+        paragraphs: [
+          "By accessing or using the Elevate Media University website or its student, teacher, or admin portals, you agree to be bound by these Terms of Use and our Privacy Policy. If you do not agree with any part of these Terms, you may not use the platform.",
+        ],
+      },
+      {
+        heading: "2. Purpose of the Platform",
+        paragraphs: [
+          "This platform provides information about Elevate Media University and offers academic services including admissions, course information, student enrolment, and password-protected portals for students, teachers, and administrators.",
+        ],
+      },
+      {
+        heading: "3. Not an Official Academic Record",
+        paragraphs: [
+          "While the platform stores academic information such as attendance, assignments, and grades, these records are provided for convenience and demonstration purposes. For official transcripts, certificates, and academic records, students must contact the university's examinations and records office.",
+        ],
+      },
+      {
+        heading: "4. Accounts and Credentials",
+        paragraphs: [
+          "Certain features require an account. You are responsible for keeping your login credentials confidential and for all activity under your account. You must provide accurate information during registration and keep it up to date. Notify us immediately of any unauthorized use of your account.",
+        ],
+      },
+      {
+        heading: "5. Acceptable Use",
+        bullets: [
+          "Use the platform only for lawful academic and administrative purposes",
+          "Do not attempt to gain unauthorized access to any account, portal, or system",
+          "Do not interfere with or disrupt the platform or its servers",
+          "Do not upload malicious software or harmful content",
+          "Do not misrepresent your identity or affiliation",
+          "Do not share your credentials with others",
+        ],
+      },
+      {
+        heading: "6. Intellectual Property",
+        paragraphs: [
+          "All content on this platform, including text, graphics, logos, and course materials, is owned by or licensed to Elevate Media University. You may not reproduce, redistribute, modify, or commercially exploit this content without prior written permission.",
+        ],
+      },
+      {
+        heading: "7. Disclaimer of Warranties",
+        paragraphs: [
+          "The platform and all content, tools, and features are provided on an 'as is' and 'as available' basis without warranties of any kind, express or implied, including merchantability, fitness for a particular purpose, accuracy, and non-infringement. We do not warrant that the platform will be uninterrupted or error-free.",
+        ],
+      },
+      {
+        heading: "8. Limitation of Liability",
+        paragraphs: [
+          "To the maximum extent permitted by law, Elevate Media University shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits, data, or goodwill, arising from your use of, or inability to use, the platform. Your sole and exclusive remedy is to stop using the platform.",
+        ],
+      },
+      {
+        heading: "9. Termination",
+        paragraphs: [
+          "We reserve the right to suspend or terminate your access to the platform where you violate these Terms or where necessary to protect the platform, its users, or the law. Upon termination, any rights granted to you under these Terms cease immediately.",
+        ],
+      },
+      {
+        heading: "10. Changes to These Terms",
+        paragraphs: [
+          "We may modify these Terms at any time. Changes will be posted on this page with an updated date. Continued use of the platform after changes take effect constitutes acceptance of the updated Terms.",
+        ],
+      },
+      {
+        heading: "11. Governing Law",
+        paragraphs: [
+          "These Terms are governed by the laws of the Republic of Kenya. Any disputes shall be subject to the exclusive jurisdiction of the courts of Kenya.",
+        ],
+      },
+      {
+        heading: "12. Contact",
+        paragraphs: [
+          "For questions about these Terms, contact Elevate Media University at elevatemediaproductions1@gmail.com, by phone at +254 111 275 630, or by WhatsApp at +254 775 333 673.",
+        ],
+      },
+    ],
+  },
   "/research": {
     slug: "/research",
     section: "Research",

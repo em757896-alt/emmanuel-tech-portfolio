@@ -9,7 +9,7 @@ export default auth((req) => {
     return NextResponse.next();
   }
 
-  const publicRoutes = ["/", "/admin-login", "/register", "/courses", "/achievements", "/student-login", "/student-apply", "/teacher-login", "/teacher-apply", "/forgot-password", "/teacher-forgot-password", "/reset-password", "/staff-reset-password", "/verification-sent", "/reset-link-sent", "/about", "/admission", "/students", "/academics", "/research", "/library"];
+  const publicRoutes = ["/", "/admin-login", "/register", "/courses", "/achievements", "/student-login", "/student-apply", "/teacher-login", "/teacher-apply", "/forgot-password", "/teacher-forgot-password", "/reset-password", "/staff-reset-password", "/verification-sent", "/reset-link-sent", "/about", "/admission", "/students", "/academics", "/research", "/library", "/privacy", "/terms"];
   const isPublic = publicRoutes.some((route) => pathname === route || pathname.startsWith(`${route}/`) || pathname.startsWith("/api/"));
 
   if (!session && !isPublic) {

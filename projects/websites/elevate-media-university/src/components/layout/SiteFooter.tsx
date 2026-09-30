@@ -97,6 +97,10 @@ export function SiteFooter() {
             <p className="text-xs text-background/40">
               &copy; {new Date().getFullYear()} Elevate Media University. All rights reserved.
             </p>
+            <div className="flex items-center gap-4">
+              <Link href="/privacy" className="text-xs text-background/40 hover:text-accent transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="text-xs text-background/40 hover:text-accent transition-colors">Terms of Use</Link>
+            </div>
             <p className="text-xs text-background/40">
               Website created by{" "}
               <a 
