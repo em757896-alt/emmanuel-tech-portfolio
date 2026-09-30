@@ -36,6 +36,22 @@ The project is a production of **Elevate Media Productions**.
 | 🔐 **Admin Dashboard** | Staff-only area to manage students, departments, classrooms, timetables and library stock. |
 | 📬 **Contact** | Working enquiry form wired to a processing script. |
 
+## Screenshots
+
+<img src="Screenshots/front page 2.png" alt="Student Management — Front Page" />
+
+<img src="Screenshots/Screenshot (127).png" alt="Student Management — Campus View" />
+
+<img src="Screenshots/Screenshot (128).png" alt="Student Management — Departments" />
+
+<img src="Screenshots/Screenshot (129).png" alt="Student Management — Students" />
+
+<img src="Screenshots/Screenshot (130).png" alt="Student Management — Timetable" />
+
+<img src="Screenshots/Screenshot (131).png" alt="Student Management — Library" />
+
+<img src="Screenshots/Screenshot (132).png" alt="Student Management — Admin Dashboard" />
+
 ## Tech Stack
 
 - **Backend** — PHP 8 (procedural, no framework) + PDO prepared statements
@@ -94,7 +110,8 @@ student-management-system/
 ├── library.php             # Library catalogue & loans
 ├── contact.php             # Contact form
 ├── database.sql            # Schema + seed data (self-cleaning)
-└── db.example.php          # DB credentials template (copy to db.php)
+├── db.example.php          # DB credentials template (copy to db.php)
+└── Screenshots/            # Project screenshots
 ```
 
 ## Deployment Notes

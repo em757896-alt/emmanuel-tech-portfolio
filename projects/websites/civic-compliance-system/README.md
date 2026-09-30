@@ -189,7 +189,17 @@ http://localhost/civic-compliance-system/
 
 # Screenshots
 
-> Screenshots will be added soon.
+<img src="Civic compliance/Screenshots/front page.png" alt="Civic Compliance Hub — Front Page" />
+
+<img src="Civic compliance/Screenshots/Screenshot (121).png" alt="Civic Compliance Hub — Knowledge Hub" />
+
+<img src="Civic compliance/Screenshots/Screenshot (122).png" alt="Civic Compliance Hub — Monitoring" />
+
+<img src="Civic compliance/Screenshots/Screenshot (123).png" alt="Civic Compliance Hub — Compliance Tools" />
+
+<img src="Civic compliance/Screenshots/Screenshot (124).png" alt="Civic Compliance Hub — Authentication" />
+
+<img src="Civic compliance/Screenshots/Screenshot (125).png" alt="Civic Compliance Hub — Admin Dashboard" />
 
 ---
 
