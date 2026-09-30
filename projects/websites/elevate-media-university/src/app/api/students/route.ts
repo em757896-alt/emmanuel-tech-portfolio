@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { randomUUID } from "node:crypto";
 import { supabaseAdmin } from "@/lib/supabase";
 import { auth } from "@/lib/auth";
 
@@ -93,7 +94,10 @@ export async function POST(req: Request) {
     }
 
     const bcrypt = await import("bcryptjs");
-    const passwordHash = await bcrypt.hash("student123", 12);
+    // A shared, well-known default password means every student account is compromised until
+    // someone remembers to change it. Generate a unique temporary password per student instead.
+    const temporaryPassword = `${randomUUID().replace(/-/g, "")}${randomUUID().replace(/-/g, "")}`.slice(0, 20);
+    const passwordHash = await bcrypt.hash(temporaryPassword, 12);
 
     const year = new Date().getFullYear();
     const randomNum = Math.floor(1000 + Math.random() * 9000);
@@ -136,7 +140,15 @@ export async function POST(req: Request) {
 
     const { users, departments, ...rest } = student as { users?: unknown; departments?: unknown };
 
-    return NextResponse.json({ student: { ...rest, user: users, department: departments } }, { status: 201 });
+    // Returned once so the admin can hand it to the student. It is never stored in plaintext
+    // and is not retrievable again — the student must use it to set their own password.
+    return NextResponse.json(
+      {
+        student: { ...rest, user: users, department: departments },
+        temporaryPassword,
+      },
+      { status: 201 },
+    );
   } catch (error) {
     console.error("Error creating student:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

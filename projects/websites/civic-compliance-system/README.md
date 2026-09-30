@@ -1,10 +1,27 @@
-# Civic Compliance System
+<h1 align="center">Civic Compliance System</h1>
 
-> A secure, responsive, and user-centric web platform designed to strengthen civic participation, support Public Benefit Organization (PBO) compliance, and enhance civic space monitoring in Kenya.
+<p align="center">
+  <strong>A secure civic-tech platform for PBO compliance, legal awareness and civic-space monitoring in Kenya.</strong>
+  <br />
+  Built for Public Benefit Organizations, legal practitioners, administrators and the public.
+</p>
 
-**🌐 Live Demo:** https://civiccompliancehub.gt.tc/
+<p align="center">
+  <a href="https://civiccompliancehub.gt.tc"><img src="https://img.shields.io/badge/Live%20Demo-civiccompliancehub.gt.tc-111?style=for-the-badge&logo=php" alt="Live demo" /></a>
+  <a href="https://github.com/em757896-alt/emmanuel-tech-portfolio/stargazers"><img src="https://img.shields.io/github/stars/em757896-alt/emmanuel-tech-portfolio?style=for-the-badge&logo=github&color=ffd166" alt="Stars" /></a>
+  <a href="https://github.com/em757896-alt/emmanuel-tech-portfolio/releases"><img src="https://img.shields.io/github/v/release/em757896-alt/emmanuel-tech-portfolio?style=for-the-badge&color=06d6a0" alt="Release" /></a>
+  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge&color=118ab2" alt="License" /></a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP" />
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
+  <img src="https://img.shields.io/badge/Turnstile%20protected-22c55e?style=for-the-badge" alt="Turnstile" />
+  <img src="https://img.shields.io/badge/no%20committed%20secrets-22c55e?style=for-the-badge" alt="Security" />
+</p>
 
 ---
+
 
 ## Overview
 

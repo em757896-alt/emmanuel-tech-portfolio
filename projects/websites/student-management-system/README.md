@@ -9,8 +9,14 @@
 </p>
 
 <p align="center">
+  <a href="https://studentmanagement.gt.tc"><img src="https://img.shields.io/badge/Live%20Demo-studentmanagement.gt.tc-111?style=for-the-badge&logo=php" alt="Live demo" /></a>
+  <a href="https://github.com/em757896-alt/emmanuel-tech-portfolio/stargazers"><img src="https://img.shields.io/github/stars/em757896-alt/emmanuel-tech-portfolio?style=for-the-badge&logo=github&color=ffd166" alt="Stars" /></a>
+  <a href="https://github.com/em757896-alt/emmanuel-tech-portfolio/releases"><img src="https://img.shields.io/github/v/release/em757896-alt/emmanuel-tech-portfolio?style=for-the-badge&color=06d6a0" alt="Release" /></a>
+  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge&color=118ab2" alt="License" /></a>
+</p>
+
+<p align="center">
   <a href="https://studentmanagement.gt.tc"><strong>View Live Demo</strong></a>
-  &nbsp;&middot;&nbsp; Admin demo: <code>admin</code> / <code>admin123</code>
 </p>
 
 ---
@@ -81,11 +87,12 @@ cd emmanuel-tech-portfolio/projects/websites/student-management-system
 
 ### 3. Default admin credentials
 
-| Username | Password |
-|----------|----------|
-| `admin`  | `admin123` |
+`database.sql` seeds an administrator so the system is usable immediately after install. The
+username is `admin`; **set the password yourself before exposing the site** — do not rely on the
+seeded value, and do not publish the login details on a public deployment.
 
-> ⚠️ **Change the admin password immediately** after your first login.
+> ⚠️ Change the admin password immediately after your first login, and disable or remove any
+> public demo account before going live.
 
 ## Project Structure
 

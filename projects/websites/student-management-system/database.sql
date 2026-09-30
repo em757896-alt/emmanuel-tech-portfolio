@@ -216,7 +216,9 @@ INSERT INTO loans (book_id, student_id, borrow_date, due_date, return_date) VALU
 (5,  10, '2026-07-25', '2026-08-08', '2026-08-04');
 
 -- ------------------------------------------------------------
--- Seed: Admin account (username: admin / password: admin123)
+-- Seed: Admin account (username: admin)
+-- The password_hash is a bcrypt hash. This is a well-known seed value — change it
+-- immediately after importing, or insert your own admin row instead of using this one.
 -- ------------------------------------------------------------
 
 INSERT INTO admins (username, password_hash) VALUES

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -17,27 +18,41 @@ function now() {
   return new Date().toISOString();
 }
 
-export async function POST() {
+/** Constant-time comparison so the token cannot be brute-forced byte by byte. */
+function safeEqual(a: string, b: string): boolean {
+  const bufA = Buffer.from(a, "utf8");
+  const bufB = Buffer.from(b, "utf8");
+  if (bufA.length !== bufB.length) return false;
+  return crypto.timingSafeEqual(bufA, bufB);
+}
+
+/**
+ * Provisions the initial department + demo accounts.
+ *
+ * SECURITY: this route uses the service-role key, so it MUST NOT be publicly callable.
+ * It is disabled entirely unless SETUP_TOKEN is configured, and requires the same value in
+ * the `x-setup-token` header. Passwords are read from env vars and are NEVER returned in
+ * the response — an unauthenticated caller could otherwise mint or disclose an admin account.
+ */
+export async function POST(req: Request) {
+  const expected = process.env.SETUP_TOKEN;
+  if (!expected) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  const provided = req.headers.get("x-setup-token") ?? "";
+  if (!provided || !safeEqual(provided, expected)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const results: string[] = [];
+  const created: string[] = [];
+
   try {
     const supabase = getSupabase();
     if (!supabase) return NextResponse.json({ error: "Missing Supabase env vars" }, { status: 500 });
 
     const ts = now();
-
-    const adminEmail = "admin@elevatemedia.edu";
-    const { data: adminCheck } = await supabase.from("users").select("id").eq("email", adminEmail).single();
-    if (adminCheck) {
-      results.push(`Admin already exists: ${adminEmail} / admin123`);
-    } else {
-      const { error } = await supabase.from("users").insert({
-        id: genId(), email: adminEmail, name: "System Administrator",
-        passwordHash: await bcrypt.hash("admin123", 12), role: "ADMIN",
-        createdAt: ts, updatedAt: ts,
-      });
-      if (error) throw new Error(`Admin: ${error.message}`);
-      results.push(`Admin: ${adminEmail} / admin123`);
-    }
 
     const { data: deptCheck } = await supabase.from("departments").select("id").eq("code", "CS").single();
     let deptId = deptCheck?.id;
@@ -50,57 +65,90 @@ export async function POST() {
       results.push("Department CS created");
     }
 
-    const teacherEmail = "sarah.jones@elevatemedia.edu";
-    const { data: tCheck } = await supabase.from("users").select("id").eq("email", teacherEmail).single();
-    if (!tCheck) {
-      const uid = genId();
-      const { error } = await supabase.from("users").insert({
-        id: uid, email: teacherEmail, name: "Sarah Jones",
-        passwordHash: await bcrypt.hash("teacher123", 12), role: "TEACHER",
-        createdAt: ts, updatedAt: ts,
-      });
-      if (error) throw new Error(`Teacher user: ${error.message}`);
-      const { error: pe } = await supabase.from("teachers").insert({
-        id: genId(), userId: uid, employeeId: "T2026001",
-        firstName: "Sarah", lastName: "Jones", departmentId: deptId, position: "Senior Lecturer",
-        hireDate: ts,
-      });
-      if (pe) throw new Error(`Teacher profile: ${pe.message}`);
-      results.push(`Teacher: ${teacherEmail} / teacher123 (T2026001)`);
-    } else {
-      results.push("Teacher already exists");
-    }
-
-    const studentEmail = "john.doe@student.elevatemedia.edu";
-    const { data: sCheck } = await supabase.from("users").select("id").eq("email", studentEmail).single();
-    if (!sCheck) {
-      const uid = genId();
-      const { error } = await supabase.from("users").insert({
-        id: uid, email: studentEmail, name: "John Doe",
-        passwordHash: await bcrypt.hash("student123", 12), role: "STUDENT",
-        createdAt: ts, updatedAt: ts,
-      });
-      if (error) throw new Error(`Student user: ${error.message}`);
-      const { error: se } = await supabase.from("students").insert({
-        id: genId(), userId: uid, studentId: "EM20261001",
-        firstName: "John", lastName: "Doe", departmentId: deptId,
-        enrollmentDate: ts,
-      });
-      if (se) throw new Error(`Student profile: ${se.message}`);
-      results.push(`Student: ${studentEmail} / student123 (EM20261001)`);
-    } else {
-      results.push("Student already exists");
-    }
-
-    return NextResponse.json({
-      status: "success",
-      accounts: {
-        admin: { email: adminEmail, password: "admin123" },
-        teacher: { email: teacherEmail, password: "teacher123", employeeId: "T2026001" },
-        student: { email: studentEmail, password: "student123", studentId: "EM20261001" },
+    const accounts = [
+      {
+        email: process.env.SETUP_ADMIN_EMAIL ?? "admin@elevatemedia.edu",
+        password: process.env.SETUP_ADMIN_PASSWORD,
+        name: "System Administrator",
+        role: "ADMIN",
+        profile: null as Record<string, unknown> | null,
       },
-      results,
-    });
+      {
+        email: process.env.SETUP_TEACHER_EMAIL ?? "sarah.jones@elevatemedia.edu",
+        password: process.env.SETUP_TEACHER_PASSWORD,
+        name: "Sarah Jones",
+        role: "TEACHER",
+        profile: { employeeId: "T2026001", firstName: "Sarah", lastName: "Jones", position: "Senior Lecturer" },
+      },
+      {
+        email: process.env.SETUP_STUDENT_EMAIL ?? "john.doe@student.elevatemedia.edu",
+        password: process.env.SETUP_STUDENT_PASSWORD,
+        name: "John Doe",
+        role: "STUDENT",
+        profile: { studentId: "EM20261001", firstName: "John", lastName: "Doe" },
+      },
+    ];
+
+    for (const account of accounts) {
+      if (!account.password) {
+        results.push(`${account.role}: skipped — no password configured`);
+        continue;
+      }
+
+      const { data: existing } = await supabase
+        .from("users")
+        .select("id")
+        .eq("email", account.email)
+        .maybeSingle();
+      if (existing) {
+        results.push(`${account.role}: already exists`);
+        continue;
+      }
+
+      const uid = genId();
+      const { error } = await supabase.from("users").insert({
+        id: uid,
+        email: account.email,
+        name: account.name,
+        passwordHash: await bcrypt.hash(account.password, 12),
+        role: account.role,
+        createdAt: ts,
+        updatedAt: ts,
+      });
+      if (error) throw new Error(`${account.role}: ${error.message}`);
+
+      if (account.role === "TEACHER" && account.profile) {
+        const { error: te } = await supabase.from("teachers").insert({
+          id: genId(),
+          userId: uid,
+          employeeId: account.profile.employeeId as string,
+          firstName: account.profile.firstName as string,
+          lastName: account.profile.lastName as string,
+          departmentId: deptId,
+          position: account.profile.position as string,
+          hireDate: ts,
+        });
+        if (te) throw new Error(`Teacher profile: ${te.message}`);
+      }
+
+      if (account.role === "STUDENT" && account.profile) {
+        const { error: se } = await supabase.from("students").insert({
+          id: genId(),
+          userId: uid,
+          studentId: account.profile.studentId as string,
+          firstName: account.profile.firstName as string,
+          lastName: account.profile.lastName as string,
+          departmentId: deptId,
+          enrollmentDate: ts,
+        });
+        if (se) throw new Error(`Student profile: ${se.message}`);
+      }
+
+      results.push(`${account.role}: created`);
+      created.push(account.email);
+    }
+
+    return NextResponse.json({ status: "success", created, results });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json({ error: message, results }, { status: 500 });

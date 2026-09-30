@@ -21,16 +21,13 @@ include __DIR__ . '/includes/header.php';
         <?= csrf_field() ?>
         <div class="field">
             <label for="username">Username</label>
-            <input class="input" type="text" id="username" name="username" required autocomplete="username" placeholder="admin">
+            <input class="input" type="text" id="username" name="username" required autocomplete="username">
         </div>
         <div class="field" style="margin-top:16px">
             <label for="password">Password</label>
-            <input class="input" type="password" id="password" name="password" required autocomplete="current-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+            <input class="input" type="password" id="password" name="password" required autocomplete="current-password">
         </div>
         <button class="btn btn-primary btn-block mt-2" type="submit"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
-        <p class="field-hint text-center mt-1" style="margin-bottom:0">
-            Demo credentials: <code>admin</code> / <code>admin123</code>
-        </p>
     </form>
 </div>
 <?php include __DIR__ . '/includes/footer.php';

@@ -1,5 +1,6 @@
 package com.trackspend.app.data.remote
 
+import com.trackspend.app.BuildConfig
 import io.github.jan.supabase.SupabaseClient as Supabase
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.FlowType
@@ -8,10 +9,18 @@ import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
 
+/**
+ * Supabase client built from BuildConfig values injected at compile time from
+ * `supabase.url` / `supabase.anonKey` (gradle property, environment, or local.properties).
+ *
+ * Only the *anon* key belongs in a client. It is designed to be readable from the APK and is
+ * safe solely because row-level security restricts what it can access. A service-role key must
+ * never be shipped to a device.
+ */
 class SupabaseClient {
     val client: Supabase = createSupabaseClient(
-        supabaseUrl = "https://ajrqpyutbkpbnggowwod.supabase.co",
-        supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqcnFweXV0YmtwYm5nZ293d29kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NzQ5NDUsImV4cCI6MjA5ODM1MDk0NX0.deWwwk7YiK75a5p6E3IWQ5FT_QNGMaFUE3ol3InUT48"
+        supabaseUrl = BuildConfig.SUPABASE_URL,
+        supabaseKey = BuildConfig.SUPABASE_ANON_KEY
     ) {
         install(Postgrest)
         install(Auth) {

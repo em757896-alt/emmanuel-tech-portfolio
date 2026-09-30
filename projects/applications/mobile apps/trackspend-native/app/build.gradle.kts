@@ -4,6 +4,16 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
+// Supabase connection values come from gradle properties, the environment, or `local.properties`.
+// They are intentionally NOT committed — the anon key is public by design but access is enforced
+// by RLS, and the URL/anon pair identifies the project you are writing into.
+val supabaseUrl: String = (findProperty("supabase.url") as String?)
+    ?: System.getenv("SUPABASE_URL")
+    ?: ""
+val supabaseAnonKey: String = (findProperty("supabase.anonKey") as String?)
+    ?: System.getenv("SUPABASE_ANON_KEY")
+    ?: ""
+
 android {
     namespace = "com.trackspend.app"
     compileSdk = 36
@@ -14,6 +24,9 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0.0"
+
+        buildConfigField("String", "SUPABASE_URL", "\"$supabaseUrl\"")
+        buildConfigField("String", "SUPABASE_ANON_KEY", "\"$supabaseAnonKey\"")
     }
 
     buildTypes {
@@ -34,6 +47,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {

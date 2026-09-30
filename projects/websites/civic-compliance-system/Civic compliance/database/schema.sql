@@ -499,7 +499,11 @@ INSERT INTO `counties` (`name`, `code`, `region`) VALUES
 ('Kisii', 'KSI', 'Nyanza'),
 ('Nyamira', 'NYM', 'Nyanza');
 
--- Default Super Admin (password: AES256:2vQKcZlXZtu8dwKVVChzA8tyC1rMtk9XJxmoTMNBSbaVmjcuM4KBUCVstVgheVj6XrGsvYHCxxvQ9tjbDRKD2Q==)
+-- Default Super Admin.
+-- The password_hash below is a bcrypt hash (correct: one-way, salted, slow).
+-- Passwords must NEVER be stored as reversible AES ciphertext.
+-- ⚠️  This is a well-known seed value. Change it immediately after importing this schema,
+--     or import the schema without the seed INSERT and create the admin via your own process.
 INSERT INTO `users` (`uuid`, `full_name`, `email`, `password_hash`, `role`, `is_verified`, `is_active`, `consent_given`, `consent_date`) VALUES
 (UUID(), 'CRECO Admin', 'admin@crecokenya.org', '$2y$12$LKJ8mN2pQ5rT9vW3xY7zA.eHgI4oP6sU1wE0dF2bC8nM5lO3kR7y', 'super_admin', 1, 1, 1, NOW());
 

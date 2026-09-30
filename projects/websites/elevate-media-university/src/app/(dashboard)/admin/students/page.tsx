@@ -152,7 +152,7 @@ export default function AdminStudents() {
                   ))}
                 </Select>
               </div>
-              <p className="text-xs text-muted-foreground">Default password: student123</p>
+              <p className="text-xs text-muted-foreground">Temporary password is generated per account and shown once</p>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setShowCreate(false)}>Cancel</Button>

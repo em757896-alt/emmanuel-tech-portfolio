@@ -25,5 +25,9 @@ out/
 .DS_Store
 Thumbs.db
 
+# Build artifacts
+*.apk
+*.aab
+
 # Backups
 backups/

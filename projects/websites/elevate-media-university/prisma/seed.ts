@@ -3,8 +3,26 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
+/**
+ * Seed account passwords are read from the environment and must never be hardcoded here —
+ * this file is committed, so a literal would publish a working credential for the live site.
+ */
+function requireSeedPassword(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(
+      `Missing ${name}. Set the seed account passwords in your environment or .env.local before seeding.`,
+    );
+  }
+  return value;
+}
+
 async function main() {
   console.log("Seeding database...");
+
+  const adminPassword = await bcrypt.hash(requireSeedPassword("SETUP_ADMIN_PASSWORD"), 12);
+  const teacherPassword = await bcrypt.hash(requireSeedPassword("SETUP_TEACHER_PASSWORD"), 12);
+  const studentPassword = await bcrypt.hash(requireSeedPassword("SETUP_STUDENT_PASSWORD"), 12);
 
   // Create departments
   const departments = await Promise.all([
@@ -25,7 +43,6 @@ async function main() {
   console.log(`Created ${departments.length} departments`);
 
   // Create admin user
-  const adminPassword = await bcrypt.hash("admin123", 12);
   await prisma.user.create({
     data: {
       email: "admin@elevatemedia.edu",
@@ -34,10 +51,8 @@ async function main() {
       role: "ADMIN",
     },
   });
-  console.log("Created admin user (admin@elevatemedia.edu / admin123)");
-
+  console.log(`Created admin user (${process.env.SETUP_ADMIN_EMAIL ?? "admin@elevatemedia.edu"}) - password set from SETUP_ADMIN_PASSWORD`);
   // Create teacher users
-  const teacherPassword = await bcrypt.hash("teacher123", 12);
   const teachers = await Promise.all([
     prisma.user.create({
       include: { teacher: true },
@@ -67,7 +82,7 @@ async function main() {
   console.log(`Created ${teachers.length} teachers`);
 
   // Create student users
-  const studentPassword = await bcrypt.hash("student123", 12);
+  const studentPassword = await studentPassword;
   const students = await Promise.all([
     prisma.user.create({
       include: { student: true },
@@ -169,10 +184,9 @@ async function main() {
   console.log("Created announcements");
 
   console.log("\nSeed completed!");
-  console.log("\nTest accounts:");
-  console.log("  Admin:    admin@elevatemedia.edu / admin123");
-  console.log("  Teacher:  sarah.jones@elevatemedia.edu / teacher123");
-  console.log("  Student:  john.doe@student.elevatemedia.edu / student123");
+  console.log("Account passwords were read from SETUP_ADMIN_PASSWORD / SETUP_TEACHER_PASSWORD /");
+  console.log("SETUP_STUDENT_PASSWORD and are intentionally not printed. Rotate them if this");
+  console.log("database is reachable from the public internet.");
 }
 
 main()

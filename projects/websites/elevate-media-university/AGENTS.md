@@ -92,7 +92,10 @@ Write-Host "Session: $($me.Content)"   # must show role: STUDENT / TEACHER / ADM
 $page = Invoke-WebRequest -Uri "$base/dashboard" -WebSession $session -UseBasicParsing -MaximumRedirection 0
 Write-Host "Status: $($page.StatusCode) | Location: $($page.Headers['Location'])"
 ```
-Test accounts: Student `john.doe@student.elevatemedia.edu`/`student123` → `/dashboard`, Teacher `sarah.jones@elevatemedia.edu`/`teacher123`/T2026001 → `/teacher/hod`, Teacher `patricia.mwangi@elevatemedia.edu`/`lecturer789`/T2026003 → `/teacher`, Faculty HOD `daniel.otieno@elevatemedia.edu`/`hod12345`/T2026004 → `/teacher/hod`, Admin `admin@elevatemedia.edu`/`admin123` → `/admin`.
+Demo accounts are created by `POST /api/setup` (requires the `x-setup-token` header, disabled unless
+`SETUP_TOKEN` is set) or by `prisma/seed.ts`. **No credentials are committed to this repo** — read them
+from Vercel env / `.env.local` (`SETUP_*_PASSWORD`). Portal routes: `/dashboard` (student),
+`/teacher` and `/teacher/hod` (teacher, HOD toggle), `/admin` (admin).
 
 ---
 
@@ -143,12 +146,19 @@ const { data, error } = await supabase.from("tableName").select("*");
 Held in Vercel env only. Never commit the project password or any key material.
 
 ## Test Accounts
-- **Admin:** admin@elevatemedia.edu / admin123
-- **Teacher (Dept HOD, CS):** sarah.jones@elevatemedia.edu / teacher123 (Employee ID: T2026001, `isHod=true`)
-- **Teacher (Unit Lecturer, CS102):** jane.smith@elevatemedia.edu / teacher456 (Employee ID: T2026002, `isHod=false`)
-- **Teacher (Unit Lecturer, PAD301 Social Sciences):** patricia.mwangi@elevatemedia.edu / lecturer789 (Employee ID: T2026003, `isHod=false`)
-- **Teacher (FACULTY HOD, Social Sciences):** daniel.otieno@elevatemedia.edu / hod12345 (Employee ID: T2026004, `isHod=true`, `faculties.hodTeacherId` → faculty `seed-fac-social`)
-- **Student:** john.doe@student.elevatemedia.edu / student123 (Adm No: EM20261001)
+
+**Never store these passwords in the repository.** Provision them with `POST /api/setup`
+(`x-setup-token: $SETUP_TOKEN`) or `prisma/seed.ts`, and read the values from Vercel env /
+`.env.local`:
+
+| Role | Env vars | Route |
+|------|----------|-------|
+| Admin | `SETUP_ADMIN_EMAIL` / `SETUP_ADMIN_PASSWORD` | `/admin` |
+| Student | `SETUP_STUDENT_EMAIL` / `SETUP_STUDENT_PASSWORD` | `/dashboard` |
+| Teacher | `SETUP_TEACHER_EMAIL` / `SETUP_TEACHER_PASSWORD` | `/teacher`, `/teacher/hod` |
+
+Seeded employee/student identifiers (T2026xxx, EM2026xxxx) are referenced by the dashboards and
+analytics queries, but the corresponding passwords are env-only.
 
 ## Login Portals (3 SEPARATE pages, 3 SEPARATE redirects)
 | Portal | URL | Credentials | Redirects To |

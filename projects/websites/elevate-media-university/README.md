@@ -1,8 +1,26 @@
-# Elevate Media University — Official Institution Website
+<h1 align="center">Elevate Media University</h1>
 
-> The official website for Elevate Media University — a modern, full-stack institution website built with Next.js, TypeScript, Tailwind CSS, and Supabase. It presents the university to the public (programs, courses, achievements, applications) and powers secure online portals for students, teaching staff, and administrators.
+<p align="center">
+  <strong>Official institution website and multi-portal management platform.</strong>
+  <br />
+  Public site plus secure portals for students, teaching staff, HODs and administrators.
+</p>
 
-**🌐 Live Demo:** https://elevate-media-dun.vercel.app
+<p align="center">
+  <a href="https://elevate-media-dun.vercel.app"><img src="https://img.shields.io/badge/Live%20Demo-elevate--media--dun.vercel.app-111?style=for-the-badge&logo=vercel" alt="Live demo" /></a>
+  <a href="https://github.com/em757896-alt/emmanuel-tech-portfolio/stargazers"><img src="https://img.shields.io/github/stars/em757896-alt/emmanuel-tech-portfolio?style=for-the-badge&logo=github&color=ffd166" alt="Stars" /></a>
+  <a href="https://github.com/em757896-alt/emmanuel-tech-portfolio/releases"><img src="https://img.shields.io/github/v/release/em757896-alt/emmanuel-tech-portfolio?style=for-the-badge&color=06d6a0" alt="Release" /></a>
+  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge&color=118ab2" alt="License" /></a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs" alt="Next.js" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase" alt="Supabase" />
+  <img src="https://img.shields.io/badge/Turnstile%20protected-22c55e?style=for-the-badge" alt="Turnstile" />
+</p>
+
+---
 
 ---
 
@@ -128,16 +146,18 @@ Elevate Media University's official website serves two audiences. For the public
 
 ## Demo Accounts
 
-> Test credentials for the live demo. Teacher accounts require the Employee ID and the Unit Lecturer / HOD role toggle.
+> Demo accounts are provisioned by `POST /api/setup`, which is **disabled unless `SETUP_TOKEN` is
+> set** and requires the same value in the `x-setup-token` header. The route never returns
+> passwords, and it will not overwrite an existing account. Credentials are never committed to
+> this repository.
 
-| Role | Login Page | Email | Password | Additional |
-|------|-----------|-------|----------|------------|
-| Admin | `/admin-login` | `admin@elevatemedia.edu` | `admin123` | — |
-| Student | `/student-login` | `john.doe@student.elevatemedia.edu` | `student123` | Adm No: `EM20261001` |
-| Teacher (HOD) | `/teacher-login` | `sarah.jones@elevatemedia.edu` | `teacher123` | Employee ID: `T2026001`, toggle HOD |
-| Teacher (Lecturer) | `/teacher-login` | `jane.smith@elevatemedia.edu` | `teacher456` | Employee ID: `T2026002`, toggle Lecturer |
-| Teacher (Lecturer) | `/teacher-login` | `patricia.mwangi@elevatemedia.edu` | `lecturer789` | Employee ID: `T2026003`, toggle Lecturer |
-| Teacher (Faculty HOD) | `/teacher-login` | `daniel.otieno@elevatemedia.edu` | `hod12345` | Employee ID: `T2026004`, toggle HOD |
+| Role | Login Page | Env var holding the password |
+|------|-----------|-------------------------------|
+| Admin | `/admin-login` | `SETUP_ADMIN_PASSWORD` |
+| Student | `/student-login` | `SETUP_STUDENT_PASSWORD` |
+| Teacher | `/teacher-login` | `SETUP_TEACHER_PASSWORD` |
+
+Teacher accounts additionally require the Employee ID and the Unit Lecturer / HOD role toggle.
 
 ---
 
