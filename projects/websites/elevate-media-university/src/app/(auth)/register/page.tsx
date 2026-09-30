@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Turnstile, isTurnstileConfigured } from "@/components/ui/Turnstile";
+import { LegalConsent } from "@/components/ui/LegalConsent";
 import { Loader2, Mail, Lock, User, Phone } from "lucide-react";
 
 interface Department {
@@ -28,6 +30,9 @@ export default function RegisterPage() {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [consent, setConsent] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0);
 
   useEffect(() => {
     fetch("/api/departments")
@@ -39,13 +44,23 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (!consent) {
+      setError("You must agree to the Privacy Policy and Terms of Use to create an account.");
+      return;
+    }
+    if (isTurnstileConfigured() && !turnstileToken) {
+      setError("Please complete the human verification before creating your account.");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, acceptedTerms: true, acceptedPrivacy: true, turnstileToken }),
       });
 
       const data = await res.json();
@@ -62,6 +77,8 @@ export default function RegisterPage() {
       setError("An error occurred. Please try again.");
     } finally {
       setLoading(false);
+      setTurnstileToken("");
+      setTurnstileResetKey((k) => k + 1);
     }
   };
 
@@ -177,6 +194,12 @@ export default function RegisterPage() {
                 </Select>
               </div>
             )}
+            <LegalConsent id="register-legal" checked={consent} onChange={setConsent} mode="signup" />
+            <Turnstile
+              onVerify={setTurnstileToken}
+              onReset={() => setTurnstileToken("")}
+              resetKey={turnstileResetKey}
+            />
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (
                 <>

@@ -11,6 +11,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Mail, Lock } from "lucide-react";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { Turnstile, isTurnstileConfigured } from "@/components/ui/Turnstile";
+import { LegalConsent } from "@/components/ui/LegalConsent";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -19,17 +21,33 @@ export default function AdminLoginPage() {
   const [error, setError] = useState("");
   const [rawError, setRawError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [consent, setConsent] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setRawError("");
+
+    if (!consent) {
+      setError("You must agree to the Privacy Policy and Terms of Use to sign in.");
+      return;
+    }
+    if (isTurnstileConfigured() && !turnstileToken) {
+      setError("Please complete the human verification before signing in.");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const result = await signIn("credentials", {
         email,
         password,
+        acceptedPrivacy: "yes",
+        acceptedTerms: "yes",
+        turnstileToken,
         redirect: false,
       });
 
@@ -45,6 +63,8 @@ export default function AdminLoginPage() {
       setRawError(msg);
     } finally {
       setLoading(false);
+      setTurnstileToken("");
+      setTurnstileResetKey((k) => k + 1);
     }
   };
 
@@ -102,6 +122,12 @@ export default function AdminLoginPage() {
                   />
                 </div>
               </div>
+              <LegalConsent id="admin-login-legal" checked={consent} onChange={setConsent} mode="signin" />
+              <Turnstile
+                onVerify={setTurnstileToken}
+                onReset={() => setTurnstileToken("")}
+                resetKey={turnstileResetKey}
+              />
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? (
                   <>

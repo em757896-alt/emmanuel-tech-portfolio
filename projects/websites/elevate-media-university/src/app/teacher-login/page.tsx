@@ -11,6 +11,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Mail, Lock, ShieldCheck, GraduationCap, IdCard } from "lucide-react";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { Turnstile, isTurnstileConfigured } from "@/components/ui/Turnstile";
+import { LegalConsent } from "@/components/ui/LegalConsent";
 
 export default function TeacherLoginPage() {
   const router = useRouter();
@@ -20,6 +22,9 @@ export default function TeacherLoginPage() {
   const [roleClaim, setRoleClaim] = useState<"lecturer" | "hod" | "">("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [consent, setConsent] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +32,15 @@ export default function TeacherLoginPage() {
 
     if (!roleClaim) {
       setError("Select whether you are a unit lecturer or a Head of Department.");
+      return;
+    }
+
+    if (!consent) {
+      setError("You must agree to the Privacy Policy and Terms of Use to sign in.");
+      return;
+    }
+    if (isTurnstileConfigured() && !turnstileToken) {
+      setError("Please complete the human verification before signing in.");
       return;
     }
 
@@ -38,6 +52,9 @@ export default function TeacherLoginPage() {
         employeeId,
         password,
         hodClaim: roleClaim === "hod" ? "yes" : "no",
+        acceptedPrivacy: "yes",
+        acceptedTerms: "yes",
+        turnstileToken,
         redirect: false,
       });
 
@@ -58,6 +75,8 @@ export default function TeacherLoginPage() {
       setError("An error occurred. Please try again.");
     } finally {
       setLoading(false);
+      setTurnstileToken("");
+      setTurnstileResetKey((k) => k + 1);
     }
   };
 
@@ -168,6 +187,12 @@ export default function TeacherLoginPage() {
                   </p>
                 )}
               </div>
+              <LegalConsent id="teacher-login-legal" checked={consent} onChange={setConsent} mode="signin" />
+              <Turnstile
+                onVerify={setTurnstileToken}
+                onReset={() => setTurnstileToken("")}
+                resetKey={turnstileResetKey}
+              />
               <Button type="submit" className="w-full bg-accent text-primary hover:bg-accent/90" disabled={loading}>
                 {loading ? (<><Loader2 className="h-4 w-4 animate-spin" /> Signing in...</>) : "Sign In"}
               </Button>

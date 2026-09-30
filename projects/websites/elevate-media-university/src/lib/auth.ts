@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { createClient } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
+import { verifyTurnstile } from "@/lib/server/turnstile";
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -89,9 +90,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         employeeId: { label: "Employee ID", type: "text" },
         password: { label: "Password", type: "password" },
         hodClaim: { label: "HOD", type: "text" },
+        acceptedPrivacy: { label: "Privacy consent", type: "text" },
+        acceptedTerms: { label: "Terms consent", type: "text" },
+        turnstileToken: { label: "Turnstile token", type: "text" },
       },
       async authorize(credentials) {
         if (!credentials?.password) return null;
+
+        // Legal consent (Privacy Policy + Terms of Use) must be explicitly accepted.
+        const acceptedPrivacy = credentials.acceptedPrivacy === "yes" || credentials.acceptedPrivacy === "true";
+        const acceptedTerms = credentials.acceptedTerms === "yes" || credentials.acceptedTerms === "true";
+        if (!acceptedPrivacy || !acceptedTerms) return null;
+
+        // Cloudflare Turnstile bot protection (degrades to allow when unconfigured).
+        const human = await verifyTurnstile((credentials.turnstileToken as string | undefined) ?? "");
+        if (!human) return null;
 
         // Student portal: email + Adm No + password, verified via Supabase Auth
         if (credentials.admNo) {

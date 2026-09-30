@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../config/auth.php';
+require_once __DIR__ . '/../config/turnstile.php';
 
 $auth = new Auth();
 $error = '';
@@ -170,9 +171,17 @@ $currentPage = 'register';
                         <label class="remember-me">
                             <input type="checkbox" name="consent" value="1" required>
                             <span class="check-box"></span>
-                            <span>I agree to the <a href="/privacy.php" target="_blank">Privacy Policy</a> and <a href="/terms.php" target="_blank">Terms of Use</a> <span class="req">*</span></span>
+                            <span>I have read and agree to the <a href="/privacy.php" target="_blank">Privacy Policy</a> and <a href="/terms.php" target="_blank">Terms of Use</a>, and consent to the processing of my personal data <span class="req">*</span></span>
                         </label>
                     </div>
+
+                    <?php if (trim(TURNSTILE_SITE_KEY) !== ''): ?>
+                    <div style="display:flex;justify-content:center;margin:12px 0">
+                        <div class="cf-turnstile"
+                             data-sitekey="<?= htmlspecialchars(TURNSTILE_SITE_KEY) ?>"
+                             data-theme="<?= htmlspecialchars(TURNSTILE_WIDGET_THEME) ?>"></div>
+                    </div>
+                    <?php endif; ?>
 
                     <button type="submit" class="auth-submit-btn" id="registerBtn">
                         <i class="fas fa-user-plus"></i> Create Account
@@ -189,6 +198,7 @@ $currentPage = 'register';
         </div>
     </div>
 
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <script>
     function togglePassword(id) {
         const btn = event.currentTarget;

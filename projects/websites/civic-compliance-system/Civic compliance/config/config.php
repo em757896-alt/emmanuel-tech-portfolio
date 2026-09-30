@@ -56,6 +56,11 @@ define('MAIL_FROM_NAME', 'PBO Kenya Platform');
 define('ITEMS_PER_PAGE', 12);
 define('ADMIN_ITEMS_PER_PAGE', 25);
 
+// ── Cloudflare Turnstile (CAPTCHA) ──────────────────────────────────────
+define('TURNSTILE_SITE_KEY', '0x4AAAAAAFGFwAY6RiW49Qdx');
+define('TURNSTILE_SECRET_KEY', ''); // set on the server; blank = bot check skipped
+define('TURNSTILE_WIDGET_THEME', 'light');
+
 // â”€â”€ Cache â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 define('CACHE_ENABLED', true);
 define('CACHE_DURATION', 3600);

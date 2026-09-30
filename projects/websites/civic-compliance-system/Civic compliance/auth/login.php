@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../config/auth.php';
+require_once __DIR__ . '/../config/turnstile.php';
 
 $auth = new Auth();
 $error = '';
@@ -19,6 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($email) || empty($password)) {
         $error = 'Please enter both email and password.';
+    } elseif (empty($_POST['consent'])) {
+        $error = 'You must agree to the Privacy Policy and Terms of Use to sign in.';
+    } elseif (!turnstile_verify($_POST['cf-turnstile-response'] ?? '')) {
+        $error = 'Human verification failed. Please try again.';
     } else {
         $result = $auth->login($email, $password, $remember);
         if ($result['success']) {
@@ -149,6 +154,22 @@ $currentPage = 'login';
                         </label>
                     </div>
 
+                    <div class="auth-options">
+                        <label class="remember-me">
+                            <input type="checkbox" name="consent" value="1" required>
+                            <span class="check-box"></span>
+                            <span>I have read and agree to the <a href="/privacy.php" target="_blank">Privacy Policy</a> and <a href="/terms.php" target="_blank">Terms of Use</a>, and consent to my personal data being processed <span class="req">*</span></span>
+                        </label>
+                    </div>
+
+                    <?php if (turnstile_configured() || trim(TURNSTILE_SITE_KEY) !== ''): ?>
+                    <div class="cf-turnstile" style="display:flex;justify-content:center;margin:12px 0">
+                        <div class="cf-turnstile"
+                             data-sitekey="<?= htmlspecialchars(TURNSTILE_SITE_KEY) ?>"
+                             data-theme="<?= htmlspecialchars(TURNSTILE_WIDGET_THEME) ?>"></div>
+                    </div>
+                    <?php endif; ?>
+
                     <button type="submit" class="auth-submit-btn">
                         <i class="fas fa-sign-in-alt"></i> Sign In
                     </button>
@@ -164,6 +185,7 @@ $currentPage = 'login';
         </div>
     </div>
 
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <script>
     function togglePassword(id) {
         const btn = event.currentTarget;

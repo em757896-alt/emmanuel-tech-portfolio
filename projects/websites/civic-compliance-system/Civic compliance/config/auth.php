@@ -58,6 +58,11 @@ class Auth {
         if (empty($data['consent'])) {
             return ['success' => false, 'message' => 'You must agree to the terms and privacy policy'];
         }
+
+        // Cloudflare Turnstile bot check
+        if (function_exists('turnstile_verify') && !turnstile_verify($data['cf-turnstile-response'] ?? '')) {
+            return ['success' => false, 'message' => 'Human verification failed. Please try again.'];
+        }
         
         try {
             $userId = $this->db->insert('users', [

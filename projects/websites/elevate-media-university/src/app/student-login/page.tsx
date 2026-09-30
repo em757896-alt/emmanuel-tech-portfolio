@@ -12,6 +12,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Mail, Hash, Lock } from "lucide-react";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { PageImages } from "@/components/layout/PageImages";
+import { Turnstile, isTurnstileConfigured } from "@/components/ui/Turnstile";
+import { LegalConsent } from "@/components/ui/LegalConsent";
 
 export default function StudentLoginPage() {
   return (
@@ -28,6 +30,9 @@ function StudentLoginInner() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [consent, setConsent] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0);
 
   const verified = searchParams.get("verified") === "1";
   const reset = searchParams.get("reset") === "1";
@@ -41,6 +46,16 @@ function StudentLoginInner() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (!consent) {
+      setError("You must agree to the Privacy Policy and Terms of Use to sign in.");
+      return;
+    }
+    if (isTurnstileConfigured() && !turnstileToken) {
+      setError("Please complete the human verification before signing in.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -48,6 +63,9 @@ function StudentLoginInner() {
         email,
         admNo: studentId,
         password,
+        acceptedPrivacy: "yes",
+        acceptedTerms: "yes",
+        turnstileToken,
         redirect: false,
       });
 
@@ -60,6 +78,8 @@ function StudentLoginInner() {
       setError("An error occurred. Please try again.");
     } finally {
       setLoading(false);
+      setTurnstileToken("");
+      setTurnstileResetKey((k) => k + 1);
     }
   };
 
@@ -147,6 +167,12 @@ function StudentLoginInner() {
                   Forgot password?
                 </Link>
               </div>
+              <LegalConsent id="student-login-legal" checked={consent} onChange={setConsent} mode="signin" />
+              <Turnstile
+                onVerify={setTurnstileToken}
+                onReset={() => setTurnstileToken("")}
+                resetKey={turnstileResetKey}
+              />
               <Button type="submit" className="w-full bg-accent text-primary hover:bg-accent/90" disabled={loading}>
                 {loading ? (<><Loader2 className="h-4 w-4 animate-spin" /> Signing in...</>) : "Sign In"}
               </Button>

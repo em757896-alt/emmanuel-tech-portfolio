@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { createClient } from "@supabase/supabase-js";
 import { supabase, supabaseAdmin } from "@/lib/supabase";
+import { verifyTurnstile } from "@/lib/server/turnstile";
 
 const SITE = process.env.NEXTAUTH_URL || "https://elevate-media-dun.vercel.app";
 
@@ -33,14 +34,24 @@ async function generateUniqueStudentId(db: any) {
 
 export async function POST(req: Request) {
   try {
-    const supabase = getSupabase();
-    if (!supabase) return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
-
     const body = await req.json();
     const {
       firstName, lastName, email, password, phone, departmentId,
       departmentName, courseName, courseCode, country, city, modeOfLearning, dateOfBirth,
+      acceptedTerms, acceptedPrivacy, turnstileToken,
     } = body;
+
+    if (acceptedTerms !== true || acceptedPrivacy !== true) {
+      return NextResponse.json({ error: "You must accept the Privacy Policy and Terms of Use" }, { status: 400 });
+    }
+
+    const human = await verifyTurnstile(typeof turnstileToken === "string" ? turnstileToken : "");
+    if (!human) {
+      return NextResponse.json({ error: "Human verification failed. Please try again." }, { status: 400 });
+    }
+
+    const supabase = getSupabase();
+    if (!supabase) return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
 
     if (!firstName || !lastName || !email || !password) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
