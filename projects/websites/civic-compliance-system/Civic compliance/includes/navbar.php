@@ -1,9 +1,27 @@
 <?php
 require_once __DIR__ . '/../config/auth.php';
-$auth = new Auth();
-$isLoggedIn = $auth->isAuthenticated();
-$currentUser = $isLoggedIn ? $auth->currentUser() : null;
-$csrf = $auth->generateCSRF();
+
+// Degrade gracefully: if the database is unreachable the navigation still
+// renders (as a signed-out visitor) so that pages such as the legal pages
+// remain readable. This fails closed - no session means no access.
+$isLoggedIn  = false;
+$currentUser = null;
+$csrf        = '';
+$dbOffline   = false;
+try {
+    $auth = new Auth();
+    $isLoggedIn  = $auth->isAuthenticated();
+    $currentUser = $isLoggedIn ? $auth->currentUser() : null;
+    $csrf        = $auth->generateCSRF();
+} catch (Throwable $e) {
+    $dbOffline = true;
+    error_log('Navbar degraded (database unavailable): ' . $e->getMessage());
+}
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 $lang = $_SESSION['lang'] ?? 'en';
 ?>
 <nav class="navbar navbar-expand-lg" role="navigation" aria-label="Main Navigation">

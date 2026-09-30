@@ -17,6 +17,9 @@ define('DB_PASS', 'AES256:4m0deNaMM0HA+yKw/HIgbYzFLvAjq8o1cD7cfheTaOSB8M/MqTc/Ed
 define('DB_CHARSET', 'utf8mb4');
 
 class Database {
+    /** Marker message used to detect an unhandled connection failure. */
+    public const CONNECTION_ERROR = 'Database connection failed';
+
     private static $instance = null;
     private $conn;
     
@@ -38,10 +41,10 @@ class Database {
             
         } catch (PDOException $e) {
             error_log("Database Connection Error: " . $e->getMessage());
-            die(json_encode([
-                'error' => true,
-                'message' => 'Database connection failed. Please try again later.'
-            ]));
+            // Thrown (not fatal) so that pages which do not need the database —
+            // such as the legal pages — can still render. Callers that genuinely
+            // need data are handled by the exception handler below.
+            throw new RuntimeException(self::CONNECTION_ERROR, 0, $e);
         }
     }
     
@@ -101,7 +104,32 @@ class Database {
     
     // Prevent cloning
     private function __clone() {}
-    public function __wakeup() {
+public function __wakeup() {
         throw new Exception("Cannot unserialize singleton");
     }
 }
+
+/**
+ * Renders a friendly response for database failures that reach the top level,
+ * so visitors never see a PHP stack trace.
+ */
+set_exception_handler(function (Throwable $e): void {
+    if (!headers_sent()) {
+        http_response_code(503);
+        header('Content-Type: application/json; charset=utf-8');
+    }
+
+    if ($e instanceof RuntimeException && $e->getMessage() === Database::CONNECTION_ERROR) {
+        echo json_encode([
+            'error'   => true,
+            'message' => 'Database connection failed. Please try again later.'
+        ]);
+        return;
+    }
+
+    error_log('Unhandled error: ' . $e->getMessage());
+    echo json_encode([
+        'error'   => true,
+        'message' => 'Something went wrong. Please try again later.'
+    ]);
+});
