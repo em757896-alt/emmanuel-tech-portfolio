@@ -4,15 +4,18 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
-// Supabase connection values come from gradle properties, the environment, or `local.properties`.
-// They are intentionally NOT committed — the anon key is public by design but access is enforced
-// by RLS, and the URL/anon pair identifies the project you are writing into.
-val supabaseUrl: String = (findProperty("supabase.url") as String?)
-    ?: System.getenv("SUPABASE_URL")
-    ?: ""
-val supabaseAnonKey: String = (findProperty("supabase.anonKey") as String?)
-    ?: System.getenv("SUPABASE_ANON_KEY")
-    ?: ""
+// Supabase connection values come from `local.properties` (git-ignored), gradle properties,
+// or the environment. They are intentionally NOT committed — the anon key is public by design
+// but access is enforced by RLS, and the URL/anon pair identifies the project being written to.
+val localProps = java.util.Properties().apply {
+    val f = rootProject.file("local.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+fun resolveSupabase(key: String, env: String): String =
+    (localProps.getProperty(key) ?: project.findProperty(key) as String? ?: System.getenv(env) ?: "").trim()
+
+val supabaseUrl: String = resolveSupabase("supabase.url", "SUPABASE_URL")
+val supabaseAnonKey: String = resolveSupabase("supabase.anonKey", "SUPABASE_ANON_KEY")
 
 android {
     namespace = "com.trackspend.app"
