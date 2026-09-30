@@ -122,17 +122,25 @@ const { data, error } = await supabase.from("tableName").select("*");
 
 ### Environment Variables
 **ENCRYPTED.** Sensitive values are AES-256 (PBKDF2, 100k iters) encrypted. Ask the user for the passphrase, then decrypt with the helper script in `scripts/decrypt-secret.ps1` (or PowerShell: `[System.Convert]::FromBase64String(...)` + Rfc2898DeriveBytes).
-```
-DATABASE_URL=AES256:KnGeSAivbCYT3LzvYCRy1TVlKI08DWLqnFv6DQcFaS/YhZseMLZQgR7u5GSXE1Cn42NtYj3IuQCMUmiiuaSW7ElF0q71b1yQy3ZHp3kpzG2Y33hok38YMImuH/kNux0MCW1nWDAGzVI4Ep9RpKSR9n78nkp8+Mipj/daAB3gglHCCqrycgDNj92P6dZ2IjDb1jgi8xKTiU5KImIK4ppSNg==
-NEXT_PUBLIC_SUPABASE_URL=https://afcdfiqpomabpuucfdbw.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<set in Vercel>
-SUPABASE_SERVICE_ROLE_KEY=<set in Vercel>
-AUTH_SECRET=AES256:jVGBNM8Sk/+uhKfxTwuRvv6w20eyqqDZdMFyNsTKFLD123SnT7bOh47818KFQ+Fp3zoA7TVRzAEbBPLY2IHhfd4d50ucyA487Vgj7LIoLCY=
-NEXTAUTH_URL=https://elevate-media-dun.vercel.app
-```
+
+> **No ciphertext or plaintext secret is committed to this repository.** The values
+> below live in the Vercel project's environment variables and in a local,
+> git-ignored `.env.local`. Decrypted values must never be written into this file.
+> See [`.env.example`](.env.example) for the variable names and their purpose.
+
+| Variable | Where it lives |
+| -------- | -------------- |
+| `DATABASE_URL` | Vercel env (encrypted at rest) |
+| `NEXT_PUBLIC_SUPABASE_URL` | Vercel env + `.env.example` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Vercel env (public by design; requires RLS) |
+| `SUPABASE_SERVICE_ROLE_KEY` | Vercel env — server-only, never `NEXT_PUBLIC_` |
+| `AUTH_SECRET` | Vercel env |
+| `NEXTAUTH_URL` | `https://elevate-media-dun.vercel.app` |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Vercel env (public by design) |
+| `TURNSTILE_SECRET_KEY` | Vercel env — server-only |
 
 ### Supabase Credentials
-- Password: `AES256:GUdSCTL7S/nQmAaeJSFznKRq9aKjl74MCd44nU6OK2tXsVjgTU1DYN/uxF1LfyntFDfjAKOtqAg4TqmFJQ8ZbA==`
+Held in Vercel env only. Never commit the project password or any key material.
 
 ## Test Accounts
 - **Admin:** admin@elevatemedia.edu / admin123

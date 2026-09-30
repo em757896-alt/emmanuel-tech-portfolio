@@ -1,3 +1,29 @@
+# Secrets — never commit real values
+.env
+.env.*
+!.env.example
+**/config/local.php
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
 
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+.vercel/
+.next/
+dist/
+build/
+out/
+
+# Tooling noise
+*.log
+.DS_Store
+Thumbs.db
+
+# Backups
 backups/
-

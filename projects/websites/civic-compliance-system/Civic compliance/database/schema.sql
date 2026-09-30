@@ -1,9 +1,9 @@
-﻿-- ============================================================
+-- ============================================================
 -- PBO COMPLIANCE PLATFORM - DATABASE SCHEMA
--- MySQL DB Name: if0_42280606_if0_42280606_
--- MySQL User Name: if0_42280606
--- MySQL Password: AES256:4m0deNaMM0HA+yKw/HIgbYzFLvAjq8o1cD7cfheTaOSB8M/MqTc/Edx85mfbuzOL
--- MySQL Host Name: sql303.infinityfree.com
+-- MySQL DB Name: [your-db-name]
+-- MySQL User Name: [your-db-user]
+-- MySQL Password: [see config/local.php]
+-- MySQL Host Name: [your-db-host]
 -- PHPMyAdmin: Available via vPanel
 -- Created for: CRECO Kenya PBO Platform
 -- ============================================================
@@ -13,7 +13,7 @@ START TRANSACTION;
 SET time_zone = "+03:00"; -- East Africa Time
 
 -- ============================================================
--- DATABASE: if0_42280606_if0_42280606_
+-- DATABASE: [your-db-name]
 -- ============================================================
 
 -- ------------------------------------------------------------

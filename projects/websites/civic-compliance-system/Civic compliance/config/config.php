@@ -1,8 +1,13 @@
 ﻿<?php
 /**
  * Application Configuration
- * PBO Compliance Platform - CRECO Kenya
+ * PBO Compliance Platform
+ *
+ * Secrets (database credentials, SECRET_KEY, Turnstile keys) are loaded from
+ * `config/local.php` (git-ignored) or environment variables — never committed.
  */
+
+require_once __DIR__ . '/settings.php';
 
 // â”€â”€ Environment â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 define('APP_ENV', 'production'); // 'development' | 'production'
@@ -19,13 +24,12 @@ define('APP_PHONE', '+254 111 275 630');
 define('ORGANIZATION', 'CRECO Kenya');
 
 // â”€â”€ Database (see database.php) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// DB_HOST: sql303.infinityfree.com
-// DB_NAME: if0_42280606_if0_42280606_
-// DB_USER: if0_42280606
-// DB_PASS: AES256:4m0deNaMM0HA+yKw/HIgbYzFLvAjq8o1cD7cfheTaOSB8M/MqTc/Edx85mfbuzOL
+// DB_HOST / DB_NAME / DB_USER / DB_PASS are resolved in settings.php from
+// config/local.php or environment variables. See config/local.example.php.
 
 // â”€â”€ Security â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-define('SECRET_KEY', 'd4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a'); // Change this in production
+// SECRET_KEY is resolved in settings.php from config/local.php or the environment.
+defined('SECRET_KEY') || define('SECRET_KEY', cfg('SECRET_KEY'));
 define('JWT_EXPIRY', 3600); // 1 hour
 define('SESSION_LIFETIME', 7200); // 2 hours
 define('MAX_LOGIN_ATTEMPTS', 5);
@@ -55,11 +59,6 @@ define('MAIL_FROM_NAME', 'PBO Kenya Platform');
 // â”€â”€ Pagination â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 define('ITEMS_PER_PAGE', 12);
 define('ADMIN_ITEMS_PER_PAGE', 25);
-
-// ── Cloudflare Turnstile (CAPTCHA) ──────────────────────────────────────
-define('TURNSTILE_SITE_KEY', '0x4AAAAAAFGFwAY6RiW49Qdx');
-define('TURNSTILE_SECRET_KEY', ''); // set on the server; blank = bot check skipped
-define('TURNSTILE_WIDGET_THEME', 'light');
 
 // â”€â”€ Cache â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 define('CACHE_ENABLED', true);

@@ -1,13 +1,13 @@
-﻿<?php
+<?php
 /**
  * admin/knowledge/index.php
  * Knowledge Hub Content Management
  * PBO Compliance Hub | CRECO Kenya
  *
- * DB: if0_42280606_if0_42280606_
- * User: if0_42280606
- * Password: AES256:4m0deNaMM0HA+yKw/HIgbYzFLvAjq8o1cD7cfheTaOSB8M/MqTc/Edx85mfbuzOL
- * Host: sql303.infinityfree.com
+ * DB: [your-db-name]
+ * User: [your-db-user]
+ * Password: [see config/local.php]
+ * Host: [your-db-host]
  */
 
 require_once '../../config/config.php';

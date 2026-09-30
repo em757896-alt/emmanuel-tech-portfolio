@@ -1,20 +1,14 @@
 ﻿<?php
 /**
  * Database Configuration
- * PBO Compliance Platform - CRECO Kenya
- * 
- * MySQL DB Name:     if0_42280606_if0_42280606_
- * MySQL User Name:   if0_42280606
- * MySQL Password:    AES256:4m0deNaMM0HA+yKw/HIgbYzFLvAjq8o1cD7cfheTaOSB8M/MqTc/Edx85mfbuzOL
- * MySQL Host Name:   sql303.infinityfree.com
- * PHPMyAdmin:        Available via vPanel dashboard
+ * PBO Compliance Platform
+ *
+ * Credentials are NOT stored in this repository. They are loaded from
+ * `config/local.php` (git-ignored) or from environment variables.
+ * See `config/local.example.php` for the template.
  */
 
-define('DB_HOST', 'sql303.infinityfree.com');
-define('DB_NAME', 'if0_42280606_if0_42280606_');
-define('DB_USER', 'if0_42280606');
-define('DB_PASS', 'AES256:4m0deNaMM0HA+yKw/HIgbYzFLvAjq8o1cD7cfheTaOSB8M/MqTc/Edx85mfbuzOL'); // Replace with actual vPanel password
-define('DB_CHARSET', 'utf8mb4');
+require_once __DIR__ . '/settings.php';
 
 class Database {
     /** Marker message used to detect an unhandled connection failure. */
@@ -25,6 +19,12 @@ class Database {
     
     private function __construct() {
         try {
+            if (DB_HOST === '' || DB_NAME === '' || DB_USER === '' || DB_PASS === '') {
+                throw new RuntimeException(
+                    'Database credentials are missing. Copy config/local.example.php to config/local.php and fill it in.'
+                );
+            }
+
             $dsn = "mysql:host=" . DB_HOST . 
                    ";dbname=" . DB_NAME . 
                    ";charset=" . DB_CHARSET;
