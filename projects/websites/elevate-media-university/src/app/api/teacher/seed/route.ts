@@ -53,16 +53,17 @@ export async function POST() {
       results.push("Course CS102 exists");
     }
 
-    const lecturerEmail = "jane.smith@elevatemedia.edu";
+    const lecturerEmail = process.env.SETUP_LECTURER_EMAIL ?? "jane.smith@elevatemedia.edu";
+    const lecturerPassword = process.env.SETUP_LECTURER_PASSWORD;
     const { data: user } = await supabase.from("users").select("id").eq("email", lecturerEmail).single();
     let teacherId: string | undefined;
-    if (!user) {
+    if (!user && lecturerPassword) {
       const uid = genId();
       const { error } = await supabase.from("users").insert({
         id: uid,
         email: lecturerEmail,
         name: "Jane Smith",
-        passwordHash: await bcrypt.hash("teacher456", 12),
+        passwordHash: await bcrypt.hash(lecturerPassword, 12),
         role: "TEACHER",
         createdAt: ts,
         updatedAt: ts,
@@ -81,7 +82,7 @@ export async function POST() {
         isHod: false,
       });
       if (te) throw new Error(`Lecturer profile: ${te.message}`);
-      results.push(`Unit lecturer created: ${lecturerEmail} / teacher456 (T2026002)`);
+      results.push(`Unit lecturer created: ${lecturerEmail} (T2026002)`);
     } else {
       const { data: t } = await supabase.from("teachers").select("id").eq("userId", user.id).single();
       teacherId = t?.id;
@@ -158,7 +159,8 @@ export async function POST() {
 
     return NextResponse.json({
       status: "success",
-      lecturer: { email: lecturerEmail, password: "teacher456", employeeId: "T2026002" },
+      // Password is never echoed — it comes from SETUP_LECTURER_PASSWORD and is not retrievable.
+      lecturer: { email: lecturerEmail, employeeId: "T2026002", created: !user && !!lecturerPassword },
       results,
     });
   } catch (error) {

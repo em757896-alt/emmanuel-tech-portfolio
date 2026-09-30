@@ -37,7 +37,7 @@ async function findOrCreateDepartment(supabase: any, name: string, code: string)
 async function findOrCreateTeacher(
   supabase: any,
   email: string,
-  password: string,
+  password: string | undefined,
   employeeId: string,
   firstName: string,
   lastName: string,
@@ -49,6 +49,10 @@ async function findOrCreateTeacher(
 ) {
   const { data: user } = await supabase.from("users").select("id").eq("email", email).single();
   if (!user) {
+    // Passwords come from the environment, never from source.
+    if (!password) {
+      throw new Error(`Cannot create ${email}: the matching SETUP_*_PASSWORD env var is not set`);
+    }
     const uid = genId();
     const { error } = await supabase.from("users").insert({
       id: uid,
@@ -150,10 +154,13 @@ export async function POST() {
       results.push("Course PAD301 exists");
     }
 
+    const lecturerPassword = process.env.SETUP_LECTURER2_PASSWORD;
+    const hodPassword = process.env.SETUP_HOD_PASSWORD;
+
     const lecturerId = await findOrCreateTeacher(
       supabase,
-      "patricia.mwangi@elevatemedia.edu",
-      "lecturer789",
+      process.env.SETUP_LECTURER2_EMAIL ?? "patricia.mwangi@elevatemedia.edu",
+      lecturerPassword,
       "T2026003",
       "Patricia",
       "Mwangi",
@@ -167,8 +174,8 @@ export async function POST() {
 
     const hodId = await findOrCreateTeacher(
       supabase,
-      "daniel.otieno@elevatemedia.edu",
-      "hod12345",
+      process.env.SETUP_HOD_EMAIL ?? "daniel.otieno@elevatemedia.edu",
+      hodPassword,
       "T2026004",
       "Daniel",
       "Otieno",
@@ -266,9 +273,9 @@ export async function POST() {
       department: "Sociology & Political Science",
       course: "PAD301 - Public Administration",
       accounts: {
-        unitLecturer: { email: "patricia.mwangi@elevatemedia.edu", password: "lecturer789", employeeId: "T2026003", isHod: false },
-        hod: { email: "daniel.otieno@elevatemedia.edu", password: "hod12345", employeeId: "T2026004", isHod: true },
-      },
+        // Passwords are never echoed — they come from SETUP_LECTURER_PASSWORD / SETUP_HOD_PASSWORD.
+        unitLecturer: { email: process.env.SETUP_LECTURER2_EMAIL ?? "patricia.mwangi@elevatemedia.edu", employeeId: "T2026003", isHod: false },
+        hod: { email: process.env.SETUP_HOD_EMAIL ?? "daniel.otieno@elevatemedia.edu", employeeId: "T2026004", isHod: true },      },
       results,
     });
   } catch (error) {
