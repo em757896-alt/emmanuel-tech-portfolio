@@ -42,7 +42,7 @@ software** with the source for every project:
 | 1 | **Elevate Media University** | Next.js 16, TypeScript, Supabase, Auth.js, Tailwind | [elevate-media-dun.vercel.app](https://elevate-media-dun.vercel.app) | [code](projects/websites/elevate-media-university) |
 | 2 | **Civic Compliance System** | PHP, MySQL, Bootstrap, jQuery, Chart.js | [civiccompliancehub.gt.tc](https://civiccompliancehub.gt.tc) | [code](projects/websites/civic-compliance-system) |
 | 3 | **Student Management System** | PHP, MySQL, Three.js | [studentmanagement.gt.tc](https://studentmanagement.gt.tc) | [code](projects/websites/student-management-system) |
-| 4 | **TrackSpend Native** | Kotlin, Jetpack Compose, Supabase | [trackspend.vercel.app](https://trackspend.vercel.app) | [code](projects/applications/mobile%20apps/trackspend-native) |
+| 4 | **TrackSpend Native** | Kotlin, Jetpack Compose, Supabase | [trackspend.vercel.app](https://trackspend-jade.vercel.app) | [code](projects/applications/mobile%20apps/trackspend-native) |
 
 ---
 
