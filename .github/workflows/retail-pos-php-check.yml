@@ -1,0 +1,21 @@
+name: Retail POS PHP syntax check
+on:
+  push:
+    paths:
+      - 'projects/websites/student-management-system/**'
+      - '.github/workflows/retail-pos-php-check.yml'
+  pull_request:
+    paths:
+      - 'projects/websites/student-management-system/**'
+jobs:
+  php-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      - name: Lint project PHP files
+        run: |
+          find projects/websites/student-management-system -name '*.php' -print0 | xargs -0 -n1 php -l
