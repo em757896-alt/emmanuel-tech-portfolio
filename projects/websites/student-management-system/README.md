@@ -1,147 +1,109 @@
-<p align="center">
-  <strong style="font-size:1.5rem; letter-spacing:.14em; text-transform:uppercase;">Student Management System</strong><br>
-  <span style="letter-spacing:.28em; text-transform:uppercase; opacity:.7; font-size:.8rem;">Elevate Media Productions</span>
-</p>
+# Elevate Retail POS & Inventory Management System
 
-<p align="center">
-  A production-grade student management platform — interactive <strong>3D campus</strong>, live timetables,
-  a digital library, and complete student record management.
-</p>
+**A cloud-hosted retail operations portfolio application by Elevate Media Productions.**
 
-<p align="center">
-  <a href="https://studentmanagement.gt.tc"><img src="https://img.shields.io/badge/Live%20Demo-studentmanagement.gt.tc-111?style=for-the-badge&logo=php" alt="Live demo" /></a>
-  <a href="https://github.com/em757896-alt/emmanuel-tech-portfolio/stargazers"><img src="https://img.shields.io/github/stars/em757896-alt/emmanuel-tech-portfolio?style=for-the-badge&logo=github&color=ffd166" alt="Stars" /></a>
-  <a href="https://github.com/em757896-alt/emmanuel-tech-portfolio/releases"><img src="https://img.shields.io/github/v/release/em757896-alt/emmanuel-tech-portfolio?style=for-the-badge&color=06d6a0" alt="Release" /></a>
-  <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge&color=118ab2" alt="License" /></a>
-</p>
+The former Student Management System has been superseded as the active application by a retail inventory and point-of-sale system. Its historical source files and screenshots are retained in this repository for traceability; the new application lives in `pos/`.
 
-<p align="center">
-  <a href="https://studentmanagement.gt.tc"><strong>View Live Demo</strong></a>
-</p>
+## Project goals
 
----
+Provide a clear, professional demonstration of the workflows used by a small retail business:
 
-## Overview
+- Role-based staff access: administrator, manager and cashier
+- Product catalogue with SKU, barcode, category, cost, selling price and reorder level
+- Inventory quantities and stock movement ledger
+- Point-of-sale cart and checkout
+- Cash, card and mobile-money payment method recording
+- Receipt references, discounts, tax calculation and change due
+- Supplier directory
+- Sales summaries and low-stock reporting
+- Audit log for important actions
 
-This **Student Management System** is a standalone web platform that brings academic administration into
-one place. Instead of a flat list of records, the system opens with an **interactive 3D campus** — visitors
-can rotate and zoom around the grounds and click any building to explore its departments, classrooms, and
-timetable.
+## Technology
 
-The project is a production of **Elevate Media Productions**.
-
-## Features
-
-| Area | What it does |
+| Layer | Implementation |
 |---|---|
-| 🏫 **Interactive 3D Campus** | Full Three.js scene — buildings, lawns and paths. Click a building to open its department, a classroom to see its timetable, or a student avatar to view their profile. Graceful 2D fallback on devices without WebGL. |
-| 🎓 **Student Management** | Register, search, edit and delete student records. Enrolment by department with live counts. |
-| 🏛️ **Departments & Classrooms** | Department pages with building, colour identity and classroom lists; room-tagged timetable lookups. |
-| 📅 **Live Timetables** | Daily schedules grouped by classroom and department, always fetched from the database. |
-| 📚 **Library & Loans** | Book catalogue with availability status, plus loan tracking (active vs returned). |
-| 🔐 **Admin Dashboard** | Staff-only area to manage students, departments, classrooms, timetables and library stock. |
-| 📬 **Contact** | Working enquiry form wired to a processing script. |
+| Server | PHP 8.x |
+| Database | MySQL / MariaDB |
+| Data access | PDO with native prepared statements |
+| UI | HTML5, CSS3, vanilla JavaScript |
+| Responsive styling | Custom CSS |
+| Hosting target | InfinityFree PHP + MySQL shared hosting |
 
-## Screenshots
+The frontend uses no Node.js server or build step. This is intentional for shared PHP hosting. External font loading is optional; the interface has local system-font fallbacks.
 
-<img src="Screenshots/front page 2.png" alt="Student Management — Front Page" />
+## Current implementation status
 
-<img src="Screenshots/Screenshot (127).png" alt="Student Management — Campus View" />
+Implemented in the initial portfolio release:
+- Secure first-administrator setup with password hashing
+- Login/logout with session ID regeneration
+- Role checks for administrator, manager and cashier
+- CSRF validation on state-changing forms
+- Product and category creation
+- Supplier creation
+- Stock adjustment with movement history
+- POS cart and server-side checkout validation
+- Database transaction around sale creation and stock deduction
+- Sales receipt references and transaction listing
+- Dashboard metrics and low-stock indicators
+- Audit records for key operations
 
-<img src="Screenshots/Screenshot (128).png" alt="Student Management — Departments" />
+Not yet implemented in the interface and must not be represented as complete:
+- Purchase receiving workflow (schema foundation exists)
+- Returns/refunds and void approvals
+- Barcode scanner hardware integration
+- Receipt printer integration
+- Multi-branch inventory
+- Tax-compliance configuration for a real jurisdiction
+- Automated backups, monitoring and production service-level guarantees
 
-<img src="Screenshots/Screenshot (129).png" alt="Student Management — Students" />
+## Installation on InfinityFree
 
-<img src="Screenshots/Screenshot (130).png" alt="Student Management — Timetable" />
+1. Create a MySQL database in the InfinityFree control panel.
+2. Open phpMyAdmin for that database and import `pos/schema.sql`.
+3. Copy `db.example.php` to `db.php` in this project folder.
+4. Fill `db.php` with the exact host, database name, username and password shown in the hosting control panel. **Never commit `db.php` or publish database credentials.**
+5. Upload the contents of this project folder so that `index.php` is the folder entry point and the `pos/` directory is alongside it.
+6. Visit `/pos/setup.php` once and create a unique administrator password of at least 12 characters.
+7. Sign in at `/pos/index.php?page=login`.
+8. Delete `pos/setup.php` from the live server immediately after creating the administrator.
+9. Add categories and products, then test with dummy transactions only.
 
-<img src="Screenshots/Screenshot (131).png" alt="Student Management — Library" />
+The project expects the database configuration file at `db.php` in this folder. It is intentionally not included in source control.
 
-<img src="Screenshots/Screenshot (132).png" alt="Student Management — Admin Dashboard" />
+## Security and operational notes
 
-## Tech Stack
+- Use HTTPS for every login and transaction.
+- Keep database credentials outside Git.
+- Use a unique password for each staff account; do not share administrator credentials.
+- Do not load real customer, payment-card or commercially sensitive records into the free-hosting demo.
+- The application records payment method and amount received; it does **not** process card or mobile-money payments.
+- A successful test on GitHub does not prove the InfinityFree deployment is configured. Verify the live database connection, setup, login, sale and stock deduction after upload.
+- Shared free hosting is suitable for a learning/demo deployment, not a dependable production POS for a live shop.
 
-- **Backend** — PHP 8 (procedural, no framework) + PDO prepared statements
-- **Database** — MySQL / MariaDB
-- **Frontend** — Semantic HTML5, modern CSS (custom design system), vanilla JavaScript
-- **3D** — Three.js (r160 module build on campus, r149 UMD on the hero) with an import-map-driven module graph
-- **Hosting** — [InfinityFree](https://infinityfree.net) with a free MySQL database
+## Database model
 
-## Getting Started
+Core tables: `users`, `categories`, `suppliers`, `products`, `stock_movements`, `sales`, `sale_items`, `purchases`, `purchase_items`, `store_settings`, and `audit_logs`.
 
-### 1. Requirements
-- PHP **8.0+** with PDO and the MySQL driver enabled
-- MySQL / MariaDB server
-- Any web server (Apache, Nginx, or PHP's built-in server)
+The checkout operation locks product rows, validates available stock, writes the sale and line items, deducts inventory and records stock movements inside one database transaction. If an operation fails, the transaction is rolled back.
 
-### 2. Clone & configure
-
-```bash
-git clone https://github.com/em757896-alt/emmanuel-tech-portfolio.git
-cd emmanuel-tech-portfolio/projects/websites/student-management-system
-```
-
-1. Copy `db.example.php` to `db.php` and fill in your database credentials.
-2. Create a database and import `database.sql` (self-cleaning import — safe to re-run).
-3. Seed the first admin account by visiting `setup_admin.php` once, or create one via SQL.
-4. Serve the folder and open `index.php` — it redirects to `home.php`.
-
-### 3. Default admin credentials
-
-`database.sql` seeds an administrator so the system is usable immediately after install. The
-username is `admin`; **set the password yourself before exposing the site** — do not rely on the
-seeded value, and do not publish the login details on a public deployment.
-
-> ⚠️ Change the admin password immediately after your first login, and disable or remove any
-> public demo account before going live.
-
-## Project Structure
+## Project structure
 
 ```
 student-management-system/
-├── assets/
-│   ├── css/styles.css      # Full design system
-│   └── js/
-│       ├── campus3d.js     # 3D campus scene (ES module)
-│       └── hero3d.js       # Home hero background scene
-├── includes/
-│   ├── config.php          # Config, DB connection, helpers
-│   ├── header.php          # Shared header / navigation
-│   └── footer.php          # Shared footer / contact details
-├── admin/                  # Admin dashboard pages
-├── api/search.php          # JSON endpoint for live admin student search
-├── campus.php              # 3D campus page
-├── students.php            # Student registration & search
-├── departments.php         # Department directory
-├── department.php          # Single department detail
-├── timetable.php           # Live timetables
-├── library.php             # Library catalogue & loans
-├── contact.php             # Contact form
-├── database.sql            # Schema + seed data (self-cleaning)
-├── db.example.php          # DB credentials template (copy to db.php)
-└── Screenshots/            # Project screenshots
+├── pos/
+│   ├── assets/app.css
+│   ├── bootstrap.php
+│   ├── index.php
+│   ├── schema.sql
+│   └── setup.php
+├── db.example.php
+├── db.php                 # private local/live configuration; never commit
+├── index.php              # redirects to the POS application
+└── [legacy student-system source and screenshots]
 ```
 
-## Deployment Notes
+## Interview explanation
 
-- This is a **shared-hosting-friendly** app: no build step, no server-side runtime beyond PHP, no package
-  manager required at runtime.
-- The 3D campus loads its Three.js modules from a public CDN (jsDelivr) via an **import map** declared in
-  `campus.php`. The page falls back to a 2D layout automatically if WebGL is unavailable.
-- `db.php` contains live credentials and is **git-ignored** by design — never commit it.
+This project demonstrates a practical PHP/MySQL business application. The most important engineering decision is that stock is not decremented by browser JavaScript: the server re-reads and locks product rows, checks stock, and commits the sale and inventory movements together. This protects against stale browser quantities and concurrent checkout races at the database level.
 
-## Security
-
-- PDO prepared statements everywhere — no SQL injection.
-- Output escaping via the `e()` helper — no reflected XSS.
-- Admin area is behind session-based access checks.
-- Credentials and the `db.php` file are excluded from version control.
-
-## Production
-
-- **Live:** https://studentmanagement.gt.tc
-- **Host:** InfinityFree (shared hosting, PHP 8.3 + MariaDB)
-
-## License
-
-Provided for demonstration and portfolio purposes.
-© 2026 Emmanuel Michael · Elevate Media Productions. All Rights Reserved.
+The current version is a portfolio MVP. Explain clearly which workflows are implemented and which are planned; do not claim real payment processing, production reliability or full accounting functionality.
