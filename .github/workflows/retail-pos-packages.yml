@@ -1,0 +1,82 @@
+name: Build Retail POS packages
+on:
+  push:
+    paths:
+      - 'projects/websites/student-management-system/pos/**'
+      - 'projects/websites/student-management-system/db.example.php'
+      - '.github/workflows/retail-pos-packages.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: write
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare packages
+        run: |
+          set -euo pipefail
+          ROOT=projects/websites/student-management-system
+          mkdir -p dist/infinityfree/pos/assets dist/portable/pos/assets
+          cp "$ROOT/pos/index.php" "$ROOT/pos/bootstrap.php" "$ROOT/pos/schema.sql" "$ROOT/pos/setup.php" dist/infinityfree/pos/
+          cp "$ROOT/pos/assets/app.css" dist/infinityfree/pos/assets/
+          cp "$ROOT/db.example.php" dist/infinityfree/db.example.php
+          cp "$ROOT/index.php" dist/infinityfree/index.php
+          cp "$ROOT/pos/index.php" "$ROOT/pos/bootstrap.php" "$ROOT/pos/schema.sql" "$ROOT/pos/setup.php" dist/portable/pos/
+          cp "$ROOT/pos/assets/app.css" dist/portable/pos/assets/
+          cp "$ROOT/db.example.php" dist/portable/db.example.php
+          cp "$ROOT/index.php" dist/portable/index.php
+          cat > dist/infinityfree/README-INSTALL.txt <<'EOF'
+          ELEVATE RETAIL POS — INFINITYFREE PACKAGE
+          
+          UPLOAD STRUCTURE
+          Upload the CONTENTS of this folder into your InfinityFree htdocs folder:
+            index.php
+            db.example.php
+            pos/index.php
+            pos/bootstrap.php
+            pos/schema.sql
+            pos/setup.php
+            pos/assets/app.css
+          
+          DATABASE
+          1. Create a NEW empty MySQL database in the hosting control panel.
+          2. Import pos/schema.sql using phpMyAdmin. WARNING: this SQL drops tables with the application table names. Never import into a database containing data you need.
+          3. Copy db.example.php to db.php in the htdocs root (same level as index.php).
+          4. Edit db.php with the exact MySQL host, database name, username and password from the control panel. Do not upload the example file as db.php without editing it.
+          
+          FIRST ADMIN
+          5. Open /pos/setup.php and create an administrator with a unique password of at least 12 characters.
+          6. Immediately delete pos/setup.php from the server.
+          7. Sign in at /pos/index.php?page=login.
+          
+          TEST
+          Use dummy data first. Test product creation, stock adjustments, a sale, receipt printing, sale voiding and stock restoration. Payment methods are recorded only; no card/mobile-money payment is processed.
+          
+          SECURITY / HOSTING
+          Use HTTPS. Never share db.php. Free shared hosting is for demo/testing, not dependable live retail operations. Keep your own backups.
+          EOF
+          cat > dist/portable/README-PORTABLE.txt <<'EOF'
+          ELEVATE RETAIL POS — PORTABLE PHP/MYSQL PACKAGE
+          
+          This package contains the application source without a host-specific database configuration. It can be adapted to PHP 8.x with MySQL/MariaDB and PDO MySQL.
+          
+          1. Upload the folder contents so index.php, db.example.php and pos/ are together.
+          2. Create a NEW empty MySQL database and import pos/schema.sql. WARNING: the SQL drops tables with the application table names; do not import over data you need.
+          3. Copy db.example.php to db.php and fill in the database host, name, username and password.
+          4. Open /pos/setup.php once to create the first admin (password minimum 12 characters).
+          5. Delete pos/setup.php immediately after setup, then sign in at /pos/index.php?page=login.
+          
+          Requires PHP 8.x, PDO and PDO MySQL. Enable HTTPS. Payment method labels are recorded only; the app does not process card/mobile-money payments. This is a portfolio MVP, not a fully hardened production POS.
+          EOF
+          (cd dist/infinityfree && zip -qr ../../retail-pos-infinityfree.zip .)
+          (cd dist/portable && zip -qr ../../retail-pos-portable.zip .)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: retail-pos-install-packages
+          path: |
+            retail-pos-infinityfree.zip
+            retail-pos-portable.zip
+          if-no-files-found: error
+          retention-days: 14
