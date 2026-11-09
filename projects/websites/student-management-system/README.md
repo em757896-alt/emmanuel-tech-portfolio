@@ -9,13 +9,16 @@ The former Student Management System has been superseded as the active applicati
 Provide a clear, professional demonstration of the workflows used by a small retail business:
 
 - Role-based staff access: administrator, manager and cashier
-- Product catalogue with SKU, barcode, category, cost, selling price and reorder level
+- Product catalogue with SKU, barcode, category, cost, selling price, unit and reorder level
+- Product editing with stock corrections recorded in the movement ledger
 - Inventory quantities and stock movement ledger
 - Point-of-sale cart and checkout
 - Cash, card and mobile-money payment method recording
 - Receipt references, discounts, tax calculation and change due
-- Supplier directory
-- Sales summaries and low-stock reporting
+- Supplier directory and purchase receiving (one product per receiving record)
+- Sales summaries, sales history and low-stock reporting
+- Controlled whole-sale voiding by administrators/managers, with reason, stock restoration and audit trail
+- Staff account creation and activation/deactivation with protection against disabling the last active administrator
 - Audit log for important actions
 
 ## Technology
@@ -38,18 +41,20 @@ Implemented in the initial portfolio release:
 - Login/logout with session ID regeneration
 - Role checks for administrator, manager and cashier
 - CSRF validation on state-changing forms
-- Product and category creation
+- Product and category creation and product editing
 - Supplier creation
 - Stock adjustment with movement history
 - POS cart and server-side checkout validation
 - Database transaction around sale creation and stock deduction
 - Sales receipt references, full sales history and printable receipts
+- Purchase receiving with stock and cost updates
+- Whole-sale voiding with inventory restoration and audit logging
+- Staff account activation/deactivation
 - Dashboard metrics and low-stock indicators
 - Audit records for key operations
 
 Not yet implemented in the interface and must not be represented as complete:
-- Purchase receiving workflow (schema foundation exists)
-- Returns/refunds and void approvals
+- Partial returns and cash/mobile-money refunds; current workflow supports whole-sale voiding only
 - Barcode scanner hardware integration
 - Receipt printer integration
 - Multi-branch inventory
@@ -59,7 +64,7 @@ Not yet implemented in the interface and must not be represented as complete:
 ## Installation on InfinityFree
 
 1. Create a MySQL database in the InfinityFree control panel.
-2. Open phpMyAdmin for that database and import `pos/schema.sql`.
+2. Open phpMyAdmin for a **new, empty database** and import `pos/schema.sql`. The schema begins by dropping tables with the same application names; do not import it over a database containing data you need.
 3. Copy `db.example.php` to `db.php` in this project folder.
 4. Fill `db.php` with the exact host, database name, username and password shown in the hosting control panel. **Never commit `db.php` or publish database credentials.**
 5. Upload the contents of this project folder so that `index.php` is the folder entry point and the `pos/` directory is alongside it.
@@ -68,7 +73,7 @@ Not yet implemented in the interface and must not be represented as complete:
 8. Delete `pos/setup.php` from the live server immediately after creating the administrator.
 9. Add categories and products, then test with dummy transactions only.
 
-The project expects the database configuration file at `db.php` in this folder. It is intentionally not included in source control.
+The project expects the private database configuration file at `db.php` in this folder (one level above `pos/`). It is intentionally not included in source control.
 
 ## Security and operational notes
 
@@ -76,6 +81,8 @@ The project expects the database configuration file at `db.php` in this folder. 
 - Keep database credentials outside Git.
 - Use a unique password for each staff account; do not share administrator credentials.
 - Do not load real customer, payment-card or commercially sensitive records into the free-hosting demo.
+- Whole-sale voiding is an inventory correction, not a payment-provider refund; return funds through the original payment provider separately and reconcile manually.
+- The application does not yet include login rate limiting, password reset, partial returns, supplier payment accounting, or automated backups.
 - The application records payment method and amount received; it does **not** process card or mobile-money payments.
 - A successful test on GitHub does not prove the InfinityFree deployment is configured. Verify the live database connection, setup, login, sale and stock deduction after upload.
 - Shared free hosting is suitable for a learning/demo deployment, not a dependable production POS for a live shop.
