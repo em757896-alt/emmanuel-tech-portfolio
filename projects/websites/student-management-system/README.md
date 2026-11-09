@@ -43,7 +43,7 @@ Implemented in the initial portfolio release:
 - Stock adjustment with movement history
 - POS cart and server-side checkout validation
 - Database transaction around sale creation and stock deduction
-- Sales receipt references and transaction listing
+- Sales receipt references, full sales history and printable receipts
 - Dashboard metrics and low-stock indicators
 - Audit records for key operations
 
