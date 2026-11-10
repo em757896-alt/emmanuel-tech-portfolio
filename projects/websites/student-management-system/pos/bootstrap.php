@@ -36,7 +36,7 @@ if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
     header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
 }
 date_default_timezone_set('Africa/Nairobi');
-define('POS_NAME', 'Elevate Retail POS');
+define('POS_NAME', 'Cloud-Based Inventory & Retail POS');
 define('POS_BASE', __DIR__);
 define('POS_URL', 'index.php');
 if (!is_file(dirname(__DIR__) . '/db.php')) {
