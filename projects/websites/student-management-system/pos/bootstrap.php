@@ -5,8 +5,35 @@ declare(strict_types=1);
  * Expects ../db.php returning host, port, dbname, user, pass, charset.
  */
 if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_set_cookie_params(['httponly'=>true,'secure'=>!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off','samesite'=>'Lax']);
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.use_only_cookies', '1');
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
+        'secure' => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+        'httponly' => true,
+        'samesite' => 'Strict',
+    ]);
     session_start();
+}
+$now = time();
+if (isset($_SESSION['pos_last_activity']) && ($now - (int)$_SESSION['pos_last_activity']) > 1800) {
+    $_SESSION = [];
+    session_regenerate_id(true);
+}
+if (isset($_SESSION['pos_created_at']) && ($now - (int)$_SESSION['pos_created_at']) > 28800) {
+    $_SESSION = [];
+    session_regenerate_id(true);
+}
+$_SESSION['pos_created_at'] = $_SESSION['pos_created_at'] ?? $now;
+$_SESSION['pos_last_activity'] = $now;
+header('X-Content-Type-Options: nosniff');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+header('X-Frame-Options: DENY');
+header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
+header('Cache-Control: no-store, private');
+if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+    header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
 }
 date_default_timezone_set('Africa/Nairobi');
 define('POS_NAME', 'Elevate Retail POS');
