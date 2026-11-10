@@ -4,9 +4,23 @@ $page=$_GET['page']??'dashboard';
 if($page==='logout'){if(user()){audit($pdo,'logout','session');}session_destroy();header('Location: index.php?page=login');exit;}
 if($page==='login'){
  $error='';
- if($_SERVER['REQUEST_METHOD']==='POST'){verify_csrf();$q=$pdo->prepare('SELECT id,full_name,username,password_hash,role,active FROM users WHERE username=? LIMIT 1');$q->execute([trim($_POST['username']??'')]);$u=$q->fetch();
-  if($u&&$u['active']&&(password_verify((string)$_POST['password'],$u['password_hash']))){session_regenerate_id(true);$_SESSION['pos_user']=['id'=>(int)$u['id'],'name'=>$u['full_name'],'username'=>$u['username'],'role'=>$u['role']];$pdo->prepare('UPDATE users SET last_login=NOW() WHERE id=?')->execute([$u['id']]);audit($pdo,'login','session');go('dashboard');}
-  $error='Invalid username or password.';
+ if($_SERVER['REQUEST_METHOD']==='POST'){
+  verify_csrf();
+  $ip=substr($_SERVER['REMOTE_ADDR']??'',0,45);
+  $limit=$pdo->prepare("SELECT COUNT(*) FROM audit_logs WHERE action='login_failed' AND ip_address=? AND created_at >= (NOW() - INTERVAL 15 MINUTE)");
+  $limit->execute([$ip]);
+  if((int)$limit->fetchColumn()>=5){http_response_code(429);$error='Too many sign-in attempts. Wait 15 minutes before trying again.';}
+  else {
+   $q=$pdo->prepare('SELECT id,full_name,username,password_hash,role,active FROM users WHERE username=? LIMIT 1');
+   $q->execute([trim($_POST['username']??'')]);$u=$q->fetch();
+   if($u&&$u['active']&&password_verify((string)($_POST['password']??''),$u['password_hash'])){
+    session_regenerate_id(true);$_SESSION['pos_csrf']=bin2hex(random_bytes(32));$_SESSION['pos_created_at']=time();$_SESSION['pos_last_activity']=time();
+    $_SESSION['pos_user']=['id'=>(int)$u['id'],'name'=>$u['full_name'],'username'=>$u['username'],'role'=>$u['role']];
+    $pdo->prepare('UPDATE users SET last_login=NOW() WHERE id=?')->execute([$u['id']]);audit($pdo,'login','session');go('dashboard');
+   }
+   audit($pdo,'login_failed','session',null,['username_attempt'=>substr(trim($_POST['username']??''),0,60)]);
+   $error='Invalid username or password.';
+  }
  }
  ?><!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in · <?=h(POS_NAME)?></title><link rel="stylesheet" href="assets/app.css"></head><body class="auth-shell"><main class="auth-card"><div class="brand-mark">ER</div><p class="eyebrow">ELEVATE MEDIA PRODUCTIONS</p><h1>Welcome back</h1><p class="muted">Sign in to your retail workspace.</p><?php if($error):?><div class="alert danger"><?=h($error)?></div><?php endif?><form method="post"><input type="hidden" name="csrf" value="<?=h(csrf())?>"><label>Username<input name="username" required autocomplete="username"></label><label>Password<input type="password" name="password" required autocomplete="current-password"></label><button class="btn primary full">Sign in</button></form><p class="tiny">Secure retail operations workspace · East Africa</p></main></body></html><?php exit;
 }
