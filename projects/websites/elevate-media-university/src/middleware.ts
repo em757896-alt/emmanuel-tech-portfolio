@@ -14,7 +14,6 @@ const PUBLIC_API_PREFIXES = [
   "/api/auth",
   "/api/register",
   "/api/setup",
-  "/api/teachers",
   "/api/departments",
   "/api/courses",
   "/api/geo/countries",
@@ -32,7 +31,14 @@ export default auth((req) => {
   const isHod = (session?.user as { hod?: boolean } | undefined)?.hod === true;
 
   const isPublicPage = PUBLIC_PAGES.some((route) => matches(pathname, route));
-  const isPublicApi = PUBLIC_API_PREFIXES.some((route) => matches(pathname, route));
+  const isPublicApi =
+    ((pathname === "/api/auth" || pathname.startsWith("/api/auth/")) && ["GET", "POST"].includes(req.method)) ||
+    ((pathname === "/api/register" || pathname.startsWith("/api/register/")) && req.method === "POST") ||
+    ((pathname === "/api/setup" || pathname.startsWith("/api/setup/")) && req.method === "POST") ||
+    ["/api/departments", "/api/courses", "/api/geo/countries", "/api/geo/cities"].some((route) =>
+      matches(pathname, route) && req.method === "GET"
+    ) ||
+    (pathname === "/api/teachers" && req.method === "POST");
 
   // API routes are not public by default. Only the explicitly listed
   // registration, login, setup-token, and public catalogue endpoints bypass auth.
