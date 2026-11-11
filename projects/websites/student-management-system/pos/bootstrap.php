@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * MauzoFlow POS — secure application bootstrap.
+ * Elevate Retail POS — secure application bootstrap.
  * Expects ../db.php returning host, port, dbname, user, pass, charset.
  */
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -37,7 +37,7 @@ if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
     header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
 }
 date_default_timezone_set('Africa/Nairobi');
-define('POS_NAME', 'MauzoFlow POS');
+define('POS_NAME', 'Elevate Retail POS POS');
 define('POS_BASE', __DIR__);
 define('POS_URL', 'index.php');
 if (!is_file(dirname(__DIR__) . '/db.php')) {
