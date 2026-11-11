@@ -132,7 +132,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Title and file are required" }, { status: 400 });
     }
 
-    const { data: uploads, error: countErr } = await supabase
+    const { count: uploadCount, error: countErr } = await supabase
       .from("poe_documents")
       .select("id", { count: "exact", head: true })
       .eq("studentId", student.id)
@@ -140,7 +140,9 @@ export async function POST(req: Request) {
 
     if (countErr) throw countErr;
 
-    if ((countErr ? 0 : (await supabase.from("poe_documents").select("id", { count: "exact", head: true }).eq("studentId", student.id).eq("source", "UPLOAD")).count || 0) >= 5) {
+    if (countErr) throw countErr;
+
+    if ((uploadCount || 0) >= 5) {
       return NextResponse.json({
         error: "Upload limit reached (5). The earlier uploads must first be verified by the unit lecturer and the HOD before you can add more.",
       }, { status: 400 });
