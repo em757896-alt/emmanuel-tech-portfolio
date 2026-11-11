@@ -38,7 +38,7 @@ export default auth((req) => {
     ["/api/departments", "/api/courses", "/api/geo/countries", "/api/geo/cities"].some((route) =>
       matches(pathname, route) && req.method === "GET"
     ) ||
-    (pathname === "/api/teachers" && req.method === "POST");
+    false;
 
   // API routes are not public by default. Only the explicitly listed
   // registration, login, setup-token, and public catalogue endpoints bypass auth.
@@ -51,6 +51,20 @@ export default auth((req) => {
   }
 
   if (session) {
+    // API namespaces carry the same role boundaries as their dashboard pages.
+    if (pathname.startsWith("/api/admin/") && role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+    if (pathname.startsWith("/api/teacher/hod/") && role !== "ADMIN" && !isHod) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+    if (pathname.startsWith("/api/teacher/") && role !== "TEACHER" && role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+    if (pathname.startsWith("/api/student/") && role !== "STUDENT" && role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     if (["/admin-login", "/register", "/student-login", "/teacher-login"].some((route) => pathname === route)) {
       if (role === "ADMIN") return NextResponse.redirect(new URL("/admin", req.url));
       if (role === "TEACHER") return NextResponse.redirect(new URL(isHod ? "/teacher/hod" : "/teacher", req.url));
