@@ -10,6 +10,13 @@ $success = '';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!validateCSRFToken((string)($_POST['csrf_token'] ?? ''))) {
+        http_response_code(419);
+        $error = 'Your form session expired. Refresh the page and submit again.';
+    } elseif (!checkRateLimit('civic-report:' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'), 5, 3600)) {
+        http_response_code(429);
+        $error = 'Too many reports have been submitted from this connection. Please try again later.';
+    }
     $reportType = sanitizeInput($_POST['report_type'] ?? '');
     $orgName = sanitizeInput($_POST['organization_name'] ?? '');
     $orgType = sanitizeInput($_POST['organization_type'] ?? '');
@@ -18,20 +25,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $severity = sanitizeInput($_POST['severity'] ?? 'medium');
     $consent = isset($_POST['consent']);
 
-    if (empty($county) || empty($description) || !$consent) {
+    if ($error !== '') {
+        // Security check above failed; do not process submitted data.
+    } elseif (!in_array($county, KENYA_COUNTIES, true) || empty($description) || strlen($description) > 10000 || empty($_POST['title']) || strlen((string)$_POST['title']) > 180 || !$consent) {
         $error = 'Please fill in all required fields and provide consent.';
     } else {
         try {
             $db->insert('monitoring_reports', [
                 'report_number' => generateReportNumber(),
-                'user_id' => $_SESSION['user_id'] ?? 0,
+                'user_id' => $_SESSION['user_id'] ?? null,
                 'organization_name' => $orgName ?: 'Anonymous',
                 'organization_type' => $orgType,
                 'county' => $county,
                 'report_type' => in_array($reportType, ['registration','compliance','barrier','delay','violation','enabling_practice','other']) ? $reportType : 'other',
                 'title' => sanitizeInput($_POST['title'] ?? 'Report'),
                 'description' => $description,
-                'severity' => $severity,
+                'severity' => in_array($severity, ['low','medium','high','critical'], true) ? $severity : 'medium',
                 'status' => 'submitted',
                 'is_anonymous' => isset($_POST['is_anonymous']) ? 1 : 0,
                 'consent_to_publish' => isset($_POST['consent_to_publish']) ? 1 : 0,
@@ -84,7 +93,8 @@ $currentPage = 'monitoring';
 
                 <div class="card border-0 shadow-sm" data-aos="fade-up">
                     <div class="card-body p-4">
-                        <form method="POST" action="" enctype="multipart/form-data">
+                        <form method="POST" action="">
+                            <?= generateCSRFField() ?>
                             <div class="row g-3">
                                 <div class="col-12">
                                     <label class="form-label">Report Type <span class="text-danger">*</span></label>
@@ -137,11 +147,6 @@ $currentPage = 'monitoring';
                                     <label class="form-label">Description <span class="text-danger">*</span></label>
                                     <textarea name="description" rows="6" class="form-control form-control-lg" placeholder="Please describe your experience in detail..." required></textarea>
                                     <small class="text-muted">Include dates, locations, and any relevant details.</small>
-                                </div>
-
-                                <div class="col-12">
-                                    <label class="form-label">Supporting Documents (optional)</label>
-                                    <input type="file" name="documents[]" class="form-control" multiple>
                                 </div>
 
                                 <div class="col-12">
