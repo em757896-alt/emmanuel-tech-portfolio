@@ -1,45 +1,78 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 
+const PUBLIC_PAGES = [
+  "/", "/admin-login", "/register", "/courses", "/achievements",
+  "/student-login", "/student-apply", "/teacher-login", "/teacher-apply",
+  "/forgot-password", "/teacher-forgot-password", "/reset-password",
+  "/staff-reset-password", "/verification-sent", "/reset-link-sent",
+  "/about", "/admission", "/students", "/academics", "/research",
+  "/library", "/privacy", "/terms",
+];
+
+const PUBLIC_API_PREFIXES = [
+  "/api/auth",
+  "/api/register",
+  "/api/setup",
+  "/api/teachers",
+  "/api/departments",
+  "/api/courses",
+  "/api/geo/countries",
+  "/api/geo/cities",
+];
+
+function matches(pathname: string, route: string) {
+  return pathname === route || pathname.startsWith(`${route}/`);
+}
+
 export default auth((req) => {
   const { pathname } = req.nextUrl;
   const session = req.auth;
+  const role = (session?.user as { role?: string } | undefined)?.role;
+  const isHod = (session?.user as { hod?: boolean } | undefined)?.hod === true;
 
-  if (pathname.startsWith("/api/auth") || pathname.startsWith("/api/register") || pathname.startsWith("/api/setup") || pathname.startsWith("/api/teachers")) {
-    return NextResponse.next();
+  const isPublicPage = PUBLIC_PAGES.some((route) => matches(pathname, route));
+  const isPublicApi = PUBLIC_API_PREFIXES.some((route) => matches(pathname, route));
+
+  // API routes are not public by default. Only the explicitly listed
+  // registration, login, setup-token, and public catalogue endpoints bypass auth.
+  if (pathname.startsWith("/api/") && !isPublicApi && !session) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
   }
 
-  const publicRoutes = ["/", "/admin-login", "/register", "/courses", "/achievements", "/student-login", "/student-apply", "/teacher-login", "/teacher-apply", "/forgot-password", "/teacher-forgot-password", "/reset-password", "/staff-reset-password", "/verification-sent", "/reset-link-sent", "/about", "/admission", "/students", "/academics", "/research", "/library", "/privacy", "/terms"];
-  const isPublic = publicRoutes.some((route) => pathname === route || pathname.startsWith(`${route}/`) || pathname.startsWith("/api/"));
-
-  if (!session && !isPublic) {
+  if (!pathname.startsWith("/api/") && !session && !isPublicPage) {
     return NextResponse.redirect(new URL("/admin-login", req.url));
   }
 
   if (session) {
-    const role = (session.user as { role: string })?.role;
-    const isHod = (session.user as { hod?: boolean })?.hod === true;
-
-    if (pathname === "/admin-login" || pathname === "/register" || pathname === "/student-login" || pathname === "/teacher-login") {
+    if (["/admin-login", "/register", "/student-login", "/teacher-login"].some((route) => pathname === route)) {
       if (role === "ADMIN") return NextResponse.redirect(new URL("/admin", req.url));
       if (role === "TEACHER") return NextResponse.redirect(new URL(isHod ? "/teacher/hod" : "/teacher", req.url));
       if (role === "STUDENT") return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
-    if (pathname.startsWith("/admin") && role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/admin-login", req.url));
+    if (matches(pathname, "/admin") && role !== "ADMIN") {
+      return pathname.startsWith("/api/") 
+        ? NextResponse.json({ error: "Forbidden" }, { status: 403 })
+        : NextResponse.redirect(new URL("/admin-login", req.url));
     }
 
-    if (pathname.startsWith("/teacher/hod") && role !== "ADMIN" && !isHod) {
-      return NextResponse.redirect(new URL("/teacher", req.url));
+    if (matches(pathname, "/teacher/hod") && role !== "ADMIN" && !isHod) {
+      return pathname.startsWith("/api/")
+        ? NextResponse.json({ error: "Forbidden" }, { status: 403 })
+        : NextResponse.redirect(new URL("/teacher", req.url));
     }
 
-    if (pathname.startsWith("/teacher") && role !== "TEACHER" && role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/admin-login", req.url));
+    if (matches(pathname, "/teacher") && role !== "TEACHER" && role !== "ADMIN") {
+      return pathname.startsWith("/api/")
+        ? NextResponse.json({ error: "Forbidden" }, { status: 403 })
+        : NextResponse.redirect(new URL("/admin-login", req.url));
     }
 
-    if (pathname.startsWith("/dashboard") && role !== "STUDENT" && role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/admin-login", req.url));
+    if (matches(pathname, "/dashboard") && role !== "STUDENT" && role !== "ADMIN") {
+      return pathname.startsWith("/api/")
+        ? NextResponse.json({ error: "Forbidden" }, { status: 403 })
+        : NextResponse.redirect(new URL("/admin-login", req.url));
     }
   }
 
