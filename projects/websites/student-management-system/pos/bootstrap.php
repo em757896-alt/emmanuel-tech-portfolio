@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * Elevate Retail POS — secure application bootstrap.
+ * Cloud-Based Inventory & Retail POS — secure application bootstrap.
  * Expects ../db.php returning host, port, dbname, user, pass, charset.
  */
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -53,7 +53,7 @@ try {
         PDO::ATTR_EMULATE_PREPARES=>false,
     ]);
 } catch (PDOException $e) {
-    error_log('[Elevate POS] Database connection failed: '.$e->getMessage());
+    error_log('[Cloud POS] Database connection failed: '.$e->getMessage());
     http_response_code(503);
     exit('The database is temporarily unavailable. Check the private database configuration.');
 }
