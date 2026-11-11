@@ -54,8 +54,12 @@ export default function StudentPOE() {
       const uploadRes = await fetch("/api/upload", { method: "POST", body: formData });
       const uploadData = await uploadRes.json();
 
-      if (uploadRes.ok) {
-        await fetch("/api/poe", {
+      if (!uploadRes.ok) {
+        const message = uploadData?.error || "File upload failed. Please check the file and try again.";
+        throw new Error(message);
+      }
+      {
+        const saveRes = await fetch("/api/poe", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -67,6 +71,8 @@ export default function StudentPOE() {
             fileSize: uploadData.fileSize,
           }),
         });
+        const saveData = await saveRes.json();
+        if (!saveRes.ok) throw new Error(saveData?.error || "The evidence record could not be saved.");
         setShowUpload(false);
         setForm({ title: "", description: "" });
         setSelectedFile(null);
@@ -74,6 +80,7 @@ export default function StudentPOE() {
       }
     } catch (error) {
       console.error("Upload error:", error);
+      alert(error instanceof Error ? error.message : "Upload failed. Please try again.");
     } finally {
       setUploading(false);
     }
