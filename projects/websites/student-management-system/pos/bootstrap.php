@@ -37,7 +37,7 @@ if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
     header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
 }
 date_default_timezone_set('Africa/Nairobi');
-define('POS_NAME', 'Elevate Retail POS POS');
+define('POS_NAME', 'Elevate Retail POS');
 define('POS_BASE', __DIR__);
 define('POS_URL', 'index.php');
 if (!is_file(dirname(__DIR__) . '/db.php')) {
@@ -53,7 +53,7 @@ try {
         PDO::ATTR_EMULATE_PREPARES=>false,
     ]);
 } catch (PDOException $e) {
-    error_log('[MauzoFlow] Database connection failed: '.$e->getMessage());
+    error_log('[Elevate Retail POS] Database connection failed: '.$e->getMessage());
     http_response_code(503);
     exit('The database is temporarily unavailable. Check the private database configuration.');
 }
