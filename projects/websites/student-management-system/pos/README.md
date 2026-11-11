@@ -1,4 +1,4 @@
-# Cloud-Based Inventory & Retail POS
+# MauzoFlow POS
 
 A PHP 8.1+ and MySQL/MariaDB retail point-of-sale application for small businesses. This project is hosted separately from the legacy student-management system and uses its own database schema.
 
@@ -74,6 +74,6 @@ Cloudflare Turnstile is a required project security standard, but this source sn
 
 ## Project identity
 
-Product name: **Cloud-Based Inventory & Retail POS**  
+Product name: **MauzoFlow POS**  
 Currency default: KES  
-Publisher: Elevate Media Productions
+Created by **Elevate Media Productions**
