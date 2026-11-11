@@ -27,7 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($error !== '') {
         // Security check above failed; do not process submitted data.
-    } elseif (!in_array($county, KENYA_COUNTIES, true) || empty($description) || strlen($description) > 10000 || empty($_POST['title']) || strlen((string)$_POST['title']) > 180 || !$consent) {
+    } elseif (!in_array($county, KENYA_COUNTIES, true) ||
+        !in_array($reportType, ['registration','compliance','barrier','delay','violation','enabling_practice','other'], true) ||
+        empty($description) || strlen($description) > 10000 ||
+        empty($_POST['title']) || strlen((string)$_POST['title']) > 180 ||
+        strlen($orgName) > 160 || strlen($orgType) > 100 || !$consent) {
         $error = 'Please fill in all required fields and provide consent.';
     } else {
         try {
@@ -37,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'organization_name' => $orgName ?: 'Anonymous',
                 'organization_type' => $orgType,
                 'county' => $county,
-                'report_type' => in_array($reportType, ['registration','compliance','barrier','delay','violation','enabling_practice','other']) ? $reportType : 'other',
+                'report_type' => $reportType,
                 'title' => sanitizeInput($_POST['title'] ?? 'Report'),
                 'description' => $description,
                 'severity' => in_array($severity, ['low','medium','high','critical'], true) ? $severity : 'medium',
