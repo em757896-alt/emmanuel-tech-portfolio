@@ -128,7 +128,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { title, description, fileUrl, fileName, fileType, fileSize, courseId } = body;
 
-    if (!title || !fileUrl) {
+    if (typeof title !== "string" || !title.trim() || title.length > 160 || typeof fileUrl !== "string" || !/^https:\/\//i.test(fileUrl)) {
       return NextResponse.json({ error: "Title and file are required" }, { status: 400 });
     }
 
@@ -140,7 +140,7 @@ export async function POST(req: Request) {
 
     if (countErr) throw countErr;
 
-    if ((uploads?.length || 0) >= 5) {
+    if ((countErr ? 0 : (await supabase.from("poe_documents").select("id", { count: "exact", head: true }).eq("studentId", student.id).eq("source", "UPLOAD")).count || 0) >= 5) {
       return NextResponse.json({
         error: "Upload limit reached (5). The earlier uploads must first be verified by the unit lecturer and the HOD before you can add more.",
       }, { status: 400 });
@@ -151,8 +151,8 @@ export async function POST(req: Request) {
       .insert({
         id: genId(),
         studentId: student.id,
-        title,
-        description: description || null,
+        title: title.trim(),
+        description: typeof description === "string" ? description.slice(0, 1500) : null,
         fileUrl,
         fileName: fileName || "document",
         fileType: fileType || "application/pdf",
