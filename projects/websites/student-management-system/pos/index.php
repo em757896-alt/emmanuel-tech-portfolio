@@ -81,7 +81,7 @@ try {
  }
 } catch(Throwable $e){if($pdo->inTransaction())$pdo->rollBack();$error=$e instanceof PDOException?'Could not save this record. Check for duplicate SKU/barcode or required fields.':$e->getMessage();}
 $stats=$pdo->query("SELECT COUNT(*) products,COALESCE(SUM(quantity),0) units,COALESCE(SUM(quantity*cost_price),0) stock_value,COALESCE(SUM(CASE WHEN quantity<=reorder_level THEN 1 ELSE 0 END),0) low_stock FROM products WHERE active=1")->fetch();
-$salesToday=$pdo->query("SELECT COUNT(DISTINCT s.id) transactions,COALESCE(SUM(DISTINCT s.total),0) revenue,COALESCE(SUM(si.quantity*(si.unit_price-si.unit_cost)),0) gross_profit FROM sales s LEFT JOIN sale_items si ON si.sale_id=s.id WHERE s.status='completed' AND DATE(s.created_at)=CURDATE()")->fetch();
+$salesToday=$pdo->query("SELECT (SELECT COUNT(*) FROM sales WHERE status='completed' AND DATE(created_at)=CURDATE()) transactions,(SELECT COALESCE(SUM(total),0) FROM sales WHERE status='completed' AND DATE(created_at)=CURDATE()) revenue,(SELECT COALESCE(SUM(si.quantity*(si.unit_price-si.unit_cost)),0) FROM sale_items si JOIN sales s ON s.id=si.sale_id WHERE s.status='completed' AND DATE(s.created_at)=CURDATE()) gross_profit")->fetch();
 $salesToday['gross_margin']=(float)$salesToday['revenue']>0?round(((float)$salesToday['gross_profit']/(float)$salesToday['revenue'])*100,1):0;
 $products=$pdo->query('SELECT p.*,c.name category FROM products p LEFT JOIN categories c ON c.id=p.category_id WHERE p.active=1 ORDER BY p.name')->fetchAll();
 $categories=$pdo->query('SELECT * FROM categories ORDER BY name')->fetchAll();
