@@ -10,16 +10,6 @@ const PUBLIC_PAGES = [
   "/library", "/privacy", "/terms",
 ];
 
-const PUBLIC_API_PREFIXES = [
-  "/api/auth",
-  "/api/register",
-  "/api/setup",
-  "/api/departments",
-  "/api/courses",
-  "/api/geo/countries",
-  "/api/geo/cities",
-];
-
 function matches(pathname: string, route: string) {
   return pathname === route || pathname.startsWith(`${route}/`);
 }
@@ -52,6 +42,9 @@ export default auth((req) => {
 
   if (session) {
     // API namespaces carry the same role boundaries as their dashboard pages.
+    if (pathname === "/api/teachers" && req.method === "POST" && role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
     if (pathname.startsWith("/api/admin/") && role !== "ADMIN") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
