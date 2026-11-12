@@ -10,6 +10,13 @@ $success = '';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!validateCSRFToken((string)($_POST['csrf_token'] ?? ''))) {
+        http_response_code(419);
+        $error = 'Your form session expired. Refresh the page and submit again.';
+    } elseif (!checkRateLimit('civic-incident:' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'), 3, 3600)) {
+        http_response_code(429);
+        $error = 'Too many incident reports have been submitted from this connection. Please try again later.';
+    }
     $incidentType = sanitizeInput($_POST['incident_type'] ?? '');
     $incidentDate = $_POST['incident_date'] ?? '';
     $location = sanitizeInput($_POST['location'] ?? '');
@@ -19,21 +26,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $urgencyLevel = sanitizeInput($_POST['urgency_level'] ?? 'medium');
     $consent = isset($_POST['consent']);
 
-    if (empty($incidentType) || empty($incidentDate) || empty($location) || empty($county) || empty($description) || !$consent) {
+    if ($error !== '') {
+        // Security check failed; do not process submitted data.
+    } elseif (!in_array($incidentType, ['harassment','intimidation','arbitrary_arrest','deregistration','funding_block','assembly_denial','other'], true) || !preg_match('/^\\d{4}-\\d{2}-\\d{2}$/', (string)$incidentDate) || strtotime($incidentDate) === false || strtotime($incidentDate) > time() || empty($location) || strlen($location) > 180 || !in_array($county, KENYA_COUNTIES, true) || empty($description) || strlen($description) > 12000 || !$consent) {
         $error = 'Please fill in all required fields and provide consent.';
     } else {
         try {
             $allowedTypes = ['harassment','intimidation','arbitrary_arrest','deregistration','funding_block','assembly_denial','other'];
             $db->insert('incident_reports', [
                 'incident_number' => generateReportNumber('INC'),
-                'reporter_id' => $_SESSION['user_id'] ?? 0,
+                'reporter_id' => $_SESSION['user_id'] ?? null,
                 'incident_type' => in_array($incidentType, $allowedTypes) ? $incidentType : 'other',
                 'incident_date' => $incidentDate,
                 'location' => $location,
                 'county' => $county,
                 'description' => $description,
                 'perpetrator_type' => in_array($perpetratorType, ['government_agency','police','county_government','private_actor','unknown']) ? $perpetratorType : null,
-                'urgency_level' => $urgencyLevel,
+                'urgency_level' => in_array($urgencyLevel, ['low','medium','high','urgent'], true) ? $urgencyLevel : 'medium',
                 'status' => 'reported',
                 'is_confidential' => isset($_POST['is_confidential']) ? 1 : 0,
             ]);
@@ -86,6 +95,7 @@ $currentPage = 'monitoring';
                 <div class="card border-0 shadow-sm" data-aos="fade-up">
                     <div class="card-body p-4">
                         <form method="POST" action="">
+                            <?= generateCSRFField() ?>
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="form-label">Incident Type <span class="text-danger">*</span></label>
