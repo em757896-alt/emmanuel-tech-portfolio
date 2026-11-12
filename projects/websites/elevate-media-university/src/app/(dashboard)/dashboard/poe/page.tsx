@@ -88,8 +88,14 @@ export default function StudentPOE() {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this document?")) return;
-    await fetch(`/api/poe?id=${id}`, { method: "DELETE" });
-    refetch();
+    try {
+      const response = await fetch(`/api/poe?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result?.error || "The document could not be deleted.");
+      await refetch();
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Delete failed. Please try again.");
+    }
   };
 
   const formatFileSize = (bytes: number) => {
