@@ -128,8 +128,17 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { title, description, fileUrl, fileName, fileType, fileSize, courseId } = body;
 
-    if (typeof title !== "string" || !title.trim() || title.length > 160 || typeof fileUrl !== "string" || !/^https:\/\//i.test(fileUrl)) {
-      return NextResponse.json({ error: "Title and file are required" }, { status: 400 });
+    const allowedTypes = new Set(["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "image/jpeg", "image/png"]);
+    const storageBase = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    let parsedFileUrl: URL | null = null;
+    try { parsedFileUrl = new URL(fileUrl); } catch { parsedFileUrl = null; }
+    if (typeof title !== "string" || !title.trim() || title.length > 160 ||
+        typeof fileUrl !== "string" || !parsedFileUrl || !storageBase || parsedFileUrl.origin !== new URL(storageBase).origin ||
+        !parsedFileUrl.pathname.includes("/storage/v1/object/") ||
+        typeof fileName !== "string" || !fileName.trim() || fileName.length > 255 ||
+        typeof fileType !== "string" || !allowedTypes.has(fileType) ||
+        !Number.isInteger(fileSize) || fileSize <= 0 || fileSize > 10 * 1024 * 1024) {
+      return NextResponse.json({ error: "A valid title and supported file (maximum 10 MB) are required" }, { status: 400 });
     }
 
     const { count: uploadCount, error: countErr } = await supabase
@@ -137,8 +146,6 @@ export async function POST(req: Request) {
       .select("id", { count: "exact", head: true })
       .eq("studentId", student.id)
       .eq("source", "UPLOAD");
-
-    if (countErr) throw countErr;
 
     if (countErr) throw countErr;
 
@@ -156,9 +163,9 @@ export async function POST(req: Request) {
         title: title.trim(),
         description: typeof description === "string" ? description.slice(0, 1500) : null,
         fileUrl,
-        fileName: fileName || "document",
-        fileType: fileType || "application/pdf",
-        fileSize: fileSize || 0,
+        fileName: fileName.trim(),
+        fileType,
+        fileSize,
         uploadedAt: now(),
         status: "PENDING",
         lecturerApproved: false,
